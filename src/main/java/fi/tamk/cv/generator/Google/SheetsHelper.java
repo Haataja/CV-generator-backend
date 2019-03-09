@@ -1,6 +1,7 @@
 package fi.tamk.cv.generator.Google;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.sheets.v4.Sheets;
@@ -19,13 +20,26 @@ public class SheetsHelper {
     private static final String APPLICATION_NAME = "quickstart-1550136441024";
     private static final String SHEET_ID = "1yTCCewzBoaqy4ALWEj-0bOEkaRMhzftC_9lWt58xIuE";
 
-    public static Sheets getSheetsService() throws IOException, GeneralSecurityException {
-        Credential credential = GoogleAuthorizeUtil.authorize();
+    public static Sheets getSheetsService(String token) throws IOException, GeneralSecurityException {
+        Credential credential = new GoogleCredential().setAccessToken(token);
         return new Sheets.Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(), credential).setApplicationName(APPLICATION_NAME).build();
     }
 
 
-    public UpdateValuesResponse writeSomethingToSheet() throws IOException {
+    public List<List<Object>> readFromSheet(String sheetID, String token){
+        try{
+            Sheets service = getSheetsService(token);
+            ValueRange response = service.spreadsheets().values()
+                    .get(sheetID, "contact infromation!A1:J2")
+                    .execute();
+            return response.getValues();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public UpdateValuesResponse writeSomethingToSheet(String token) throws IOException {
         ValueRange body = new ValueRange()
                 .setValues(Arrays.asList(
                         Arrays.asList("Expenses January"),
@@ -36,7 +50,7 @@ public class SheetsHelper {
                         Arrays.asList("shoes", "5")));
         UpdateValuesResponse result = null;
         try {
-            result = getSheetsService().spreadsheets().values()
+            result = getSheetsService(token).spreadsheets().values()
                     .update(SHEET_ID, "A1", body)
                     .setValueInputOption("RAW")
                     .execute();
@@ -44,18 +58,5 @@ public class SheetsHelper {
             e.printStackTrace();
         }
         return result;
-    }
-
-    public List<List<Object>> readFromSheet(String sheetID){
-        try{
-            Sheets service = getSheetsService();
-            ValueRange response = service.spreadsheets().values()
-                    .get(sheetID, "contact infromation!A1:J2")
-                    .execute();
-            return response.getValues();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
     }
 }
