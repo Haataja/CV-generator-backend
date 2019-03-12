@@ -37,6 +37,7 @@ import java.util.List;
 
 @RestController
 public class CvController {
+    private String accessToken;
 
     Logger log = LoggerFactory.getLogger(this.getClass());
     @Autowired
@@ -52,16 +53,12 @@ public class CvController {
                         authentication.getAuthorizedClientRegistrationId(),
                         authentication.getName());
         log.info("Client: {}, token: {}", client.getPrincipalName(), client.getAccessToken().getTokenValue());
-        try {
-            sheetsHelper.writeSomethingToSheet(client.getAccessToken().getTokenValue());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        accessToken = client.getAccessToken().getTokenValue();
         return "loginSuccess";
     }
 
     @RequestMapping("/read")
     public List<List<Object>> read(@RequestParam(name = "id") String sheetID){
-        return sheetsHelper.readFromSheet(sheetID, "null");
+        return sheetsHelper.readFromSheet(sheetID, accessToken);
     }
 }
