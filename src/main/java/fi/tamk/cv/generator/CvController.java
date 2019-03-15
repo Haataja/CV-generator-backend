@@ -21,6 +21,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package fi.tamk.cv.generator;
 
 import fi.tamk.cv.generator.Google.SheetsHelper;
+import fi.tamk.cv.generator.model.*;
+import fi.tamk.cv.generator.model.datatypes.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -60,5 +63,27 @@ public class CvController {
     @RequestMapping("/read")
     public List<List<Object>> read(@RequestParam(name = "id") String sheetID){
         return sheetsHelper.readFromSheet(sheetID, accessToken);
+    }
+
+    @RequestMapping("/demo")
+    public User demo(){
+        User demoUser = new User(1,"demo","person", LocalDate.of(1990,1,1));
+        demoUser.getContact_info().add(new ContactInfo("email","demo.person@example.com",true));
+        demoUser.getContact_info().add(new ContactInfo("phone","001122335544",true));
+        demoUser.setAddress(new Address("something street","111","Suomi","Tampere",true));
+        demoUser.setProfile_image(new ProfileImage("https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwi7x9Cf7oThAhUqwMQBHfmJB0kQjRx6BAgBEAU&url=https%3A%2F%2Fen.wiktionary.org%2Fwiki%2Fcat&psig=AOvVaw1uyeUhaOBH7godt4Uaobzd&ust=1552763849780520",true));
+        demoUser.setDocument_settings(new DocumentSettings("en",null,null));
+        demoUser.setBio(new Bio("this user has been created for demo and testing purposes",true));
+        demoUser.setLicences(new Info(1,true, new ArrayList<>()));
+        demoUser.getLicences().getData().add(new Licence("drivers_licence",1,true,"B","drivers_licence"));
+        demoUser.getLicences().getData().add(new Licence("other",2,true,"something","other"));
+        demoUser.setAbilities_and_hobbies(new Info(2,true));
+        demoUser.getAbilities_and_hobbies().getData().add(new Ability("language",1,true,"Swedish","barely",1));
+        demoUser.getAbilities_and_hobbies().getData().add(new Hobby(2,true,"Scuba Diving","Diving with gear",LocalDate.of(2010,1,1),LocalDate.now()));
+        demoUser.setExperience(new Info(2,true));
+        demoUser.getExperience().getData().add(new Experience(1,true,LocalDate.now(),LocalDate.now(),"something","something","something",new String[]{""}));
+        demoUser.getExperience().getData().add(new ExperienceWork(2,true,LocalDate.now(),LocalDate.now(),"something","something","something",new String[]{"Having a cat"},new String[]{"the cat"}));
+
+        return demoUser;
     }
 }
