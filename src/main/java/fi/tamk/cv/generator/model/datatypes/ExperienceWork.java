@@ -28,11 +28,13 @@ public class ExperienceWork extends Experience{
     public ExperienceWork(LocalDate startdate, LocalDate enddate, String title, String name, String description, String[] achievements, String[] responsibilities) {
         super(startdate, enddate, title, name, description, achievements);
         this.responsibilities = responsibilities;
+        setType("work");
     }
 
     public ExperienceWork(long id, boolean visible, LocalDate startdate, LocalDate enddate, String title, String name, String description, String[] achievements, String[] responsibilities) {
         super(id, visible, startdate, enddate, title, name, description, achievements);
         this.responsibilities = responsibilities;
+        setType("work");
     }
 
     public String[] getResponsibilities() {
