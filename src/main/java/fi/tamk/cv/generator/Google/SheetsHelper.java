@@ -23,7 +23,11 @@ package fi.tamk.cv.generator.Google;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.FileList;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.BatchGetValuesResponse;
 import com.google.api.services.sheets.v4.model.UpdateValuesResponse;
@@ -52,6 +56,10 @@ public class SheetsHelper {
         return new Sheets.Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(), credential).setApplicationName(APPLICATION_NAME).build();
     }
 
+    public static Drive getDriveService(String token) throws IOException, GeneralSecurityException {
+        Credential credential = new GoogleCredential().setAccessToken(token);
+        return new Drive.Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(), credential).setApplicationName(APPLICATION_NAME).build();
+    }
 
     public List<List<Object>> readFromSheet(String sheetID, String token){
         try{
@@ -328,5 +336,15 @@ public class SheetsHelper {
     private LocalDate parseLocalDate(String string){
         String[] splitDate = string.split("/");
         return LocalDate.of(Integer.parseInt(splitDate[2]),Integer.parseInt(splitDate[1]),Integer.parseInt(splitDate[0]));
+    }
+
+    public void createNewFolder(String token) throws IOException, GeneralSecurityException {
+        
+        Drive service = getDriveService(token);
+        File fileMetadata = new File();
+        fileMetadata.setName("CV-data");
+        fileMetadata.setMimeType("application/vnd.google-apps.folder");
+        File file = service.files().create(fileMetadata).setFields("id").execute();
+        System.out.println("Folder ID: " + file.getId());
     }
 }
