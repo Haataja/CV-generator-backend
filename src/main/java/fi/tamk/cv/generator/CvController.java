@@ -55,14 +55,19 @@ public class CvController {
                 .loadAuthorizedClient(
                         authentication.getAuthorizedClientRegistrationId(),
                         authentication.getName());
-        log.info("Client: {}, token: {}", client.getPrincipalName(), client.getAccessToken().getTokenValue());
+        log.info("Client: {}, token: {}",authentication.getName(), client.getAccessToken().getTokenValue());
         accessToken = client.getAccessToken().getTokenValue();
         return "loginSuccess";
     }
 
+    @GetMapping("/error")
+    public String getLoginError(OAuth2AuthenticationToken authentication) {
+        return "Error while authenticating" + authentication.getAuthorizedClientRegistrationId();
+    }
+
     @RequestMapping("/read")
-    public List<List<Object>> read(@RequestParam(name = "id") String sheetID){
-        return sheetsHelper.readFromSheet(sheetID, accessToken);
+    public User read(@RequestParam(name = "id") String sheetID){
+        return sheetsHelper.read(sheetID, accessToken);
     }
 
     @RequestMapping("/demo")
