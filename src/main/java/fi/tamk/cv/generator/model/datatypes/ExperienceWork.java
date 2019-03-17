@@ -37,6 +37,11 @@ public class ExperienceWork extends Experience{
         setType("work");
     }
 
+    public ExperienceWork(long id, boolean visible, LocalDate startdate, LocalDate enddate, String title, String name, String description) {
+        super(id, visible, startdate, enddate, title, name, description);
+        setType("work");
+    }
+
     public String[] getResponsibilities() {
         return responsibilities;
     }

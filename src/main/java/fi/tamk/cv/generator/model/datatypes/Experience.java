@@ -50,6 +50,16 @@ public class Experience extends DataType {
         this.achievements = achievements;
     }
 
+    public Experience(long id, boolean visible, LocalDate startdate, LocalDate enddate, String title, String name, String description) {
+        super("personal", id, visible);
+        this.startdate = startdate;
+        this.enddate = enddate;
+        this.title = title;
+        this.name = name;
+        this.description = description;
+        this.achievements = achievements;
+    }
+
     public LocalDate getStartdate() {
         return startdate;
     }
