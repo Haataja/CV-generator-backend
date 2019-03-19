@@ -30,6 +30,7 @@ public class Bio {
     }
 
     public Bio() {
+        setVisible(true);
     }
 
     public String getValue() {

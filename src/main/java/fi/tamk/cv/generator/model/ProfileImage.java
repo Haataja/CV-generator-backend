@@ -25,6 +25,7 @@ public class ProfileImage {
     private boolean visible;
 
     public ProfileImage() {
+        setVisible(true);
     }
 
     public ProfileImage(String source, boolean visible) {
