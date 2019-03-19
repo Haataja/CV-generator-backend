@@ -134,13 +134,21 @@ public class SheetsHelper {
             switch (sheet){
                 case "basic":
                     user.setId(Long.parseLong((String) values.get(0).get(0)));
-                    user.setFirstname((String) values.get(0).get(1));
-                    user.setLastname((String) values.get(0).get(2));
-                    user.setBirthdate(parseLocalDate((String) values.get(0).get(3)));
+                    if(values.get(0).size() > 1){
+                        user.setFirstname((String) values.get(0).get(1));
+                        if(values.get(0).size() > 2){
+                            user.setLastname((String) values.get(0).get(2));
+                            if(values.get(0).size() > 3){
+                                user.setBirthdate(parseLocalDate((String) values.get(0).get(3)));
+                            }
+                        }
+                    }
                     break;
                 case "contact_info":
-                    for(List<Object> contact:values){
-                        user.getContact_info().add(new ContactInfo((String)contact.get(0),(String) contact.get(1),Boolean.parseBoolean((String) contact.get(2))));
+                    if(values != null){
+                        for(List<Object> contact:values){
+                            user.getContact_info().add(new ContactInfo((String)contact.get(0),(String) contact.get(1),Boolean.parseBoolean((String) contact.get(2))));
+                        }
                     }
                     break;
                 case "address":
