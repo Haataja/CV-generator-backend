@@ -355,4 +355,25 @@ public class SheetsHelper {
         File file = service.files().create(fileMetadata).setFields("id").execute();
         System.out.println("Folder ID: " + file.getId());
     }
+
+    public User createDefUser(long id){
+        User user = new User();
+        user.setId(id);
+        user.setContact_info(new ArrayList<>());
+
+        Address address = new Address();
+        address.setVisible(true);
+        user.setAddress(address);
+
+        user.setProfile_image(new ProfileImage());
+        user.setBio(new Bio());
+        user.setLicences(new Info(0,true));
+        user.setAbilities_and_hobbies(new Info(0, true));
+        user.setExperience(new Info(0, true));
+        user.setCourses_and_education(new Info(0, true));
+        user.setAchievements_and_projects(new Info(0,true));
+        user.setTitles_and_degrees(new Info(0,true));
+
+        return user;
+    }
 }
