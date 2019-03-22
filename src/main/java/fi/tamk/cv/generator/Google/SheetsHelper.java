@@ -23,6 +23,7 @@ package fi.tamk.cv.generator.Google;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.FileContent;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
@@ -30,10 +31,16 @@ import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.BatchGetValuesResponse;
+import com.google.api.services.sheets.v4.model.Spreadsheet;
+import com.google.api.services.sheets.v4.model.SpreadsheetProperties;
 import com.google.api.services.sheets.v4.model.UpdateValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
 import fi.tamk.cv.generator.model.*;
 import fi.tamk.cv.generator.model.datatypes.*;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -50,6 +57,12 @@ public class SheetsHelper {
     private Logger log = LoggerFactory.getLogger(this.getClass());
     private static final String APPLICATION_NAME = "quickstart-1550136441024";
     private static final String SHEET_ID = "1yTCCewzBoaqy4ALWEj-0bOEkaRMhzftC_9lWt58xIuE";
+    private String sheetID;
+    private String folderID;
+    private static final String FOLDER_NAME = "CV-Generator-data";
+    private static final String SPREADSHEET_NAME = "CV-Generator-data-spreadsheet";
+
+
 
     public static Sheets getSheetsService(String token) throws IOException, GeneralSecurityException {
         Credential credential = new GoogleCredential().setAccessToken(token);
@@ -134,21 +147,13 @@ public class SheetsHelper {
             switch (sheet){
                 case "basic":
                     user.setId(Long.parseLong((String) values.get(0).get(0)));
-                    if(values.get(0).size() > 1){
-                        user.setFirstname((String) values.get(0).get(1));
-                        if(values.get(0).size() > 2){
-                            user.setLastname((String) values.get(0).get(2));
-                            if(values.get(0).size() > 3){
-                                user.setBirthdate(parseLocalDate((String) values.get(0).get(3)));
-                            }
-                        }
-                    }
+                    user.setFirstname((String) values.get(0).get(1));
+                    user.setLastname((String) values.get(0).get(2));
+                    user.setBirthdate(parseLocalDate((String) values.get(0).get(3)));
                     break;
                 case "contact_info":
-                    if(values != null){
-                        for(List<Object> contact:values){
-                            user.getContact_info().add(new ContactInfo((String)contact.get(0),(String) contact.get(1),Boolean.parseBoolean((String) contact.get(2))));
-                        }
+                    for(List<Object> contact:values){
+                        user.getContact_info().add(new ContactInfo((String)contact.get(0),(String) contact.get(1),Boolean.parseBoolean((String) contact.get(2))));
                     }
                     break;
                 case "address":
@@ -328,7 +333,7 @@ public class SheetsHelper {
         ArrayList<String> achievements = new ArrayList<>();
         for(int i = 0; i < objects.size() - 8; i++){
             if(inResp){
-                if(((String)objects.get(i + 8)).trim().equals("achievements")){
+                if(objects.get(i + 8).equals("achievements")){
                     inResp = false;
                 } else {
                     responsibilities.add((String) objects.get(i + 8));
@@ -346,34 +351,67 @@ public class SheetsHelper {
         return LocalDate.of(Integer.parseInt(splitDate[2]),Integer.parseInt(splitDate[1]),Integer.parseInt(splitDate[0]));
     }
 
-    public void createNewFolder(String token) throws IOException, GeneralSecurityException {
-
+    public String createNewFolder(String token) throws IOException, GeneralSecurityException {
+        
         Drive service = getDriveService(token);
         File fileMetadata = new File();
-        fileMetadata.setName("CV-data");
+        fileMetadata.setName(FOLDER_NAME);
         fileMetadata.setMimeType("application/vnd.google-apps.folder");
-        File file = service.files().create(fileMetadata).setFields("id").execute();
-        System.out.println("Folder ID: " + file.getId());
+        List<File> files = service.files().list().setQ("name = '" + FOLDER_NAME + "'").execute().getFiles();
+        if (!(files.size() > 0)) {
+            File file = service.files().create(fileMetadata).setFields("id").execute();
+            System.out.println("Folder ID: " + file.getId());
+            folderID = file.getId();
+        } else {
+            JSONArray array = new JSONArray(files.toString());
+            JSONObject object = array.getJSONObject(0);
+            folderID = object.getString("id");
+        }
+        return "Folder " + FOLDER_NAME + " Created! Folder id: " + folderID;
     }
 
-    public User createDefUser(long id){
-        User user = new User();
-        user.setId(id);
-        user.setContact_info(new ArrayList<>());
+    public String createSheet(String token) throws IOException, GeneralSecurityException {
+        
+        Sheets service = getSheetsService(token);
+        Drive driveService = getDriveService(token);
+        Spreadsheet spreadsheet = new Spreadsheet().setProperties(new SpreadsheetProperties().setTitle(SPREADSHEET_NAME));
 
-        Address address = new Address();
-        address.setVisible(true);
-        user.setAddress(address);
+        List<File> files = driveService.files().list().setQ("name = '" + SPREADSHEET_NAME + "'").execute().getFiles();
+        if (!(files.size() > 0)) {
+            spreadsheet = service.spreadsheets().create(spreadsheet)
+            .setFields("spreadsheetId")
+            .execute();
+            sheetID = spreadsheet.getSpreadsheetId();
+            System.out.println("Spreadsheet ID: " + spreadsheet.getSpreadsheetId());
+        } else {
+            JSONArray array = new JSONArray(files.toString());
+            JSONObject object = array.getJSONObject(0);
+            sheetID = object.getString("id");
+        }
 
-        user.setProfile_image(new ProfileImage());
-        user.setBio(new Bio());
-        user.setLicences(new Info(0,true));
-        user.setAbilities_and_hobbies(new Info(0, true));
-        user.setExperience(new Info(0, true));
-        user.setCourses_and_education(new Info(0, true));
-        user.setAchievements_and_projects(new Info(0,true));
-        user.setTitles_and_degrees(new Info(0,true));
+        return "Sheet " + SPREADSHEET_NAME + " Created! Sheet id: " + sheetID;
+    }
 
-        return user;
+    public String moveSheetToFolder(String token) throws IOException, GeneralSecurityException {
+        Drive service = getDriveService(token);
+        File file = service.files().get(sheetID)
+        .setFields("parents")
+        .execute();
+
+        StringBuilder previousParents = new StringBuilder();
+        for (String parent : file.getParents()) {
+            previousParents.append(parent);
+            previousParents.append(',');
+        }
+
+        file = service.files().update(sheetID, null)
+        .setAddParents(folderID)
+        .setRemoveParents(previousParents.toString())
+        .setFields("id, parents")
+        .execute();
+
+        System.out.println("Moved from location: " + previousParents.toString() + " to location: " + FOLDER_NAME);
+
+        return "Sheet: " + SPREADSHEET_NAME + " was moved from location: " + previousParents.toString() + " to location: " + FOLDER_NAME;
     }
 }
