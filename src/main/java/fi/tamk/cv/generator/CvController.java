@@ -51,6 +51,7 @@ public class CvController {
     @Autowired
     private OAuth2AuthorizedClientService authorizedClientService;
 
+    // login in http://localhost:8080/oauth2/authorize/google
     @GetMapping("/loginSuccess")
     public String getLoginInfo(OAuth2AuthenticationToken authentication) {
         OAuth2AuthorizedClient client = authorizedClientService

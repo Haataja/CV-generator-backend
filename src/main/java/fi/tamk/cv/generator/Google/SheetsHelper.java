@@ -333,7 +333,7 @@ public class SheetsHelper {
         ArrayList<String> achievements = new ArrayList<>();
         for(int i = 0; i < objects.size() - 8; i++){
             if(inResp){
-                if(objects.get(i + 8).equals("achievements")){
+                if(((String)objects.get(i + 8)).trim().equals("achievements")){
                     inResp = false;
                 } else {
                     responsibilities.add((String) objects.get(i + 8));
