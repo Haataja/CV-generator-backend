@@ -97,10 +97,10 @@ public class CvController {
         return demoUser;
     }
 
-    @RequestMapping("/create")
-    public String create() {
+    @RequestMapping("/createFolder")
+    public String createFolder() {
         try {
-            sheetsHelper.createNewFolder(accessToken);
+            return sheetsHelper.createNewFolder(accessToken);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -108,6 +108,31 @@ public class CvController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return "File created";
+        return null;
+    }
+
+    @RequestMapping("/createSheet")
+    public String createSheet() {
+        try {
+            return sheetsHelper.createSheet(accessToken);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (GeneralSecurityException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @RequestMapping("/moveSheetToFolder")
+    public String moveSheetToFolder() {
+        try {
+            return sheetsHelper.moveSheetToFolder(accessToken);
+        } catch (IOException | GeneralSecurityException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
     }
 }
