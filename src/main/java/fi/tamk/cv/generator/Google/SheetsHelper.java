@@ -358,14 +358,12 @@ public class SheetsHelper {
         fileMetadata.setName(FOLDER_NAME);
         fileMetadata.setMimeType("application/vnd.google-apps.folder");
         List<File> files = service.files().list().setQ("name = '" + FOLDER_NAME + "'").execute().getFiles();
-        if (!(files.size() > 0)) {
+        if (files.size() == 0) {
             File file = service.files().create(fileMetadata).setFields("id").execute();
             System.out.println("Folder ID: " + file.getId());
             folderID = file.getId();
         } else {
-            JSONArray array = new JSONArray(files.toString());
-            JSONObject object = array.getJSONObject(0);
-            folderID = object.getString("id");
+            folderID = files.get(0).getId();
         }
         return "Folder " + FOLDER_NAME + " Created! Folder id: " + folderID;
     }
@@ -377,16 +375,14 @@ public class SheetsHelper {
         Spreadsheet spreadsheet = new Spreadsheet().setProperties(new SpreadsheetProperties().setTitle(SPREADSHEET_NAME));
 
         List<File> files = driveService.files().list().setQ("name = '" + SPREADSHEET_NAME + "'").execute().getFiles();
-        if (!(files.size() > 0)) {
+        if (files.size() == 0) {
             spreadsheet = service.spreadsheets().create(spreadsheet)
             .setFields("spreadsheetId")
             .execute();
             sheetID = spreadsheet.getSpreadsheetId();
             System.out.println("Spreadsheet ID: " + spreadsheet.getSpreadsheetId());
         } else {
-            JSONArray array = new JSONArray(files.toString());
-            JSONObject object = array.getJSONObject(0);
-            sheetID = object.getString("id");
+            sheetID = files.get(0).getId();
         }
 
         return "Sheet " + SPREADSHEET_NAME + " Created! Sheet id: " + sheetID;
