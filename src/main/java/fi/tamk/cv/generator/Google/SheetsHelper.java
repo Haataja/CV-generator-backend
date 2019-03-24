@@ -44,6 +44,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -170,14 +171,16 @@ public class SheetsHelper {
                             Boolean.parseBoolean((String) values.get(0).get(1))));
                     break;
                 case "document_settings":
-                    if(values.get(0).size() == 3){
-                        user.setDocument_settings(new DocumentSettings((String) values.get(0).get(0),(String) values.get(0).get(1),
-                                (String) values.get(0).get(2)));
-                    } else if(values.get(0).size() == 2){
-                        user.setDocument_settings(new DocumentSettings((String) values.get(0).get(0),(String) values.get(0).get(1),
-                                null));
-                    } else {
-                        user.setDocument_settings(new DocumentSettings((String) values.get(0).get(0),null, null));
+                    if(values != null){
+                        if(values.get(0).size() == 3){
+                            user.setDocument_settings(new DocumentSettings((String) values.get(0).get(0),(String) values.get(0).get(1),
+                                    (String) values.get(0).get(2)));
+                        } else if(values.get(0).size() == 2){
+                            user.setDocument_settings(new DocumentSettings((String) values.get(0).get(0),(String) values.get(0).get(1),
+                                    null));
+                        } else {
+                            user.setDocument_settings(new DocumentSettings((String) values.get(0).get(0),null, null));
+                        }
                     }
                     break;
                 case "bio":
@@ -361,7 +364,7 @@ public class SheetsHelper {
         File fileMetadata = new File();
         fileMetadata.setName(FOLDER_NAME);
         fileMetadata.setMimeType("application/vnd.google-apps.folder");
-        List<File> files = service.files().list().setQ("name = '" + FOLDER_NAME + "'").execute().getFiles();
+        List<File> files = new ArrayList<>();//service.files().list().setQ("name = '" + FOLDER_NAME + "'").execute().getFiles();
         if (!(files.size() > 0)) {
             File file = service.files().create(fileMetadata).setFields("id").execute();
             System.out.println("Folder ID: " + file.getId());
@@ -436,6 +439,7 @@ public class SheetsHelper {
         user.setCourses_and_education(new Info(0, true));
         user.setAchievements_and_projects(new Info(0,true));
         user.setTitles_and_degrees(new Info(0,true));
+        user.setReferences(new Info(0, true));
 
         return user;
     }
@@ -469,6 +473,90 @@ public class SheetsHelper {
             //e.printStackTrace();
         }
 
+        User user = createDefUser(0);
+        writeToSheet(accessToken, sheetID, user);
+
         return "Ok";
+    }
+
+    public void writeToSheet(String accessToken,String sheetID, String range, List<List<Object>> values){
+        ValueRange body = new ValueRange().setValues(values);
+        UpdateValuesResponse result = null;
+        try {
+            result = getSheetsService(accessToken).spreadsheets().values()
+                    .update(sheetID, range + "!A1", body)
+                    .setValueInputOption("RAW")
+                    .execute();
+        } catch (IOException|GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+        log.debug("Result {}", result);
+    }
+
+    public void writeToSheet(String accessToken,String sheetID, User user){
+        String firstname = user.getFirstname();
+        String lastname = user.getLastname();
+        LocalDate birthdate = user.getBirthdate();
+        if(firstname == null){
+            firstname = "";
+        }
+        if(lastname == null){
+            lastname = "";
+        }
+        String birthDate;
+        if(birthdate != null){
+            birthDate = birthdate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        }else {
+            birthDate = "";
+        }
+
+        List<List<Object>> basicList = Arrays.asList(Arrays.asList(""+user.getId(),firstname,lastname,birthDate));
+        writeToSheet(accessToken,sheetID,"basic",basicList);
+        if(user.getContactInfoAsList() != null){
+            writeToSheet(accessToken,sheetID,"contact_info",user.getContactInfoAsList());
+        }
+
+        if(user.getAddress() != null){
+            writeToSheet(accessToken, sheetID, "address",user.getAddress().toListOfLists());
+        }
+
+        if(user.getProfile_image() != null){
+            writeToSheet(accessToken, sheetID, "profile_image",user.getProfile_image().toListOfLists());
+        }
+
+        if(user.getDocument_settings() != null){
+            writeToSheet(accessToken, sheetID, "document_settings",user.getDocument_settings().toListOfLists());
+        }
+
+        if(user.getBio() != null){
+            writeToSheet(accessToken, sheetID, "bio",user.getBio().toListOfLists());
+        }
+
+        if(user.getLicences() != null){
+            writeToSheet(accessToken, sheetID, "licences",user.getLicences().toListOfLists());
+        }
+        if(user.getAbilities_and_hobbies() != null){
+            writeToSheet(accessToken, sheetID, "abilities_and_hobbies",user.getAbilities_and_hobbies().toListOfLists());
+        }
+
+        if(user.getExperience() != null){
+            writeToSheet(accessToken, sheetID, "experience",user.getExperience().toListOfLists());
+        }
+
+        if(user.getCourses_and_education() != null){
+            writeToSheet(accessToken, sheetID, "courses_and_education",user.getCourses_and_education().toListOfLists());
+        }
+
+        if(user.getAchievements_and_projects() != null){
+            writeToSheet(accessToken, sheetID, "achievements_and_projects",user.getAbilities_and_hobbies().toListOfLists());
+        }
+
+        if(user.getTitles_and_degrees() != null){
+            writeToSheet(accessToken, sheetID, "titles_and_degrees",user.getTitles_and_degrees().toListOfLists());
+        }
+
+        if(user.getReferences() != null){
+            writeToSheet(accessToken, sheetID, "references",user.getReferences().toListOfLists());
+        }
     }
 }
