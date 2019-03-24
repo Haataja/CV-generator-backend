@@ -357,7 +357,7 @@ public class SheetsHelper {
         File fileMetadata = new File();
         fileMetadata.setName(FOLDER_NAME);
         fileMetadata.setMimeType("application/vnd.google-apps.folder");
-        List<File> files = service.files().list().setQ("name = '" + FOLDER_NAME + "'").execute().getFiles();
+        List<File> files = getFiles(token, FOLDER_NAME);
         if (files.size() == 0) {
             File file = service.files().create(fileMetadata).setFields("id").execute();
             System.out.println("Folder ID: " + file.getId());
@@ -371,10 +371,9 @@ public class SheetsHelper {
     public String createSheet(String token) throws IOException, GeneralSecurityException {
         
         Sheets service = getSheetsService(token);
-        Drive driveService = getDriveService(token);
         Spreadsheet spreadsheet = new Spreadsheet().setProperties(new SpreadsheetProperties().setTitle(SPREADSHEET_NAME));
 
-        List<File> files = driveService.files().list().setQ("name = '" + SPREADSHEET_NAME + "'").execute().getFiles();
+        List<File> files = getFiles(token, SPREADSHEET_NAME);
         if (files.size() == 0) {
             spreadsheet = service.spreadsheets().create(spreadsheet)
             .setFields("spreadsheetId")
@@ -409,5 +408,10 @@ public class SheetsHelper {
         System.out.println("Moved from location: " + previousParents.toString() + " to location: " + FOLDER_NAME);
 
         return "Sheet: " + SPREADSHEET_NAME + " was moved from location: " + previousParents.toString() + " to location: " + FOLDER_NAME;
+    }
+
+    public List<File> getFiles(String token, String name) throws IOException, GeneralSecurityException {
+        Drive service = getDriveService(token);
+        return service.files().list().setQ("name = '" + name + "'").execute().getFiles();
     }
 }
