@@ -37,7 +37,12 @@ public class Bio {
     }
 
     public List<List<Object>> toListOfLists() {
-        List<Object> list = Arrays.asList(value,"" + visible);
+        List<Object> list;
+        if(value == null){
+            list = Arrays.asList("","" + visible);
+        } else {
+            list = Arrays.asList(value,"" + visible);
+        }
         return Arrays.asList(list);
     }
 

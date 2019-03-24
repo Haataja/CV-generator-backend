@@ -25,6 +25,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
@@ -63,6 +65,17 @@ public class User {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public List<List<Object>> getContactInfoAsList(){
+        List<List<Object>> lists = null;
+        if(contact_info.size() > 0){
+            lists = Arrays.asList(contact_info.get(0).toList());
+            for(int i = 1; i < contact_info.size(); i++){
+                lists.add(Arrays.asList(contact_info.get(i).toList()));
+            }
+        }
+        return lists;
     }
 
     public String getFirstname() {

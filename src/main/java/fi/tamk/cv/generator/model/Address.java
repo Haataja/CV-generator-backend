@@ -42,8 +42,21 @@ public class Address {
     }
 
     public List<List<Object>> toListOfLists() {
-        List<Object> list = Arrays.asList(street_address,zipcode,country,city,"" + visible);
+        String street = nullCheck(street_address);
+        String zip = nullCheck(zipcode);
+        String country = nullCheck(this.country);
+        String city = nullCheck(this.city);
+
+        List<Object> list = Arrays.asList(street,zip,country,city,"" + visible);
         return Arrays.asList(list);
+    }
+
+    public String nullCheck(String string){
+        if(string == null){
+            return "";
+        } else {
+            return string;
+        }
     }
 
     public String getStreet_address() {
