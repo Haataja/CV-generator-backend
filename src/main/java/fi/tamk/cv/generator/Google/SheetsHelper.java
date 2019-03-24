@@ -393,7 +393,7 @@ public class SheetsHelper {
             sheetID = object.getString("id");
         }
 
-        return "Sheet " + SPREADSHEET_NAME + " Created! Sheet id: " + sheetID;
+        return sheetID;
     }
 
     public String moveSheetToFolder(String token) throws IOException, GeneralSecurityException {
@@ -440,6 +440,7 @@ public class SheetsHelper {
         return user;
     }
 
+    // should this be done in the create sheet?
     public String makeTabsToSheet(String accessToken, String sheetID){
         List<Request> requests = new ArrayList<>();
         BatchUpdateSpreadsheetRequest requestBody = new BatchUpdateSpreadsheetRequest();
@@ -463,9 +464,11 @@ public class SheetsHelper {
             BatchUpdateSpreadsheetResponse response = getSheetsService(accessToken).spreadsheets().batchUpdate(sheetID, requestBody).execute();
             log.debug(response.toString());
         } catch (IOException|GeneralSecurityException e) {
-            e.printStackTrace();
+            log.error("Something went wrong in the making of the tabs in the sheets: {}", e.getMessage());
+            return "Error";
+            //e.printStackTrace();
         }
 
-        return "String";
+        return "Ok";
     }
 }
