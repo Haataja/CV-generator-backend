@@ -30,11 +30,7 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.sheets.v4.Sheets;
-import com.google.api.services.sheets.v4.model.BatchGetValuesResponse;
-import com.google.api.services.sheets.v4.model.Spreadsheet;
-import com.google.api.services.sheets.v4.model.SpreadsheetProperties;
-import com.google.api.services.sheets.v4.model.UpdateValuesResponse;
-import com.google.api.services.sheets.v4.model.ValueRange;
+import com.google.api.services.sheets.v4.model.*;
 import fi.tamk.cv.generator.model.*;
 import fi.tamk.cv.generator.model.datatypes.*;
 
@@ -147,13 +143,21 @@ public class SheetsHelper {
             switch (sheet){
                 case "basic":
                     user.setId(Long.parseLong((String) values.get(0).get(0)));
-                    user.setFirstname((String) values.get(0).get(1));
-                    user.setLastname((String) values.get(0).get(2));
-                    user.setBirthdate(parseLocalDate((String) values.get(0).get(3)));
+                    if(values.get(0).size() > 1){
+                        user.setFirstname((String) values.get(0).get(1));
+                        if(values.get(0).size() > 2){
+                            user.setLastname((String) values.get(0).get(2));
+                            if(values.get(0).size() > 3){
+                                user.setBirthdate(parseLocalDate((String) values.get(0).get(3)));
+                            }
+                        }
+                    }
                     break;
                 case "contact_info":
-                    for(List<Object> contact:values){
-                        user.getContact_info().add(new ContactInfo((String)contact.get(0),(String) contact.get(1),Boolean.parseBoolean((String) contact.get(2))));
+                    if(values != null){
+                        for(List<Object> contact:values){
+                            user.getContact_info().add(new ContactInfo((String)contact.get(0),(String) contact.get(1),Boolean.parseBoolean((String) contact.get(2))));
+                        }
                     }
                     break;
                 case "address":
@@ -333,7 +337,7 @@ public class SheetsHelper {
         ArrayList<String> achievements = new ArrayList<>();
         for(int i = 0; i < objects.size() - 8; i++){
             if(inResp){
-                if(objects.get(i + 8).equals("achievements")){
+                if(((String)objects.get(i + 8)).trim().equals("achievements")){
                     inResp = false;
                 } else {
                     responsibilities.add((String) objects.get(i + 8));
@@ -352,7 +356,7 @@ public class SheetsHelper {
     }
 
     public String createNewFolder(String token) throws IOException, GeneralSecurityException {
-        
+
         Drive service = getDriveService(token);
         File fileMetadata = new File();
         fileMetadata.setName(FOLDER_NAME);
@@ -413,5 +417,55 @@ public class SheetsHelper {
         System.out.println("Moved from location: " + previousParents.toString() + " to location: " + FOLDER_NAME);
 
         return "Sheet: " + SPREADSHEET_NAME + " was moved from location: " + previousParents.toString() + " to location: " + FOLDER_NAME;
+    }
+
+    public User createDefUser(long id){
+        User user = new User();
+        user.setId(id);
+        user.setContact_info(new ArrayList<>());
+
+        Address address = new Address();
+        address.setVisible(true);
+        user.setAddress(address);
+
+        user.setProfile_image(new ProfileImage());
+        user.setBio(new Bio());
+        user.setLicences(new Info(0,true));
+        user.setAbilities_and_hobbies(new Info(0, true));
+        user.setExperience(new Info(0, true));
+        user.setCourses_and_education(new Info(0, true));
+        user.setAchievements_and_projects(new Info(0,true));
+        user.setTitles_and_degrees(new Info(0,true));
+
+        return user;
+    }
+
+    public String makeTabsToSheet(String accessToken, String sheetID){
+        List<Request> requests = new ArrayList<>();
+        BatchUpdateSpreadsheetRequest requestBody = new BatchUpdateSpreadsheetRequest();
+        requests.add(new Request().setAddSheet(new AddSheetRequest().setProperties(new SheetProperties().setTitle("basic"))));
+        requests.add(new Request().setAddSheet(new AddSheetRequest().setProperties(new SheetProperties().setTitle("contact_info"))));
+        requests.add(new Request().setAddSheet(new AddSheetRequest().setProperties(new SheetProperties().setTitle("address"))));
+        requests.add(new Request().setAddSheet(new AddSheetRequest().setProperties(new SheetProperties().setTitle("profile_image"))));
+        requests.add(new Request().setAddSheet(new AddSheetRequest().setProperties(new SheetProperties().setTitle("document_settings"))));
+        requests.add(new Request().setAddSheet(new AddSheetRequest().setProperties(new SheetProperties().setTitle("bio"))));
+        requests.add(new Request().setAddSheet(new AddSheetRequest().setProperties(new SheetProperties().setTitle("licences"))));
+        requests.add(new Request().setAddSheet(new AddSheetRequest().setProperties(new SheetProperties().setTitle("abilities_and_hobbies"))));
+        requests.add(new Request().setAddSheet(new AddSheetRequest().setProperties(new SheetProperties().setTitle("experience"))));
+        requests.add(new Request().setAddSheet(new AddSheetRequest().setProperties(new SheetProperties().setTitle("courses_and_education"))));
+        requests.add(new Request().setAddSheet(new AddSheetRequest().setProperties(new SheetProperties().setTitle("achievements_and_projects"))));
+        requests.add(new Request().setAddSheet(new AddSheetRequest().setProperties(new SheetProperties().setTitle("titles_and_degrees"))));
+        requests.add(new Request().setAddSheet(new AddSheetRequest().setProperties(new SheetProperties().setTitle("references"))));
+        requests.add(new Request().setDeleteSheet(new DeleteSheetRequest().setSheetId(0)));
+        requestBody.setRequests(requests);
+
+        try {
+            BatchUpdateSpreadsheetResponse response = getSheetsService(accessToken).spreadsheets().batchUpdate(sheetID, requestBody).execute();
+            log.debug(response.toString());
+        } catch (IOException|GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+
+        return "String";
     }
 }
