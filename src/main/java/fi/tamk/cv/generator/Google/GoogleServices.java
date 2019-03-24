@@ -20,17 +20,34 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package fi.tamk.cv.generator.Google;
 
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.List;
 
+@Component
 public class GoogleServices {
     public static final String APPLICATION_NAME = "quickstart-1550136441024";
 
+    @Autowired
+    private SheetsHelper sheetsHelper;
 
+    @Autowired
+    private DriveHelper driveHelper;
+
+
+    public String createSheet(String accessToken) throws IOException, GeneralSecurityException {
+        String folderID = driveHelper.createNewFolder(accessToken);
+        if(folderID != null){
+            String sheetID = sheetsHelper.createSheet(accessToken);
+            if(sheetID != null){
+                driveHelper.moveSheetToFolder(accessToken, sheetID,folderID);
+                sheetsHelper.makeTabsToSheet(accessToken, sheetID);
+            }
+        }
+        return "ok";
+    }
 }
