@@ -68,13 +68,11 @@ public class User {
     }
 
     public List<List<Object>> fetchContactInfoAsList(){
-        List<List<Object>> lists = null;
-        if(contact_info.size() > 0){
-            lists = Arrays.asList(contact_info.get(0).toList());
-            for(int i = 1; i < contact_info.size(); i++){
-                lists.add(Arrays.asList(contact_info.get(i).toList()));
-            }
+        List<List<Object>> lists = new ArrayList<>();
+        for(ContactInfo c: contact_info){
+            lists.add(c.toList());
         }
+
         return lists;
     }
 

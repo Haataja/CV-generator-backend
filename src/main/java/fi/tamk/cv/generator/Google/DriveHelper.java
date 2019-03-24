@@ -41,7 +41,7 @@ import java.util.List;
 public class DriveHelper {
     private Logger log = LoggerFactory.getLogger(this.getClass());
     private static final String FOLDER_NAME = "CV-Generator-data";
-    private static final String SPREADSHEET_NAME = "CV-Generator-data-spreadsheet";
+    static final String SPREADSHEET_NAME = "CV-Generator-data-spreadsheet";
     private static final String APPLICATION_NAME = "quickstart-1550136441024";
 
 
@@ -57,7 +57,7 @@ public class DriveHelper {
         File fileMetadata = new File();
         fileMetadata.setName(FOLDER_NAME);
         fileMetadata.setMimeType("application/vnd.google-apps.folder");
-        List<File> files = service.files().list().setQ("name = '" + FOLDER_NAME + "'").execute().getFiles();
+        List<File> files = new ArrayList<>();//service.files().list().setQ("name = '" + FOLDER_NAME + "'").execute().getFiles();
         if (!(files.size() > 0)) {
             File file = service.files().create(fileMetadata).setFields("id").execute();
             System.out.println("Folder ID: " + file.getId());

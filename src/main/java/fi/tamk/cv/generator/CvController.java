@@ -95,11 +95,18 @@ public class CvController {
                 .add(new Hobby(2, true, "Scuba Diving", "Diving with gear", LocalDate.of(2010, 1, 1), LocalDate.now()));
         demoUser.setExperience(new Info(2, true));
         demoUser.getExperience().getData().add(new Experience(1, true, LocalDate.now(), LocalDate.now(), "something",
-                "something", "something", new String[] { "" }));
+                "something", "something", new String[] { "somethin","in","achievements" }));
         demoUser.getExperience().getData().add(new ExperienceWork(2, true, LocalDate.now(), LocalDate.now(),
                 "something", "something", "something", new String[] { "Having a cat" }, new String[] { "the cat" }));
 
         return demoUser;
+    }
+
+    @RequestMapping("/write/demo")
+    public String writeDemo() {
+        User user = demo();
+        googleServices.writeToCV(accessToken, user);
+        return "ok";
     }
 
     @RequestMapping("/createFolder")

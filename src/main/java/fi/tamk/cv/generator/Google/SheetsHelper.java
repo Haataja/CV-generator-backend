@@ -274,6 +274,7 @@ public class SheetsHelper {
 
     public void writeToSheet(String accessToken,String sheetID, String range, List<List<Object>> values){
         ValueRange body = new ValueRange().setValues(values);
+        log.debug("{}", body);
         UpdateValuesResponse result = null;
         try {
             result = getSheetsService(accessToken).spreadsheets().values()

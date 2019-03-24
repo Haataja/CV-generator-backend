@@ -20,11 +20,16 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package fi.tamk.cv.generator.model.datatypes;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Experience extends DataType {
+    Logger log = LoggerFactory.getLogger(this.getClass());
     private LocalDate startdate;
     private LocalDate enddate;
     private String title;
@@ -62,9 +67,20 @@ public class Experience extends DataType {
     }
 
     public List<Object> toList(){
-        List<Object> list = Arrays.asList(getType(),""+getId(),""+isVisible(), getStartdate().format(formatter),getEnddate().format(formatter),
-                getTitle(),getName());
-        list.addAll(Arrays.asList(achievements));
+        List<Object> list = new ArrayList<>();
+        list.add(getType());
+        list.add(getId());
+        list.add(isVisible());
+        list.add( getStartdate().format(formatter));
+        list.add(getEnddate().format(formatter));
+        list.add(getTitle());
+        list.add(getName());
+        list.add(getDescription());
+        if(achievements != null && achievements.length != 0){
+            list.addAll(Arrays.asList(achievements));
+        }
+            log.debug("EXPERINCE {}", list);
+
         return list;
     }
 

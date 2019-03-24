@@ -21,6 +21,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package fi.tamk.cv.generator.Google;
 
 import com.google.api.services.drive.model.File;
+import fi.tamk.cv.generator.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -49,5 +50,25 @@ public class GoogleServices {
             }
         }
         return "ok";
+    }
+
+    public void writeToCV(String accessToken, User user){
+        String sheetID = getOwnedSheetID(accessToken);
+
+        if(sheetID != null){
+            sheetsHelper.writeToSheet(accessToken,sheetID,user);
+        }
+    }
+
+    public String getOwnedSheetID(String accessToken){
+        List<File> files = driveHelper.search(accessToken, DriveHelper.SPREADSHEET_NAME);
+        String sheetID = null;
+        for(File file: files){
+            if(file.getOwnedByMe()){
+                sheetID = file.getId();
+                break;
+            }
+        }
+        return sheetID;
     }
 }
