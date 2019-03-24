@@ -1,5 +1,8 @@
 package fi.tamk.cv.generator.model.datatypes;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Licence extends DataType{
     private String value;
     private String name;
@@ -14,6 +17,10 @@ public class Licence extends DataType{
         super(type, id, visible);
         this.value = value;
         this.name = name;
+    }
+
+    public List<String> toList(){
+        return Arrays.asList(getType(),""+getId(),""+isVisible(),getValue(),getName());
     }
 
     public String getValue() {

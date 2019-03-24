@@ -21,6 +21,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package fi.tamk.cv.generator.model.datatypes;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 public class ExperienceWork extends Experience{
     private String[] responsibilities;
@@ -40,6 +42,16 @@ public class ExperienceWork extends Experience{
     public ExperienceWork(long id, boolean visible, LocalDate startdate, LocalDate enddate, String title, String name, String description) {
         super(id, visible, startdate, enddate, title, name, description);
         setType("work");
+    }
+
+    @Override
+    public List<String> toList(){
+        List<String> list = Arrays.asList(getType(),""+getId(),""+isVisible(), getStartdate().format(formatter),getEnddate().format(formatter),
+                getTitle(),getName());
+        list.addAll(Arrays.asList(responsibilities));
+        list.add("achievements");
+        list.addAll(Arrays.asList(getAchievements()));
+        return list;
     }
 
     public String[] getResponsibilities() {

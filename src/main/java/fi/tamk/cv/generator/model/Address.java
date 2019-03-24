@@ -20,6 +20,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package fi.tamk.cv.generator.model;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Address {
     private String street_address;
     private String zipcode;
@@ -36,6 +39,11 @@ public class Address {
         this.country = country;
         this.city = city;
         this.visible = visible;
+    }
+
+    public List<List<String>> toListOfLists() {
+        List<String> list = Arrays.asList(street_address,zipcode,country,city,"" + visible);
+        return Arrays.asList(list);
     }
 
     public String getStreet_address() {

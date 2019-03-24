@@ -20,6 +20,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package fi.tamk.cv.generator.model;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class ContactInfo {
     private String type;
     private String value;
@@ -29,6 +32,11 @@ public class ContactInfo {
         this.type = type;
         this.value = value;
         this.visible = visible;
+    }
+
+    public List<List<String>> toListOfLists(){
+        List<String> list = Arrays.asList(type,value,"" + visible);
+        return Arrays.asList(list);
     }
 
     public String getType() {

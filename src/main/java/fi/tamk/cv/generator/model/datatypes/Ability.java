@@ -20,6 +20,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package fi.tamk.cv.generator.model.datatypes;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Ability extends DataType{
     private String name;
     private String efficiency_title;
@@ -36,6 +39,10 @@ public class Ability extends DataType{
         this.name = name;
         this.efficiency_title = efficiency_title;
         this.efficiency_level = efficiency_level;
+    }
+
+    public List<String> toList(){
+        return Arrays.asList(getType(),""+getId(),""+isVisible(),getName(),getEfficiency_title(),""+getEfficiency_level());
     }
 
     public Ability(String type, long id, boolean visible, String name, String efficiency_title, long efficiency_level) {

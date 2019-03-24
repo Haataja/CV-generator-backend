@@ -21,6 +21,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package fi.tamk.cv.generator.model.datatypes;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Title type is title or degree
@@ -39,6 +41,10 @@ public class Title extends DataType{
         super(type, id, visible);
         this.title = title;
         this.awarded = awarded;
+    }
+
+    public List<String> toList(){
+        return Arrays.asList(getType(),""+getId(),""+isVisible(),getTitle(),getAwarded().format(formatter));
     }
 
     public String getTitle() {

@@ -21,6 +21,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package fi.tamk.cv.generator.model.datatypes;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
 
 public class Achievement extends DataType{
     private String name;
@@ -43,6 +46,10 @@ public class Achievement extends DataType{
         this.name = name;
         this.description = description;
         this.completion_date = completion_date;
+    }
+
+    public List<String> toList(){
+        return Arrays.asList(getType(),""+getId(),""+isVisible(),getName(),getDescription(),getCompletion_date().format(formatter));
     }
 
     public String getName() {

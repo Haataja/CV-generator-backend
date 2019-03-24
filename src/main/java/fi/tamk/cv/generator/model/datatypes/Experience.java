@@ -21,6 +21,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package fi.tamk.cv.generator.model.datatypes;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 public class Experience extends DataType {
     private LocalDate startdate;
@@ -57,7 +59,13 @@ public class Experience extends DataType {
         this.title = title;
         this.name = name;
         this.description = description;
-        this.achievements = achievements;
+    }
+
+    public List<String> toList(){
+        List<String> list = Arrays.asList(getType(),""+getId(),""+isVisible(), getStartdate().format(formatter),getEnddate().format(formatter),
+                getTitle(),getName());
+        list.addAll(Arrays.asList(achievements));
+        return list;
     }
 
     public LocalDate getStartdate() {

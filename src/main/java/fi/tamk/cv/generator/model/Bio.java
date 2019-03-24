@@ -20,6 +20,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package fi.tamk.cv.generator.model;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Bio {
     private String value;
     private boolean visible;
@@ -31,6 +34,11 @@ public class Bio {
 
     public Bio() {
         setVisible(true);
+    }
+
+    public List<List<String>> toListOfLists() {
+        List<String> list = Arrays.asList(value,"" + visible);
+        return Arrays.asList(list);
     }
 
     public String getValue() {

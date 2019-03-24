@@ -22,6 +22,9 @@ package fi.tamk.cv.generator.model.datatypes;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 public class Person extends DataType{
     private String name;
@@ -40,6 +43,10 @@ public class Person extends DataType{
         this.name = name;
         this.contact_email = contact_email;
         this.contact_phone = contact_phone;
+    }
+
+    public List<String> toList(){
+        return Arrays.asList(getType(),""+getId(),""+isVisible(),getName(),getContact_email(),getContact_phone());
     }
 
     public String getName() {

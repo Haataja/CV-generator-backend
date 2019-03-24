@@ -20,6 +20,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package fi.tamk.cv.generator.model;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class DocumentSettings {
     private String language;
     private String background_image;
@@ -32,6 +35,11 @@ public class DocumentSettings {
     }
 
     public DocumentSettings() {
+    }
+
+    public List<List<String>> toListOfLists() {
+        List<String> list = Arrays.asList(language, background_image, footer_value);
+        return Arrays.asList(list);
     }
 
     public String getLanguage() {
