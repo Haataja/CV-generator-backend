@@ -20,6 +20,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package fi.tamk.cv.generator;
 
+import fi.tamk.cv.generator.Google.GoogleServices;
 import fi.tamk.cv.generator.Google.SheetsHelper;
 import fi.tamk.cv.generator.model.*;
 import fi.tamk.cv.generator.model.datatypes.*;
@@ -47,6 +48,9 @@ public class CvController {
     Logger log = LoggerFactory.getLogger(this.getClass());
     @Autowired
     SheetsHelper sheetsHelper;
+
+    @Autowired
+    GoogleServices googleServices;
 
     @Autowired
     private OAuth2AuthorizedClientService authorizedClientService;
@@ -135,5 +139,15 @@ public class CvController {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @RequestMapping("/create")
+    public String createSheetTemplate(){
+        try {
+            return googleServices.createSheet(accessToken);
+        } catch (IOException | GeneralSecurityException e) {
+            e.printStackTrace();
+            return "error";
+        }
     }
 }
