@@ -67,7 +67,7 @@ public class User {
         this.id = id;
     }
 
-    public List<List<Object>> getContactInfoAsList(){
+    public List<List<Object>> fetchContactInfoAsList(){
         List<List<Object>> lists = null;
         if(contact_info.size() > 0){
             lists = Arrays.asList(contact_info.get(0).toList());

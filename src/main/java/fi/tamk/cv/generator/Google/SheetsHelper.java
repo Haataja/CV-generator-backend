@@ -105,6 +105,20 @@ public class SheetsHelper {
         return result;
     }
 
+    public Object readRange(String accessToken, String sheetID, String range){
+        try{
+            Sheets service = getSheetsService(accessToken);
+            ValueRange response = service.spreadsheets().values()
+                    .get(sheetID, range+"!A1:Z1000")
+                    .execute();
+            return SheetParser.parseObject(response.getValues(), range);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     public User read(String sheetID, String token){
         ArrayList<String> ranges = new ArrayList<>();
         ranges.add("basic"); // id, first,last,birthdate
@@ -126,237 +140,16 @@ public class SheetsHelper {
             Sheets.Spreadsheets.Values.BatchGet request = service.spreadsheets().values().batchGet(sheetID);
             request.setRanges(ranges);
             BatchGetValuesResponse response = request.execute();
-            log.info(response.toString());
-            log.info(response.get("valueRanges").toString());
+            log.debug(response.toString());
+            log.debug(response.get("valueRanges").toString());
             //List<List<Object>> rawValues = response.getValues();
-            return parseUser(response.getValueRanges());
+            return SheetParser.parseUser(response.getValueRanges());
         } catch (Exception e){
             e.printStackTrace();
         }
         return null;
     }
 
-    private User parseUser(List<ValueRange> list){
-        User user = new User();
-        for(ValueRange vr : list){
-            String sheet = vr.getRange().split("!")[0];
-            List<List<Object>> values = vr.getValues();
-            switch (sheet){
-                case "basic":
-                    user.setId(Long.parseLong((String) values.get(0).get(0)));
-                    if(values.get(0).size() > 1){
-                        user.setFirstname((String) values.get(0).get(1));
-                        if(values.get(0).size() > 2){
-                            user.setLastname((String) values.get(0).get(2));
-                            if(values.get(0).size() > 3){
-                                user.setBirthdate(parseLocalDate((String) values.get(0).get(3)));
-                            }
-                        }
-                    }
-                    break;
-                case "contact_info":
-                    if(values != null){
-                        for(List<Object> contact:values){
-                            user.getContact_info().add(new ContactInfo((String)contact.get(0),(String) contact.get(1),Boolean.parseBoolean((String) contact.get(2))));
-                        }
-                    }
-                    break;
-                case "address":
-                    user.setAddress(new Address((String) values.get(0).get(0),(String) values.get(0).get(1),
-                            (String) values.get(0).get(2),(String) values.get(0).get(3),
-                            Boolean.parseBoolean((String) values.get(0).get(4))));
-                    break;
-                case "profile_image":
-                    user.setProfile_image(new ProfileImage((String) values.get(0).get(0),
-                            Boolean.parseBoolean((String) values.get(0).get(1))));
-                    break;
-                case "document_settings":
-                    if(values != null){
-                        if(values.get(0).size() == 3){
-                            user.setDocument_settings(new DocumentSettings((String) values.get(0).get(0),(String) values.get(0).get(1),
-                                    (String) values.get(0).get(2)));
-                        } else if(values.get(0).size() == 2){
-                            user.setDocument_settings(new DocumentSettings((String) values.get(0).get(0),(String) values.get(0).get(1),
-                                    null));
-                        } else {
-                            user.setDocument_settings(new DocumentSettings((String) values.get(0).get(0),null, null));
-                        }
-                    }
-                    break;
-                case "bio":
-                    user.setBio(new Bio((String) values.get(0).get(0),
-                            Boolean.parseBoolean((String) values.get(0).get(1))));
-                    break;
-                case "licences":
-                    List<Object> LicenceInfos = values.get(0);
-                    Info LicenceInfo = new Info(Integer.parseInt((String) LicenceInfos.get(0)), Boolean.parseBoolean((String) LicenceInfos.get(1)));
-                    ArrayList<DataType> LicenceData = new ArrayList<>();
-                    for(int i = 1; i < values.size(); i++){
-                        LicenceData.add(new Licence((String) values.get(i).get(0),Long.parseLong((String) values.get(i).get(1)),
-                                Boolean.parseBoolean((String) values.get(i).get(2)),(String) values.get(i).get(3),
-                                (String) values.get(i).get(4)));
-                    }
-                    LicenceInfo.setData(LicenceData);
-                    user.setLicences(LicenceInfo);
-                    break;
-                case "abilities_and_hobbies":
-                    List<Object> AbilityInfos = values.get(0);
-                    Info abilityInfo = new Info(Integer.parseInt((String) AbilityInfos.get(0)),
-                            Boolean.parseBoolean((String) AbilityInfos.get(1)));
-                    ArrayList<DataType> AbilityData = new ArrayList<>();
-                    for(int i = 1; i < values.size(); i++){
-                        DataType ability;
-                        if(values.get(i).get(0).equals("hobby")){
-                            ability = new Hobby(Long.parseLong((String) values.get(i).get(1)),
-                                    Boolean.parseBoolean((String) values.get(i).get(2)),
-                                    (String) values.get(i).get(3),(String) values.get(i).get(4),
-                                    parseLocalDate((String) values.get(i).get(5)),parseLocalDate((String) values.get(i).get(6)));
-                        } else {
-                            ability = new Ability((String) values.get(i).get(0),Long.parseLong((String) values.get(i).get(1)),
-                                    Boolean.parseBoolean((String) values.get(i).get(2)),(String) values.get(i).get(3),
-                                    (String) values.get(i).get(4),Integer.parseInt((String) values.get(i).get(5)));
-                        }
-
-                        AbilityData.add(ability);
-                    }
-                    abilityInfo.setData(AbilityData);
-                    user.setAbilities_and_hobbies(abilityInfo);
-                    break;
-                case "experience":
-                    List<Object> ExpInfos = values.get(0);
-                    Info expInfo = new Info(Integer.parseInt((String) ExpInfos.get(0)),
-                            Boolean.parseBoolean((String) ExpInfos.get(1)));
-                    ArrayList<DataType> expData = new ArrayList<>();
-                    for(int i = 1; i < values.size(); i++){
-                        DataType experience;
-                        if(values.get(i).get(0).equals("work")){
-                            experience = new ExperienceWork(Long.parseLong((String) values.get(i).get(1)),
-                                    Boolean.parseBoolean((String) values.get(i).get(2)),parseLocalDate((String) values.get(i).get(3)),
-                                    parseLocalDate((String) values.get(i).get(4)),(String) values.get(i).get(5),(String) values.get(i).get(6),
-                                    (String) values.get(i).get(7));
-                            setAchievementsAndResp(experience, values.get(i));
-
-                        } else {
-                            experience = new Experience(Long.parseLong((String) values.get(i).get(1)),
-                                    Boolean.parseBoolean((String) values.get(i).get(2)),parseLocalDate((String) values.get(i).get(3)),
-                                    parseLocalDate((String) values.get(i).get(4)),(String) values.get(i).get(5),(String) values.get(i).get(6),
-                                    (String) values.get(i).get(7));
-                            int size = values.get(i).size() - 8;
-                            String[] achievements = new String[size];
-                            for(int j = 0; j < size; j++){
-                                achievements[j] = (String) values.get(i).get(j+8);
-                            }
-                            ((Experience) experience).setAchievements(achievements);
-                        }
-
-                        expData.add(experience);
-                    }
-                    expInfo.setData(expData);
-                    user.setExperience(expInfo);
-                    break;
-                case "courses_and_education":
-                    List<Object> courseInfos = values.get(0);
-                    Info courseInfo = new Info(Integer.parseInt((String) courseInfos.get(0)),
-                            Boolean.parseBoolean((String) courseInfos.get(1)));
-                    ArrayList<DataType> courseData = new ArrayList<>();
-                    for(int i = 1; i < values.size(); i++){
-                        DataType course;
-                        if(values.get(i).get(0).equals("course")){
-                            course = new Course(Long.parseLong((String) values.get(i).get(1)),
-                                    Boolean.parseBoolean((String) values.get(i).get(2)),
-                                    (String) values.get(i).get(3),(String) values.get(i).get(4), Integer.parseInt((String) values.get(i).get(5)),
-                                    parseLocalDate((String) values.get(i).get(6)),parseLocalDate((String) values.get(i).get(7)));
-                        } else {
-                            course = new Education(Long.parseLong((String) values.get(i).get(1)),
-                                    Boolean.parseBoolean((String) values.get(i).get(2)),
-                                    (String) values.get(i).get(3),(String) values.get(i).get(4),(String) values.get(i).get(5)
-                                    , Integer.parseInt((String) values.get(i).get(6)),
-                                    parseLocalDate((String) values.get(i).get(7)),parseLocalDate((String) values.get(i).get(8)));
-                        }
-
-                        courseData.add(course);
-                    }
-                    courseInfo.setData(courseData);
-                    user.setCourses_and_education(courseInfo);
-                    break;
-                case "achievements_and_projects":
-                    List<Object> projectInfos = values.get(0);
-                    Info projectInfo = new Info(Integer.parseInt((String) projectInfos.get(0)),
-                            Boolean.parseBoolean((String) projectInfos.get(1)));
-                    ArrayList<DataType> projectData = new ArrayList<>();
-                    for(int i = 1; i < values.size(); i++){
-                        DataType project;
-                        if(values.get(i).get(0).equals("achievement")){
-                            project = new Achievement(Long.parseLong((String) values.get(i).get(1)),
-                                    Boolean.parseBoolean((String) values.get(i).get(2)),
-                                    (String) values.get(i).get(3),(String) values.get(i).get(4),parseLocalDate((String) values.get(i).get(5)));
-                        } else {
-                            project = new Project((String) values.get(i).get(0),Long.parseLong((String) values.get(i).get(1)),
-                                    Boolean.parseBoolean((String) values.get(i).get(2)),
-                                    (String) values.get(i).get(3),(String) values.get(i).get(4),parseLocalDate((String) values.get(i).get(5)));
-                        }
-
-                        projectData.add(project);
-                    }
-                    projectInfo.setData(projectData);
-                    user.setCourses_and_education(projectInfo);
-                    break;
-                case "titles_and_degrees":
-                    List<Object> titleInfos = values.get(0);
-                    Info titleInfo = new Info(Integer.parseInt((String) titleInfos.get(0)),
-                            Boolean.parseBoolean((String) titleInfos.get(1)));
-                    ArrayList<DataType> titleData = new ArrayList<>();
-                    for(int i = 1; i < values.size(); i++){
-                        titleData.add(new Title((String) values.get(i).get(0),Long.parseLong((String) values.get(i).get(1)),
-                                Boolean.parseBoolean((String) values.get(i).get(2)),(String) values.get(i).get(3),
-                                parseLocalDate((String) values.get(i).get(4))));
-                    }
-                    titleInfo.setData(titleData);
-                    user.setTitles_and_degrees(titleInfo);
-                    break;
-                case "references":
-                    List<Object> referenceInfos = values.get(0);
-                    Info referenceInfo = new Info(Integer.parseInt((String) referenceInfos.get(0)),
-                            Boolean.parseBoolean((String) referenceInfos.get(1)));
-                    ArrayList<DataType> referenceData = new ArrayList<>();
-                    for(int i = 1; i < values.size(); i++){
-                        referenceData.add(new Person(Long.parseLong((String) values.get(i).get(1)),
-                                Boolean.parseBoolean((String) values.get(i).get(2)),(String) values.get(i).get(3),
-                                (String) values.get(i).get(4),(String) values.get(i).get(5)));
-                    }
-                    referenceInfo.setData(referenceData);
-                    user.setReferences(referenceInfo);
-                    break;
-            }
-
-
-        }
-        return user;
-    }
-
-    private void setAchievementsAndResp(DataType experience, List<Object> objects){
-        boolean inResp = true;
-        ArrayList<String> responsibilities = new ArrayList<>();
-        ArrayList<String> achievements = new ArrayList<>();
-        for(int i = 0; i < objects.size() - 8; i++){
-            if(inResp){
-                if(((String)objects.get(i + 8)).trim().equals("achievements")){
-                    inResp = false;
-                } else {
-                    responsibilities.add((String) objects.get(i + 8));
-                }
-            } else {
-                achievements.add((String) objects.get(i + 8));
-            }
-        }
-        ((ExperienceWork) experience).setResponsibilities(responsibilities.toArray(new String[0]));
-        ((ExperienceWork) experience).setAchievements(achievements.toArray(new String[0]));
-    }
-
-    private LocalDate parseLocalDate(String string){
-        String[] splitDate = string.split("/");
-        return LocalDate.of(Integer.parseInt(splitDate[2]),Integer.parseInt(splitDate[1]),Integer.parseInt(splitDate[0]));
-    }
 
     public String createNewFolder(String token) throws IOException, GeneralSecurityException {
 
@@ -383,7 +176,7 @@ public class SheetsHelper {
         Drive driveService = getDriveService(token);
         Spreadsheet spreadsheet = new Spreadsheet().setProperties(new SpreadsheetProperties().setTitle(SPREADSHEET_NAME));
 
-        List<File> files = driveService.files().list().setQ("name = '" + SPREADSHEET_NAME + "'").execute().getFiles();
+        List<File> files = new ArrayList<>();//driveService.files().list().setQ("name = '" + SPREADSHEET_NAME + "'").execute().getFiles();
         if (!(files.size() > 0)) {
             spreadsheet = service.spreadsheets().create(spreadsheet)
             .setFields("spreadsheetId")
@@ -512,8 +305,8 @@ public class SheetsHelper {
 
         List<List<Object>> basicList = Arrays.asList(Arrays.asList(""+user.getId(),firstname,lastname,birthDate));
         writeToSheet(accessToken,sheetID,"basic",basicList);
-        if(user.getContactInfoAsList() != null){
-            writeToSheet(accessToken,sheetID,"contact_info",user.getContactInfoAsList());
+        if(user.fetchContactInfoAsList() != null){
+            writeToSheet(accessToken,sheetID,"contact_info",user.fetchContactInfoAsList());
         }
 
         if(user.getAddress() != null){
