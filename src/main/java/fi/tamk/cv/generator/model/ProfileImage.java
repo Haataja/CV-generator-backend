@@ -36,8 +36,8 @@ public class ProfileImage {
         this.visible = visible;
     }
 
-    public List<List<String>> toListOfLists() {
-        List<String> list = Arrays.asList(source,"" + visible);
+    public List<List<Object>> toListOfLists() {
+        List<Object> list = Arrays.asList(source,"" + visible);
         return Arrays.asList(list);
     }
 

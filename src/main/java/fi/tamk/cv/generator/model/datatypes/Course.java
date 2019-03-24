@@ -49,7 +49,7 @@ public class Course extends DataType{
         this.enddate = enddate;
     }
 
-    public List<String> toList(){
+    public List<Object> toList(){
         return Arrays.asList(getType(),""+getId(),""+isVisible(),getProvider_name(),getCourse_name(),"" + getGrade(),
                 getStartdate().format(formatter),getEnddate().format(formatter));
     }

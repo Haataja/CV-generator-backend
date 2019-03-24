@@ -45,7 +45,7 @@ public class Person extends DataType{
         this.contact_phone = contact_phone;
     }
 
-    public List<String> toList(){
+    public List<Object> toList(){
         return Arrays.asList(getType(),""+getId(),""+isVisible(),getName(),getContact_email(),getContact_phone());
     }
 

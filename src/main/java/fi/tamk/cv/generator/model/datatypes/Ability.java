@@ -41,7 +41,7 @@ public class Ability extends DataType{
         this.efficiency_level = efficiency_level;
     }
 
-    public List<String> toList(){
+    public List<Object> toList(){
         return Arrays.asList(getType(),""+getId(),""+isVisible(),getName(),getEfficiency_title(),""+getEfficiency_level());
     }
 

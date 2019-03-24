@@ -43,7 +43,7 @@ public class Title extends DataType{
         this.awarded = awarded;
     }
 
-    public List<String> toList(){
+    public List<Object> toList(){
         return Arrays.asList(getType(),""+getId(),""+isVisible(),getTitle(),getAwarded().format(formatter));
     }
 

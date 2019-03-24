@@ -34,8 +34,8 @@ public class ContactInfo {
         this.visible = visible;
     }
 
-    public List<List<String>> toListOfLists(){
-        List<String> list = Arrays.asList(type,value,"" + visible);
+    public List<List<Object>> toListOfLists(){
+        List<Object> list = Arrays.asList(type,value,"" + visible);
         return Arrays.asList(list);
     }
 

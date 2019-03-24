@@ -48,7 +48,7 @@ public class Achievement extends DataType{
         this.completion_date = completion_date;
     }
 
-    public List<String> toList(){
+    public List<Object> toList(){
         return Arrays.asList(getType(),""+getId(),""+isVisible(),getName(),getDescription(),getCompletion_date().format(formatter));
     }
 

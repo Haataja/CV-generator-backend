@@ -19,7 +19,7 @@ public class Licence extends DataType{
         this.name = name;
     }
 
-    public List<String> toList(){
+    public List<Object> toList(){
         return Arrays.asList(getType(),""+getId(),""+isVisible(),getValue(),getName());
     }
 

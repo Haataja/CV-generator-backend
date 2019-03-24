@@ -36,8 +36,8 @@ public class Bio {
         setVisible(true);
     }
 
-    public List<List<String>> toListOfLists() {
-        List<String> list = Arrays.asList(value,"" + visible);
+    public List<List<Object>> toListOfLists() {
+        List<Object> list = Arrays.asList(value,"" + visible);
         return Arrays.asList(list);
     }
 

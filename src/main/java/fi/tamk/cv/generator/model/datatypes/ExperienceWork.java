@@ -45,8 +45,8 @@ public class ExperienceWork extends Experience{
     }
 
     @Override
-    public List<String> toList(){
-        List<String> list = Arrays.asList(getType(),""+getId(),""+isVisible(), getStartdate().format(formatter),getEnddate().format(formatter),
+    public List<Object> toList(){
+        List<Object> list = Arrays.asList(getType(),""+getId(),""+isVisible(), getStartdate().format(formatter),getEnddate().format(formatter),
                 getTitle(),getName());
         list.addAll(Arrays.asList(responsibilities));
         list.add("achievements");

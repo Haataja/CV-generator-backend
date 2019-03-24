@@ -47,7 +47,7 @@ public class Hobby extends DataType{
         this.enddate = enddate;
     }
 
-    public List<String> toList(){
+    public List<Object> toList(){
         return Arrays.asList(getType(),""+getId(),""+isVisible(),getName(),getDescription(),
                 getStartdate().format(formatter),getEnddate().format(formatter));
     }

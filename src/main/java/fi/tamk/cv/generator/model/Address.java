@@ -41,8 +41,8 @@ public class Address {
         this.visible = visible;
     }
 
-    public List<List<String>> toListOfLists() {
-        List<String> list = Arrays.asList(street_address,zipcode,country,city,"" + visible);
+    public List<List<Object>> toListOfLists() {
+        List<Object> list = Arrays.asList(street_address,zipcode,country,city,"" + visible);
         return Arrays.asList(list);
     }
 

@@ -28,7 +28,7 @@ public abstract class DataType {
     private String type;
     private long id;
     private boolean visible;
-    public abstract List<String> toList();
+    public abstract List<Object> toList();
 
     public DataType() {
     }

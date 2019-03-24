@@ -43,9 +43,9 @@ public class Info {
         this.data = new ArrayList<>();
     }
 
-    public List<List<String>> toListOfLists() {
-        List<String> list = Arrays.asList(""+order,"" + visible);
-        List<List<String>> listOfLists = Arrays.asList(list);
+    public List<List<Object>> toListOfLists() {
+        List<Object> list = Arrays.asList(""+order,"" + visible);
+        List<List<Object>> listOfLists = Arrays.asList(list);
         for(DataType dataSample: data){
             listOfLists.add(dataSample.toList());
         }

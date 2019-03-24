@@ -61,8 +61,8 @@ public class Experience extends DataType {
         this.description = description;
     }
 
-    public List<String> toList(){
-        List<String> list = Arrays.asList(getType(),""+getId(),""+isVisible(), getStartdate().format(formatter),getEnddate().format(formatter),
+    public List<Object> toList(){
+        List<Object> list = Arrays.asList(getType(),""+getId(),""+isVisible(), getStartdate().format(formatter),getEnddate().format(formatter),
                 getTitle(),getName());
         list.addAll(Arrays.asList(achievements));
         return list;

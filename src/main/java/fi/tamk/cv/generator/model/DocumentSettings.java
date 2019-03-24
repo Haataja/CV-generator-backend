@@ -37,8 +37,8 @@ public class DocumentSettings {
     public DocumentSettings() {
     }
 
-    public List<List<String>> toListOfLists() {
-        List<String> list = Arrays.asList(language, background_image, footer_value);
+    public List<List<Object>> toListOfLists() {
+        List<Object> list = Arrays.asList(language, background_image, footer_value);
         return Arrays.asList(list);
     }
 
