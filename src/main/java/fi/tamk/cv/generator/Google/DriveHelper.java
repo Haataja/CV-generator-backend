@@ -62,12 +62,12 @@ public class DriveHelper {
             File file = service.files().create(fileMetadata).setFields("id").execute();
             System.out.println("Folder ID: " + file.getId());
             folderID = file.getId();
-        } else {
+        } else { // todo: distiquish the shared and not shared files!
             JSONArray array = new JSONArray(files.toString());
             JSONObject object = array.getJSONObject(0);
             folderID = object.getString("id");
         }
-        return "Folder " + FOLDER_NAME + " Created! Folder id: " + folderID;
+        return folderID;
     }
 
 
