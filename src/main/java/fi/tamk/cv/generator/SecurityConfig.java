@@ -33,11 +33,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/demo").permitAll()
+                .antMatchers("/test", "/demo").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login().defaultSuccessUrl("/loginSuccess").failureUrl("/error");
     }
-
-
 }
