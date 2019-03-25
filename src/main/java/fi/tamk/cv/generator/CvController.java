@@ -23,22 +23,22 @@ package fi.tamk.cv.generator;
 import fi.tamk.cv.generator.Google.SheetsHelper;
 import fi.tamk.cv.generator.model.*;
 import fi.tamk.cv.generator.model.datatypes.*;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 public class CvController {
@@ -96,6 +96,22 @@ public class CvController {
                 "something", "something", "something", new String[] { "Having a cat" }, new String[] { "the cat" }));
 
         return demoUser;
+    }
+
+    @GetMapping(value = "/test", produces = "application/json")
+    public String getTestJson() throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new ClassPathResource("test.json").getInputStream()));
+        StringBuilder builder = new StringBuilder();
+        String line = null;
+
+        while((line = reader.readLine()) != null) {
+            builder.append(line);
+        }
+
+        reader.close();
+        JSONObject object = new JSONObject(builder.toString());
+
+        return object.toString();
     }
 
     @RequestMapping("/createFolder")
