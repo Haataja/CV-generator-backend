@@ -358,7 +358,7 @@ public class SheetsHelper {
         fileMetadata.setName(FOLDER_NAME);
         fileMetadata.setMimeType("application/vnd.google-apps.folder");
         List<File> files = getFiles(token, FOLDER_NAME);
-        if (files.size() == 0) {
+        if (files.isEmpty()) {
             File file = service.files().create(fileMetadata).setFields("id").execute();
             System.out.println("Folder ID: " + file.getId());
             folderID = file.getId();
@@ -374,7 +374,7 @@ public class SheetsHelper {
         Spreadsheet spreadsheet = new Spreadsheet().setProperties(new SpreadsheetProperties().setTitle(SPREADSHEET_NAME));
 
         List<File> files = getFiles(token, SPREADSHEET_NAME);
-        if (files.size() == 0) {
+        if (files.isEmpty()) {
             spreadsheet = service.spreadsheets().create(spreadsheet)
             .setFields("spreadsheetId")
             .execute();
