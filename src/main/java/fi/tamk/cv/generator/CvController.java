@@ -30,10 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -156,5 +153,11 @@ public class CvController {
             e.printStackTrace();
             return "error";
         }
+    }
+
+    @RequestMapping(value="/append/{range}", method=RequestMethod.POST)
+    public String appendDataType(@PathVariable String range, @RequestBody DataType dataType){
+        log.debug("Got here: {} and datatype {}", range, dataType.getType());
+        return googleServices.appendDataType(accessToken,range, dataType);
     }
 }

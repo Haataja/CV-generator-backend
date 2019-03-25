@@ -21,7 +21,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package fi.tamk.cv.generator.Google;
 
 import com.google.api.services.drive.model.File;
+import fi.tamk.cv.generator.model.Info;
 import fi.tamk.cv.generator.model.User;
+import fi.tamk.cv.generator.model.datatypes.DataType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -70,5 +72,15 @@ public class GoogleServices {
             }
         }
         return sheetID;
+    }
+
+    public String appendDataType(String accessToken ,String range, DataType dataType) {
+        String sheetID = getOwnedSheetID(accessToken);
+        Info data = (Info) sheetsHelper.readRange(accessToken, sheetID, range);
+        data.getData().add(dataType);
+
+        sheetsHelper.writeToSheet(accessToken, sheetID, range,data.toListOfLists());
+
+        return "ok";
     }
 }
