@@ -29,9 +29,23 @@
             {
                 "type": "language", 
                 "id": 1,
-                "name": "Svenska",
+                "name": "Swedish",
                 "value": "Bad",
                 "visible": true 
+            },
+            {
+              "type": "language",
+              "id": 1,
+              "name": "English",
+              "value": "Bad",
+              "visible": true
+            },
+            {
+              "type": "language",
+              "id": 1,
+              "name": "Finnish",
+              "value": "Mother tongue",
+              "visible": true
             }
         ]
     },
@@ -192,7 +206,7 @@
     "references": {
         "data": [
             {
-                "type": "person",
+                "type": "Head of Market, S-market Huittinen",
                 "id": 1,
                 "name": "Kaisa Haikarainen", 
                 "contact_email": "kaisa.haikarainen@email.com",
