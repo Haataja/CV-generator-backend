@@ -118,22 +118,6 @@ public class CvController {
         return object.toString();
     }
 
-    @RequestMapping("/createFolder")
-    public String createFolder() {
-        try {
-            return sheetsHelper.createNewFolder(accessToken);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (GeneralSecurityException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @RequestMapping("/createSheet")
-    public String createSheet() {
     @RequestMapping(value="/demo",method = RequestMethod.POST)
     public User postUser(){
         log.debug("HERE WITH POST!");
@@ -169,17 +153,6 @@ public class CvController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (GeneralSecurityException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @RequestMapping("/moveSheetToFolder")
-    public String moveSheetToFolder() {
-        try {
-            return sheetsHelper.moveSheetToFolder(accessToken);
-        } catch (IOException | GeneralSecurityException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
