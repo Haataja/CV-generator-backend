@@ -46,8 +46,6 @@ public class CvController {
     private String accessToken;
 
     Logger log = LoggerFactory.getLogger(this.getClass());
-    @Autowired
-    SheetsHelper sheetsHelper;
 
     @Autowired
     GoogleServices googleServices;
@@ -68,11 +66,6 @@ public class CvController {
     @GetMapping("/error")
     public String getLoginError(OAuth2AuthenticationToken authentication) {
         return "Error while authenticating" + authentication.getAuthorizedClientRegistrationId();
-    }
-
-    @RequestMapping("/read")
-    public User read(@RequestParam(name = "id") String sheetID) {
-        return sheetsHelper.read(sheetID, accessToken);
     }
 
     @RequestMapping("/demo")
@@ -118,45 +111,6 @@ public class CvController {
         User user = demo();
         googleServices.writeToCV(accessToken, user);
         return "ok";
-    }
-
-    @RequestMapping("/createFolder")
-    public String createFolder() {
-        try {
-            return sheetsHelper.createNewFolder(accessToken);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (GeneralSecurityException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @RequestMapping("/createSheet")
-    public String createSheet() {
-        try {
-            return sheetsHelper.createSheet(accessToken);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (GeneralSecurityException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @RequestMapping("/moveSheetToFolder")
-    public String moveSheetToFolder() {
-        try {
-            return sheetsHelper.moveSheetToFolder(accessToken);
-        } catch (IOException | GeneralSecurityException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @RequestMapping("/create")
