@@ -48,7 +48,7 @@ public class User {
 
     }
 
-    public User(long id, String firstname, String lastname, LocalDate birthdate) {
+    public User(String firstname, String lastname, LocalDate birthdate) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.birthdate = birthdate;

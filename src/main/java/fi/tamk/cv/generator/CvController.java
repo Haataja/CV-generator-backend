@@ -71,17 +71,39 @@ public class CvController {
 
     @RequestMapping("/demo")
     public User demo() {
-        User demoUser = new User(1, "demo", "person", LocalDate.of(1990, 1, 1));
-        demoUser.setContact_info(new ContactInfo("demo.person@example.com","0011225566",true));
-        demoUser.setAddress(new Address("something street", "111", "Suomi", "Tampere", true));
+        User demoUser = new User("Tuksu", "Juksu", LocalDate.of(1990, 1, 1));
+        demoUser.setContact_info(new ContactInfo("tuksu.juksu@email.com","0101234456",true));
+        demoUser.setAddress(new Address("Esimerkkikatu 12", "33500", "Finland", "Tampere", true));
         demoUser.setProfile_image(new ProfileImage(
                 "https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwi7x9Cf7oThAhUqwMQBHfmJB0kQjRx6BAgBEAU&url=https%3A%2F%2Fen.wiktionary.org%2Fwiki%2Fcat&psig=AOvVaw1uyeUhaOBH7godt4Uaobzd&ust=1552763849780520",
                 true));
-        demoUser.setBio(new Bio("this user has been created for demo and testing purposes", null,true));
-        demoUser.setExperience(new Info(2, true));
-        demoUser.getExperience().getData().add(new Experience("work",1, true, LocalDate.now(), LocalDate.now(), "something",
-                "something", "something", new int[] { 1,2}));
+        demoUser.setBio(new Bio("I'm absolutely best human on planet. No one is better than me. The best", "If you want to know more from me send me a email!",false));
+        demoUser.setExperience(new Info(1, true));
+        demoUser.getExperience().getData().add(new Experience("work",1, true, LocalDate.of(1992,2,21), LocalDate.of(2015,5,28), "Java consultant",
+                "Tuksu's Coding palace", "Was a great place to work at", new int[] {1}));
+        demoUser.getExperience().getData().add(new Experience("work",2, true, LocalDate.of(2005,2,1), LocalDate.now(), "Kotlin trainee",
+                "Cool code Joonas", "Was a fun place to work at", new int[]{}));
+        demoUser.getExperience().getData().add(new Experience("work",3, true, LocalDate.of(2001,5,1), LocalDate.of(2002,8,31), "Kotlin developer",
+                "Samu's pro codezz", "Was a super nice place to work at", new int[]{2}));
+        demoUser.getExperience().getData().add(new Experience("work",4, true, LocalDate.of(2003,5,1), LocalDate.of(2003,8,31), "Kotlin expert",
+                "Hannateq", "Was a super nice place to work at", new int[]{3,4}));
 
+        demoUser.getExperience().getData().add(new Experience("personal",5, true, LocalDate.of(2003,5,1), LocalDate.of(2003,8,31), "Leader of sports team in University",
+                "Generic sports team", "Worked hard to achieve this dream", new int[]{}));
+        demoUser.setEducation(new Info(2,true));
+        demoUser.getEducation().getData().add(new Education(1,true,"Tampere University of Applied Sciences","University of Applied Sciences",
+                "Bacheleor of Business Information Systems",4,LocalDate.of(2017,8,1),LocalDate.of(2020,12,20)));
+        demoUser.getEducation().getData().add(new Course(2,true,"Tampere University","Kotlin basics",4,LocalDate.of(2016,11,1),LocalDate.of(2016,12,22)));
+        demoUser.setProjects(new Info(3,true));
+        demoUser.getProjects().getData().add(new Project("project",1,true,"Java/json-parser","",LocalDate.of(2018,11,1)));
+        demoUser.getProjects().getData().add(new Project("project",2,true,"Java/shpoping-list-applcation","",LocalDate.of(2018,12,12)));
+        demoUser.getProjects().getData().add(new Project("project",3,true,"Kotlin/user-login-backend","",LocalDate.of(2015,1,1)));
+        demoUser.getProjects().getData().add(new Project("achievement",1,true,"Award for best Kotlin code in 2015","",LocalDate.of(2015,5,25)));
+        demoUser.setTitles(new Info(4,true));
+        demoUser.getTitles().getData().add(new Title("title",1,true,"Vuoden hauis palkinto",LocalDate.of(2019,1,1)));
+        demoUser.getTitles().getData().add(new Title("degree",2,true,"Penkkauksen maisterikoulutus",LocalDate.of(2019,1,1)));
+        demoUser.setReferences(new Info(5,true));
+        demoUser.getReferences().getData().add(new Person(1,true,"Kaisa Haikarainene","kaisa.haikarainen@email.com","0101153456"));
         return demoUser;
     }
 
