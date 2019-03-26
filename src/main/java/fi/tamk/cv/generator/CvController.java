@@ -84,23 +84,22 @@ public class CvController {
                 "Cool code Joonas", "Was a fun place to work at", new int[]{}));
         demoUser.getExperience().getData().add(new Experience("work",3, true, LocalDate.of(2001,5,1), LocalDate.of(2002,8,31), "Kotlin developer",
                 "Samu's pro codezz", "Was a super nice place to work at", new int[]{2}));
-        demoUser.getExperience().getData().add(new Experience("work",4, true, LocalDate.of(2003,5,1), LocalDate.of(2003,8,31), "Kotlin expert",
+        demoUser.getExperience().getData().add(new Experience("work",4, true, LocalDate.of(2003,5,1), LocalDate.of(2008,8,31), "Kotlin expert",
                 "Hannateq", "Was a super nice place to work at", new int[]{3,4}));
-
-        demoUser.getExperience().getData().add(new Experience("personal",5, true, LocalDate.of(2003,5,1), LocalDate.of(2003,8,31), "Leader of sports team in University",
+        demoUser.getExperience().getData().add(new Experience("personal",5, true, LocalDate.of(2002,5,1), LocalDate.of(2003,8,31), "Leader of sports team in University",
                 "Generic sports team", "Worked hard to achieve this dream", new int[]{}));
         demoUser.setEducation(new Info(2,true));
         demoUser.getEducation().getData().add(new Education(1,true,"Tampere University of Applied Sciences","University of Applied Sciences",
-                "Bacheleor of Business Information Systems",4,LocalDate.of(2017,8,1),LocalDate.of(2020,12,20)));
-        demoUser.getEducation().getData().add(new Course(2,true,"Tampere University","Kotlin basics",4,LocalDate.of(2016,11,1),LocalDate.of(2016,12,22)));
+                "Bacheleor of Business Information Systems",4,LocalDate.of(2013,8,1),LocalDate.of(2017,12,20)));
+        demoUser.getEducation().getData().add(new Course(2,true,"Tampere University","Kotlin basics",4,LocalDate.of(2011,11,1),LocalDate.of(2011,12,22)));
         demoUser.setProjects(new Info(3,true));
         demoUser.getProjects().getData().add(new Project("project",1,true,"Java/json-parser","",LocalDate.of(2018,11,1)));
-        demoUser.getProjects().getData().add(new Project("project",2,true,"Java/shpoping-list-applcation","",LocalDate.of(2018,12,12)));
-        demoUser.getProjects().getData().add(new Project("project",3,true,"Kotlin/user-login-backend","",LocalDate.of(2015,1,1)));
-        demoUser.getProjects().getData().add(new Project("achievement",1,true,"Award for best Kotlin code in 2015","",LocalDate.of(2015,5,25)));
+        demoUser.getProjects().getData().add(new Project("project",2,true,"Java/shpoping-list-applcation","",LocalDate.of(2011,12,12)));
+        demoUser.getProjects().getData().add(new Project("project",3,true,"Kotlin/user-login-backend","",LocalDate.of(2006,1,1)));
+        demoUser.getProjects().getData().add(new Project("achievement",1,true,"Award for best Kotlin code in 2015","",LocalDate.of(2014,5,25)));
         demoUser.setTitles(new Info(4,true));
-        demoUser.getTitles().getData().add(new Title("title",1,true,"Vuoden hauis palkinto",LocalDate.of(2019,1,1)));
-        demoUser.getTitles().getData().add(new Title("degree",2,true,"Penkkauksen maisterikoulutus",LocalDate.of(2019,1,1)));
+        demoUser.getTitles().getData().add(new Title("title",1,true,"Vuoden hauis palkinto",LocalDate.of(2009,1,1)));
+        demoUser.getTitles().getData().add(new Title("degree",2,true,"Penkkauksen maisterikoulutus",LocalDate.of(2013,1,1)));
         demoUser.setReferences(new Info(5,true));
         demoUser.getReferences().getData().add(new Person(1,true,"Kaisa Haikarainene","kaisa.haikarainen@email.com","0101153456"));
         demoUser.setMisc(new Info(6, true));
