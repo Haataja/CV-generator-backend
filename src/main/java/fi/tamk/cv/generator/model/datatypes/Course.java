@@ -50,8 +50,10 @@ public class Course extends DataType{
     }
 
     public List<Object> toList(){
-        return Arrays.asList(getType(),""+getId(),""+isVisible(),getProvider_name(),getCourse_name(),"" + getGrade(),
-                getStartdate().format(formatter),getEnddate().format(formatter));
+        String startDate = this.startdate == null ? "": getStartdate().format(formatter);
+        String endDate = this.startdate == null ? "": getEnddate().format(formatter);
+        return Arrays.asList(getType(),getId(),isVisible(),getProvider_name(),getCourse_name(),getGrade(),
+                startDate,endDate);
     }
 
     public String getProvider_name() {

@@ -37,12 +37,8 @@ public class ProfileImage {
     }
 
     public List<List<Object>> toListOfLists() {
-        List<Object> list;
-        if(source == null){
-            list = Arrays.asList("","" + visible);
-        } else {
-            list = Arrays.asList(source,"" + visible);
-        }
+        String sourceString = source == null ? "":source;
+        List<Object> list = Arrays.asList(sourceString,visible);
         return Arrays.asList(list);
     }
 

@@ -47,7 +47,7 @@ public class Address {
         String country = nullCheck(this.country);
         String city = nullCheck(this.city);
 
-        List<Object> list = Arrays.asList(street,zip,country,city,"" + visible);
+        List<Object> list = Arrays.asList(street,zip,country,city,visible);
         return Arrays.asList(list);
     }
 

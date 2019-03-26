@@ -44,7 +44,7 @@ public class Project extends DataType{
     }
 
     public List<Object> toList(){
-        return Arrays.asList(getType(),""+getId(),""+isVisible(),getName(),getDescription(),getCompletion_date().format(formatter));
+        return Arrays.asList(getType(),getId(),isVisible(),getName(),getDescription(),getCompletion_date().format(formatter));
     }
     public String getName() {
         return name;

@@ -53,7 +53,7 @@ public class Education extends DataType{
     }
 
     public List<Object> toList(){
-        return Arrays.asList(getType(),""+getId(),""+isVisible(),getSchool_name(),getSchool_type(),getField_name(),"" + getGrade(),
+        return Arrays.asList(getType(),getId(),isVisible(),getSchool_name(),getSchool_type(),getField_name(),getGrade(),
                 getStartdate().format(formatter),getEnddate().format(formatter));
     }
 

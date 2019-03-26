@@ -20,6 +20,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package fi.tamk.cv.generator.Google;
 
+import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import fi.tamk.cv.generator.model.Info;
 import fi.tamk.cv.generator.model.User;

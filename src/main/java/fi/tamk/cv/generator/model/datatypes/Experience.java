@@ -35,10 +35,10 @@ public class Experience extends DataType {
     private String title;
     private String name;
     private String description;
-    private String[] achievements;
+    private int[] achievements;
 
-    public Experience(LocalDate startdate, LocalDate enddate, String title, String name, String description, String[] achievements) {
-        super("personal");
+    public Experience(String type, LocalDate startdate, LocalDate enddate, String title, String name, String description, int[] achievements) {
+        super(type);
         this.startdate = startdate;
         this.enddate = enddate;
         this.title = title;
@@ -47,8 +47,8 @@ public class Experience extends DataType {
         this.achievements = achievements;
     }
 
-    public Experience(long id, boolean visible, LocalDate startdate, LocalDate enddate, String title, String name, String description, String[] achievements) {
-        super("personal", id, visible);
+    public Experience(String type, long id, boolean visible, LocalDate startdate, LocalDate enddate, String title, String name, String description, int[] achievements) {
+        super(type, id, visible);
         this.startdate = startdate;
         this.enddate = enddate;
         this.title = title;
@@ -57,8 +57,8 @@ public class Experience extends DataType {
         this.achievements = achievements;
     }
 
-    public Experience(long id, boolean visible, LocalDate startdate, LocalDate enddate, String title, String name, String description) {
-        super("personal", id, visible);
+    public Experience(String type, long id, boolean visible, LocalDate startdate, LocalDate enddate, String title, String name, String description) {
+        super(type, id, visible);
         this.startdate = startdate;
         this.enddate = enddate;
         this.title = title;
@@ -71,15 +71,14 @@ public class Experience extends DataType {
         list.add(getType());
         list.add(getId());
         list.add(isVisible());
-        list.add( getStartdate().format(formatter));
-        list.add(getEnddate().format(formatter));
+        list.add(getStartdate() == null ? "": getStartdate().format(formatter));
+        list.add(getEnddate()== null ? "": getEnddate().format(formatter));
         list.add(getTitle());
         list.add(getName());
         list.add(getDescription());
         if(achievements != null && achievements.length != 0){
             list.addAll(Arrays.asList(achievements));
         }
-            log.debug("EXPERINCE {}", list);
 
         return list;
     }
@@ -124,11 +123,11 @@ public class Experience extends DataType {
         this.description = description;
     }
 
-    public String[] getAchievements() {
+    public int[] getAchievements() {
         return achievements;
     }
 
-    public void setAchievements(String[] achievements) {
+    public void setAchievements(int[] achievements) {
         this.achievements = achievements;
     }
 }

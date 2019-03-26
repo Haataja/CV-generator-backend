@@ -114,4 +114,10 @@ public class DriveHelper {
 
         return files;
     }
+
+    public List<File> getFiles(String token, String name) throws IOException, GeneralSecurityException {
+        Drive service = getDriveService(token);
+        return service.files().list().setQ("name = '" + name + "'").execute().getFiles();
+    }
+
 }

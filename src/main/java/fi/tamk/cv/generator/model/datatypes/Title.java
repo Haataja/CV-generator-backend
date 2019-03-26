@@ -44,7 +44,7 @@ public class Title extends DataType{
     }
 
     public List<Object> toList(){
-        return Arrays.asList(getType(),""+getId(),""+isVisible(),getTitle(),getAwarded().format(formatter));
+        return Arrays.asList(getType(),getId(),isVisible(),getTitle(),getAwarded().format(formatter));
     }
 
     public String getTitle() {
