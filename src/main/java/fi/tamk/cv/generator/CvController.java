@@ -99,6 +99,12 @@ public class CvController {
         return demoUser;
     }
 
+    @RequestMapping(value="/demo",method = RequestMethod.POST)
+    public User postUser(){
+        log.debug("HERE WITH POST!");
+        return demo();
+    }
+
     @RequestMapping("/write/demo")
     public String writeDemo() {
         User user = demo();
@@ -156,8 +162,9 @@ public class CvController {
     }
 
     @RequestMapping(value="/append/{range}", method=RequestMethod.POST)
-    public String appendDataType(@PathVariable String range, @RequestBody DataType dataType){
-        log.debug("Got here: {} and datatype {}", range, dataType.getType());
+    public String appendDataType(@PathVariable String range, @RequestBody Achievement dataType){
+        log.debug("Got here: {} and datatype {}", range, dataType.toString());
         return googleServices.appendDataType(accessToken,range, dataType);
     }
+
 }
