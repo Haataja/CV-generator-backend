@@ -24,19 +24,22 @@ import fi.tamk.cv.generator.Google.GoogleServices;
 import fi.tamk.cv.generator.Google.SheetsHelper;
 import fi.tamk.cv.generator.model.*;
 import fi.tamk.cv.generator.model.datatypes.*;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 public class CvController {
@@ -99,6 +102,38 @@ public class CvController {
         return demoUser;
     }
 
+    @GetMapping(value = "/test", produces = "application/json")
+    public String getTestJson() throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new ClassPathResource("test.json").getInputStream()));
+        StringBuilder builder = new StringBuilder();
+        String line = null;
+
+        while((line = reader.readLine()) != null) {
+            builder.append(line);
+        }
+
+        reader.close();
+        JSONObject object = new JSONObject(builder.toString());
+
+        return object.toString();
+    }
+
+    @RequestMapping("/createFolder")
+    public String createFolder() {
+        try {
+            return sheetsHelper.createNewFolder(accessToken);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (GeneralSecurityException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @RequestMapping("/createSheet")
+    public String createSheet() {
     @RequestMapping(value="/demo",method = RequestMethod.POST)
     public User postUser(){
         log.debug("HERE WITH POST!");
@@ -134,6 +169,17 @@ public class CvController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (GeneralSecurityException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @RequestMapping("/moveSheetToFolder")
+    public String moveSheetToFolder() {
+        try {
+            return sheetsHelper.moveSheetToFolder(accessToken);
+        } catch (IOException | GeneralSecurityException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
