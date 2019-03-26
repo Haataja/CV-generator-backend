@@ -23,6 +23,8 @@ package fi.tamk.cv.generator.model;
 import fi.tamk.cv.generator.model.datatypes.DataType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Info {
     private int order;
@@ -39,6 +41,18 @@ public class Info {
         this.order = order;
         this.visible = visible;
         this.data = new ArrayList<>();
+    }
+
+    public List<List<Object>> toListOfLists() {
+        List<Object> list = Arrays.asList(order,visible);
+        List<List<Object>> listOfLists = new ArrayList<>();
+        listOfLists.add(list);
+        if(data.size() > 0){
+            for(DataType dataSample: data){
+                listOfLists.add(dataSample.toList());
+            }
+        }
+        return listOfLists;
     }
 
     public Info(){

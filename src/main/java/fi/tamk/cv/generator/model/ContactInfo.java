@@ -20,31 +20,41 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package fi.tamk.cv.generator.model;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class ContactInfo {
-    private String type;
-    private String value;
+    private String email;
+    private String phone;
     private Boolean visible;
 
-    public ContactInfo(String type, String value, Boolean visible) {
-        this.type = type;
-        this.value = value;
+    public ContactInfo(String email, String phone, Boolean visible) {
+        this.email = email;
+        this.phone = phone;
         this.visible = visible;
     }
 
-    public String getType() {
-        return type;
+    public List<Object> toList(){
+        String phoneString = phone == null ? "":phone;
+        String emailString = email == null ? "":email;
+        List<Object> list = Arrays.asList(emailString,phoneString,visible);
+        return list;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public String getEmail() {
+        return email;
     }
 
-    public String getValue() {
-        return value;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public Boolean getVisible() {

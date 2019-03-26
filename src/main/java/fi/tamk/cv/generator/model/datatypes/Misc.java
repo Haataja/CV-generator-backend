@@ -1,19 +1,26 @@
 package fi.tamk.cv.generator.model.datatypes;
 
-public class Licence extends DataType{
+import java.util.Arrays;
+import java.util.List;
+
+public class Misc extends DataType{
     private String value;
     private String name;
 
-    public Licence(String type, String value, String name) {
+    public Misc(String type, String value, String name) {
         super(type);
         this.value = value;
         this.name = name;
     }
 
-    public Licence(String type, long id, boolean visible, String value, String name) {
+    public Misc(String type, long id, boolean visible, String value, String name) {
         super(type, id, visible);
         this.value = value;
         this.name = name;
+    }
+
+    public List<Object> toList(){
+        return Arrays.asList(getType(),getId(),isVisible(),getValue(),getName());
     }
 
     public String getValue() {

@@ -20,18 +20,25 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package fi.tamk.cv.generator.model.datatypes;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Experience extends DataType {
+    Logger log = LoggerFactory.getLogger(this.getClass());
     private LocalDate startdate;
     private LocalDate enddate;
     private String title;
     private String name;
     private String description;
-    private String[] achievements;
+    private int[] achievements;
 
-    public Experience(LocalDate startdate, LocalDate enddate, String title, String name, String description, String[] achievements) {
-        super("personal");
+    public Experience(String type, LocalDate startdate, LocalDate enddate, String title, String name, String description, int[] achievements) {
+        super(type);
         this.startdate = startdate;
         this.enddate = enddate;
         this.title = title;
@@ -40,8 +47,8 @@ public class Experience extends DataType {
         this.achievements = achievements;
     }
 
-    public Experience(long id, boolean visible, LocalDate startdate, LocalDate enddate, String title, String name, String description, String[] achievements) {
-        super("personal", id, visible);
+    public Experience(String type, long id, boolean visible, LocalDate startdate, LocalDate enddate, String title, String name, String description, int[] achievements) {
+        super(type, id, visible);
         this.startdate = startdate;
         this.enddate = enddate;
         this.title = title;
@@ -50,14 +57,30 @@ public class Experience extends DataType {
         this.achievements = achievements;
     }
 
-    public Experience(long id, boolean visible, LocalDate startdate, LocalDate enddate, String title, String name, String description) {
-        super("personal", id, visible);
+    public Experience(String type, long id, boolean visible, LocalDate startdate, LocalDate enddate, String title, String name, String description) {
+        super(type, id, visible);
         this.startdate = startdate;
         this.enddate = enddate;
         this.title = title;
         this.name = name;
         this.description = description;
-        this.achievements = achievements;
+    }
+
+    public List<Object> toList(){
+        List<Object> list = new ArrayList<>();
+        list.add(getType());
+        list.add(getId());
+        list.add(isVisible());
+        list.add(getStartdate() == null ? "": getStartdate().format(formatter));
+        list.add(getEnddate()== null ? "": getEnddate().format(formatter));
+        list.add(getTitle());
+        list.add(getName());
+        list.add(getDescription());
+        if(achievements != null && achievements.length != 0){
+            list.addAll(Arrays.asList(achievements));
+        }
+
+        return list;
     }
 
     public LocalDate getStartdate() {
@@ -100,11 +123,11 @@ public class Experience extends DataType {
         this.description = description;
     }
 
-    public String[] getAchievements() {
+    public int[] getAchievements() {
         return achievements;
     }
 
-    public void setAchievements(String[] achievements) {
+    public void setAchievements(int[] achievements) {
         this.achievements = achievements;
     }
 }

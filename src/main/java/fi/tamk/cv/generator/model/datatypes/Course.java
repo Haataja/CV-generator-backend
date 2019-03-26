@@ -21,6 +21,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package fi.tamk.cv.generator.model.datatypes;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 public class Course extends DataType{
     private String provider_name;
@@ -45,6 +47,13 @@ public class Course extends DataType{
         this.grade = grade;
         this.startdate = startdate;
         this.enddate = enddate;
+    }
+
+    public List<Object> toList(){
+        String startDate = this.startdate == null ? "": getStartdate().format(formatter);
+        String endDate = this.startdate == null ? "": getEnddate().format(formatter);
+        return Arrays.asList(getType(),getId(),isVisible(),getProvider_name(),getCourse_name(),getGrade(),
+                startDate,endDate);
     }
 
     public String getProvider_name() {

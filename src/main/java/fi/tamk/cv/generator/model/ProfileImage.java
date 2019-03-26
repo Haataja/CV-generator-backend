@@ -20,16 +20,26 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package fi.tamk.cv.generator.model;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class ProfileImage {
     private String source;
     private boolean visible;
 
     public ProfileImage() {
+        setVisible(true);
     }
 
     public ProfileImage(String source, boolean visible) {
         this.source = source;
         this.visible = visible;
+    }
+
+    public List<List<Object>> toListOfLists() {
+        String sourceString = source == null ? "":source;
+        List<Object> list = Arrays.asList(sourceString,visible);
+        return Arrays.asList(list);
     }
 
     public String getSource() {

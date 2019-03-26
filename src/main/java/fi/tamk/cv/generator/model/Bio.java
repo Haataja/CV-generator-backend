@@ -20,16 +20,30 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package fi.tamk.cv.generator.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Bio {
     private String value;
+    private String footer;
     private boolean visible;
 
-    public Bio(String value, boolean visible) {
+    public Bio(String value, String footer,boolean visible) {
         this.value = value;
+        this.footer = footer;
         this.visible = visible;
     }
 
     public Bio() {
+        setVisible(true);
+    }
+
+    public List<List<Object>> toListOfLists() {
+        String valueString = value == null ? "":value;
+        String footerString = footer == null ? "":footer;
+        List<Object> list = Arrays.asList(valueString, footerString, visible);
+        return Arrays.asList(list);
     }
 
     public String getValue() {

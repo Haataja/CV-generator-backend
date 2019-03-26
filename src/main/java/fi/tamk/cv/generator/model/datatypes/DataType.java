@@ -20,10 +20,15 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package fi.tamk.cv.generator.model.datatypes;
 
-public class DataType {
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+public abstract class DataType {
+    protected DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private String type;
     private long id;
     private boolean visible;
+    public abstract List<Object> toList();
 
     public DataType() {
     }
