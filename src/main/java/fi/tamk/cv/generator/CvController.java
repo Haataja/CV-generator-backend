@@ -21,7 +21,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package fi.tamk.cv.generator;
 
 import fi.tamk.cv.generator.Google.GoogleServices;
-import fi.tamk.cv.generator.Google.SheetsHelper;
 import fi.tamk.cv.generator.model.*;
 import fi.tamk.cv.generator.model.datatypes.*;
 import org.json.JSONObject;
@@ -39,7 +38,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.time.LocalDate;
-import java.util.ArrayList;
+
 
 @RestController
 @RequestMapping("rest/")
@@ -104,6 +103,11 @@ public class CvController {
         demoUser.getTitles().getData().add(new Title("degree",2,true,"Penkkauksen maisterikoulutus",LocalDate.of(2019,1,1)));
         demoUser.setReferences(new Info(5,true));
         demoUser.getReferences().getData().add(new Person(1,true,"Kaisa Haikarainene","kaisa.haikarainen@email.com","0101153456"));
+        demoUser.setMisc(new Info(6, true));
+        demoUser.getMisc().getData().add(new Misc("language", "Swedish", "Bad"));
+        demoUser.getMisc().getData().add(new Misc("language", "Finnish", "Mothers tongue"));
+        demoUser.getMisc().getData().add(new Misc("language", "English", "Good"));
+
         return demoUser;
     }
 
