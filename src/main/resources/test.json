@@ -3,18 +3,11 @@
     "firstname": "Tuksu",
     "lastname": "Juksu",
     "birthdate": 662688000,
-    "contact_info": [
-        {
-            "type": "email",
-            "value": "tuksu.juksu@email.com",
+    "contact_info": {
+            "email": "tuksu.juksu@email.com",
+            "phone": "0401234123",
             "visible": true
-        },
-        {
-            "type": "phone", 
-            "value": "0101234456",
-            "visible": true
-        }
-    ],
+    },
     "address": {
         "street_address": "Esimerkkikatu 12",
         "zipcode": "33500",
@@ -23,17 +16,24 @@
         "visible": true
     },
     "profile_image": {
-        "source": "testtesttest",
+        "source": "https://cdn.pixabay.com/photo/2014/11/30/14/11/kitty-551554__340.jpg",
         "visible": false
-    },
-    "document_settings": {
-        "language": "en",
-        "background_image": "testtesttest",
-        "footer_value": "If you want to know more from me send me a email!"
     },
     "bio": {
         "value": "I'm absolutely best human on planet. No one is better than me. The best",
+        "footer": "If you want to know more from me send me a email!",
         "visible": true
+    },
+    "misc": {
+        "data": [
+            {
+                "type": "language", 
+                "id": 1,
+                "name": "Svenska",
+                "value": "Bad",
+                "visible": true 
+            }
+        ]
     },
     "experience": {
         "data": [
@@ -104,7 +104,7 @@
         "order": 1,
         "visible": true
     },
-    "courses_and_education": {
+    "education": {
         "data": [
             {
                 "type": "education",
@@ -131,7 +131,7 @@
         "order": 2,
         "visible": true
     },
-    "achievements_and_projects": {
+    "projects": {
         "data": [
             {
                 "type": "project",
@@ -169,7 +169,7 @@
         "order": 3,
         "visible": true
     },
-    "titles_and_degrees": {
+    "titles": {
         "data": [
             {
                 "type": "title",
