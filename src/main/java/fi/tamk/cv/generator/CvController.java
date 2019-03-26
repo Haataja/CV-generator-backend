@@ -75,7 +75,7 @@ public class CvController {
         demoUser.setContact_info(new ContactInfo("tuksu.juksu@email.com","0101234456",true));
         demoUser.setAddress(new Address("Esimerkkikatu 12", "33500", "Finland", "Tampere", true));
         demoUser.setProfile_image(new ProfileImage(
-                "https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwi7x9Cf7oThAhUqwMQBHfmJB0kQjRx6BAgBEAU&url=https%3A%2F%2Fen.wiktionary.org%2Fwiki%2Fcat&psig=AOvVaw1uyeUhaOBH7godt4Uaobzd&ust=1552763849780520",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/600px-Cat03.jpg",
                 true));
         demoUser.setBio(new Bio("I'm absolutely best human on planet. No one is better than me. The best", "If you want to know more from me send me a email!",false));
         demoUser.setExperience(new Info(1, true));
