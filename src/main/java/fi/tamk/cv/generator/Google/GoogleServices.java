@@ -30,6 +30,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -67,12 +68,24 @@ public class GoogleServices {
         List<File> files = driveHelper.search(accessToken, DriveHelper.SPREADSHEET_NAME);
         String sheetID = null;
         for(File file: files){
-            if(file.getOwnedByMe()){
+            if(file.getOwnedByMe() && !file.getTrashed()){
                 sheetID = file.getId();
                 break;
             }
         }
         return sheetID;
+    }
+
+    public List<String> getEmailsOfNotOwnedByMe(String accessToken){
+        List<File> files = driveHelper.search(accessToken, DriveHelper.SPREADSHEET_NAME);
+        List<String> emails = new ArrayList<>();
+        for(File file: files){
+            if(!file.getOwnedByMe() && !file.getTrashed()){
+                emails.add( file.getOwners().get(0).getEmailAddress());
+                break;
+            }
+        }
+        return emails;
     }
 
     public String appendDataType(String accessToken ,String range, DataType dataType) {

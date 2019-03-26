@@ -106,7 +106,7 @@ public class DriveHelper {
         List<File> files = new ArrayList<>();
         try {
             service = getDriveService(token);
-            files = service.files().list().setQ("name contains '" + name +"'").setFields("files(id, name, mimeType, owners, ownedByMe)").execute().getFiles();
+            files = service.files().list().setQ("name contains '" + name +"'").setFields("files(id, name, mimeType, owners, ownedByMe, trashed)").execute().getFiles();
 
         } catch (IOException|GeneralSecurityException e) {
             e.printStackTrace();
