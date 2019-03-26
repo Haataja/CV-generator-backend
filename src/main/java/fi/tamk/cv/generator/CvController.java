@@ -93,10 +93,10 @@ public class CvController {
                 "Bacheleor of Business Information Systems",4,LocalDate.of(2013,8,1),LocalDate.of(2017,12,20)));
         demoUser.getEducation().getData().add(new Course(2,true,"Tampere University","Kotlin basics",4,LocalDate.of(2011,11,1),LocalDate.of(2011,12,22)));
         demoUser.setProjects(new Info(3,true));
-        demoUser.getProjects().getData().add(new Project("project",1,true,"Java/json-parser","",LocalDate.of(2018,11,1)));
-        demoUser.getProjects().getData().add(new Project("project",2,true,"Java/shpoping-list-applcation","",LocalDate.of(2011,12,12)));
-        demoUser.getProjects().getData().add(new Project("project",3,true,"Kotlin/user-login-backend","",LocalDate.of(2006,1,1)));
-        demoUser.getProjects().getData().add(new Project("achievement",1,true,"Award for best Kotlin code in 2015","",LocalDate.of(2014,5,25)));
+        demoUser.getProjects().getData().add(new Project("project",1,true,"Java/json-parser","I worked on a json-parser, which can read and write json data. I worked in a group of ten people. Project was a great success (as Borat would say it) and it reached top 10 most downloaded json-parsers month it was released.",LocalDate.of(2018,11,1)));
+        demoUser.getProjects().getData().add(new Project("project",2,true,"Java/shpoping-list-applcation","Shopping list application where user can save their data as a json file. User can also read their shopping list from said json file. User can also save their shopping list to Dropbox and database. Standalone project, worked for 8 hours for ten months.",LocalDate.of(2011,12,12)));
+        demoUser.getProjects().getData().add(new Project("project",3,true,"Kotlin/user-login-backend","User login backend for Samu's pro codezz. Worked with two other people on this project. My field of work was mostly releted on validating user's login credentials.",LocalDate.of(2006,1,1)));
+        demoUser.getProjects().getData().add(new Project("achievement",1,true,"Award for best Kotlin code in 2015","I was awarded from my hard work with Ktolin",LocalDate.of(2014,5,25)));
         demoUser.setTitles(new Info(4,true));
         demoUser.getTitles().getData().add(new Title("title",1,true,"Vuoden hauis palkinto",LocalDate.of(2009,1,1)));
         demoUser.getTitles().getData().add(new Title("degree",2,true,"Penkkauksen maisterikoulutus",LocalDate.of(2013,1,1)));
