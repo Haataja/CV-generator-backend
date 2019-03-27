@@ -41,7 +41,7 @@ import java.time.LocalDate;
 
 
 @RestController
-@RequestMapping("rest/")
+@RequestMapping("api/")
 public class CvController {
     private String accessToken;
 
