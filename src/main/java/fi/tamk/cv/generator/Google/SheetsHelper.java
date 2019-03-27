@@ -121,9 +121,9 @@ public class SheetsHelper {
                 .setFields("spreadsheetId")
                 .execute();
         sheetID = spreadsheet.getSpreadsheetId();
-        System.out.println("Spreadsheet ID: " + spreadsheet.getSpreadsheetId());
+        log.debug("Spreadsheet ID: " + spreadsheet.getSpreadsheetId());
 
-        return "Sheet " + SPREADSHEET_NAME + " Created! Sheet id: " + sheetID;
+        return sheetID;
     }
 
     public User createDefUser(long id) {
@@ -237,15 +237,15 @@ public class SheetsHelper {
         }
 
         if (user.getEducation() != null) {
-            writeToSheet(accessToken, sheetID, "courses_and_education", user.getEducation().toListOfLists());
+            writeToSheet(accessToken, sheetID, "education", user.getEducation().toListOfLists());
         }
 
         if (user.getProjects() != null) {
-            writeToSheet(accessToken, sheetID, "achievements_and_projects", user.getProjects().toListOfLists());
+            writeToSheet(accessToken, sheetID, "projects", user.getProjects().toListOfLists());
         }
 
         if (user.getTitles() != null) {
-            writeToSheet(accessToken, sheetID, "titles_and_degrees", user.getTitles().toListOfLists());
+            writeToSheet(accessToken, sheetID, "titles", user.getTitles().toListOfLists());
         }
 
         if (user.getReferences() != null) {
