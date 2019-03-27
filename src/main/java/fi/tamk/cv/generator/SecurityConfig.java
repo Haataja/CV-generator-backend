@@ -35,17 +35,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/rest/test").permitAll()
-                .antMatchers("/rest/demo").permitAll()
+                .antMatchers("/api/test").permitAll()
+                .antMatchers("/api/demo").permitAll()
                 .antMatchers(HttpMethod.POST,"/demo").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .oauth2Login().defaultSuccessUrl("/loginSuccess").failureUrl("/error");
+                .oauth2Login().defaultSuccessUrl("/api/loginSuccess").failureUrl("/error");
     }
 
     public void configure(WebSecurity web)
             throws Exception {
-        web.ignoring().antMatchers(HttpMethod.POST, "/append/**");
+        web.ignoring().antMatchers(HttpMethod.POST, "/api/append/**");
     }
 
 
