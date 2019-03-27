@@ -52,20 +52,23 @@ public class DriveHelper {
 
 
     public String createNewFolder(String token) throws IOException, GeneralSecurityException {
-        String folderID;
+        String folderID = null;
         Drive service = getDriveService(token);
         File fileMetadata = new File();
         fileMetadata.setName(FOLDER_NAME);
         fileMetadata.setMimeType("application/vnd.google-apps.folder");
-        List<File> files = new ArrayList<>();//service.files().list().setQ("name = '" + FOLDER_NAME + "'").execute().getFiles();
-        if (!(files.size() > 0)) {
+        List<File> files = search(token, FOLDER_NAME);
+        if (files.isEmpty()) {
             File file = service.files().create(fileMetadata).setFields("id").execute();
-            System.out.println("Folder ID: " + file.getId());
+            log.debug("Folder ID: " + file.getId());
             folderID = file.getId();
-        } else { // todo: distiquish the shared and not shared files!
-            JSONArray array = new JSONArray(files.toString());
-            JSONObject object = array.getJSONObject(0);
-            folderID = object.getString("id");
+        } else {
+            for(File file: files){
+                if(file.getOwnedByMe() && !file.getTrashed()){
+                    folderID = file.getId();
+                    break;
+                }
+            }
         }
         return folderID;
     }
