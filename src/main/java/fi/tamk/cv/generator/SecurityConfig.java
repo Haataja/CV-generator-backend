@@ -37,15 +37,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/api/test").permitAll()
                 .antMatchers("/api/demo").permitAll()
-                .antMatchers(HttpMethod.POST,"/demo").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .oauth2Login().defaultSuccessUrl("/api/loginSuccess").failureUrl("/error");
+                .oauth2Login().defaultSuccessUrl("/api/loginSuccess").failureUrl("/api/error");
     }
 
-    public void configure(WebSecurity web)
-            throws Exception {
+    public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers(HttpMethod.POST, "/api/append/**");
+        web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/auth", "/demo", "/api/error", "/loggedout", "/dist/**");
     }
 
 

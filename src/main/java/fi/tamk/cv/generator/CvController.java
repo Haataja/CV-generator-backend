@@ -44,34 +44,22 @@ import java.time.LocalDate;
 @RestController
 @RequestMapping("api/")
 @Scope("session")
-public class CvController {
-    private String accessToken;
+public class CvController extends BaseController{
 
     Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     GoogleServices googleServices;
 
-    @Autowired
-    private OAuth2AuthorizedClientService authorizedClientService;
-
-    // login in http://localhost:8080/oauth2/authorize/google
-    @GetMapping("/loginSuccess")
-    public String getLoginInfo(OAuth2AuthenticationToken authentication) {
-        OAuth2AuthorizedClient client = authorizedClientService
-                .loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
-        log.info("Client: {}, token: {}", authentication.getName(), client.getAccessToken().getTokenValue());
-        accessToken = client.getAccessToken().getTokenValue();
-        return "loginSuccess";
-    }
 
     @GetMapping("/error")
     public String getLoginError(OAuth2AuthenticationToken authentication) {
-        return "Error while authenticating" + authentication.getAuthorizedClientRegistrationId();
+        return "Error while authenticating";
     }
 
     @RequestMapping("/demo")
     public User demo() {
+        log.debug("Getting demo");
         User demoUser = new User("Tuksu", "Juksu", LocalDate.of(1990, 1, 1));
         demoUser.setContact_info(new ContactInfo("tuksu.juksu@email.com","0101234456",true));
         demoUser.setAddress(new Address("Esimerkkikatu 12", "33500", "Finland", "Tampere", true));
@@ -112,8 +100,14 @@ public class CvController {
         return demoUser;
     }
 
+    @RequestMapping("/get/user")
+    public User getData(String accessToken){
+        return googleServices.getData(getAccessToken());
+    }
+
     @GetMapping(value = "/test", produces = "application/json")
     public String getTestJson() throws IOException {
+        log.debug("Getting test");
         BufferedReader reader = new BufferedReader(new InputStreamReader(new ClassPathResource("test.json").getInputStream()));
         StringBuilder builder = new StringBuilder();
         String line = null;
@@ -137,14 +131,14 @@ public class CvController {
     @RequestMapping("/write/demo")
     public String writeDemo() {
         User user = demo();
-        googleServices.writeToCV(accessToken, user);
+        googleServices.writeToCV(getAccessToken(), user);
         return "ok";
     }
 
     @RequestMapping("/create")
     public String createSheetTemplate(){
         try {
-            return googleServices.createSheet(accessToken);
+            return googleServices.createSheet(getAccessToken());
         } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
             return "error";
@@ -152,14 +146,14 @@ public class CvController {
     }
 
     @RequestMapping("/get/search")
-    public String getAccessToken(){
-        return googleServices.getOwnedSheetID(accessToken);
+    public String getOwnedByMe(){
+        return googleServices.getOwnedSheetID(getAccessToken());
     }
 
     @RequestMapping(value="/append/{range}", method=RequestMethod.POST)
     public String appendDataType(@PathVariable String range, @RequestBody DataType dataType){
         log.debug("Got here: {} and datatype {}", range, dataType.toString());
-        return googleServices.appendDataType(accessToken,range, dataType);
+        return googleServices.appendDataType(getAccessToken(),range, dataType);
     }
 
 }
