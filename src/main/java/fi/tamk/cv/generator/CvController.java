@@ -104,6 +104,7 @@ public class CvController extends BaseController{
 
     @RequestMapping("/get/user")
     public ResponseEntity<User> getData(){
+        log.debug("Getting user");
         if (getAccessToken() != null){
             User user = googleServices.getData(getAccessToken());
             if(user != null){
@@ -112,7 +113,7 @@ public class CvController extends BaseController{
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
         } else {
-            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return  new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 
