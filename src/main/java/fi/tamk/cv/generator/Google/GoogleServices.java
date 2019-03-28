@@ -108,4 +108,14 @@ public class GoogleServices {
 
         return "ok";
     }
+
+    public User getData(String accessToken){
+        String sheetID = getOwnedSheetID(accessToken);
+        if(sheetID != null){
+            return sheetsHelper.read(sheetID, accessToken);
+        } else {
+            return new User();
+        }
+
+    }
 }

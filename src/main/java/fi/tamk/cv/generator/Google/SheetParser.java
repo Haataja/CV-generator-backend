@@ -37,7 +37,7 @@ public class SheetParser {
             List<List<Object>> values = vr.getValues();
             switch (sheet) {
                 case "basic":
-                    if (values.get(0).size() > 0) {
+                    if (values != null && values.get(0).size() > 0) {
                         user.setFirstname((String) values.get(0).get(0));
                         if (values.get(0).size() > 1) {
                             user.setLastname((String) values.get(0).get(1));

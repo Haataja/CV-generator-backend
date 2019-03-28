@@ -88,14 +88,12 @@ public class SheetsHelper {
         ranges.add("contact_info"); // type,value,visible
         ranges.add("address");
         ranges.add("profile_image");
-        ranges.add("document_settings");
         ranges.add("bio");//licences
-        ranges.add("licences");
-        ranges.add("abilities_and_hobbies");
+        ranges.add("misc");
         ranges.add("experience");
-        ranges.add("courses_and_education");
-        ranges.add("achievements_and_projects");
-        ranges.add("titles_and_degrees");
+        ranges.add("education");
+        ranges.add("projects");
+        ranges.add("titles");
         ranges.add("references");
 
         try {

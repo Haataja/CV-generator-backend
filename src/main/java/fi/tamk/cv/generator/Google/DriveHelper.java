@@ -120,7 +120,8 @@ public class DriveHelper {
             files = service.files().list().setQ("name = '" + name + "'").setFields("files(id, name, mimeType, owners, ownedByMe, trashed)").execute().getFiles();
 
         } catch (IOException | GeneralSecurityException e) {
-            e.printStackTrace();
+            log.debug("Error while searching the file, {}", e.getMessage());
+            //e.printStackTrace();
         }
 
         return files;
