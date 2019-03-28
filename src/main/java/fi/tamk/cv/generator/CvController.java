@@ -29,6 +29,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -101,8 +103,17 @@ public class CvController extends BaseController{
     }
 
     @RequestMapping("/get/user")
-    public User getData(String accessToken){
-        return googleServices.getData(getAccessToken());
+    public ResponseEntity<User> getData(){
+        if (getAccessToken() != null){
+            User user = googleServices.getData(getAccessToken());
+            if(user != null){
+                return new ResponseEntity<>(googleServices.getData(getAccessToken()), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+        } else {
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping(value = "/test", produces = "application/json")
@@ -155,5 +166,6 @@ public class CvController extends BaseController{
         log.debug("Got here: {} and datatype {}", range, dataType.toString());
         return googleServices.appendDataType(getAccessToken(),range, dataType);
     }
+
 
 }

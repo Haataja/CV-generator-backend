@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/api/test").permitAll()
+                .antMatchers("/api/get/user").permitAll()
                 .antMatchers("/api/demo").permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -43,8 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(HttpMethod.POST, "/api/append/**");
-        web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/auth", "/demo", "/api/error", "/loggedout", "/dist/**");
+        web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/auth", "/demo", "/api/error", "/dist/**");
     }
 
 

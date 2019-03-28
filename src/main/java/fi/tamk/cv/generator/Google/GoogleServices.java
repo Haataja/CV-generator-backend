@@ -114,7 +114,7 @@ public class GoogleServices {
         if(sheetID != null){
             return sheetsHelper.read(sheetID, accessToken);
         } else {
-            return new User();
+            return null;
         }
 
     }
