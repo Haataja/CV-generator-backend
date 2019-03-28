@@ -25,6 +25,8 @@ import com.google.api.services.drive.model.File;
 import fi.tamk.cv.generator.model.Info;
 import fi.tamk.cv.generator.model.User;
 import fi.tamk.cv.generator.model.datatypes.DataType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -35,6 +37,7 @@ import java.util.List;
 
 @Component
 public class GoogleServices {
+    Logger log = LoggerFactory.getLogger(this.getClass());
     public static final String APPLICATION_NAME = "quickstart-1550136441024";
 
     @Autowired
@@ -46,11 +49,19 @@ public class GoogleServices {
 
     public String createSheet(String accessToken) throws IOException, GeneralSecurityException {
         String folderID = driveHelper.createNewFolder(accessToken);
+        log.debug("Created folder: {}", folderID);
         if(folderID != null){
-            String sheetID = sheetsHelper.createSheet(accessToken);
+            String sheetID = getOwnedSheetID(accessToken);
+            log.debug("Found sheet? : {}", sheetID == null);
+            if(sheetID == null){
+                sheetID = sheetsHelper.createSheet(accessToken);
+                log.debug("Created sheet id: {}", sheetID);
+            }
             if(sheetID != null){
+                log.debug("folder: {} sheet: {}", folderID, sheetID);
                 driveHelper.moveSheetToFolder(accessToken, sheetID,folderID);
-                sheetsHelper.makeTabsToSheet(accessToken, sheetID);
+                User user = sheetsHelper.createDefUser();
+                sheetsHelper.writeToSheet(accessToken, sheetID, user);
             }
         }
         return "ok";

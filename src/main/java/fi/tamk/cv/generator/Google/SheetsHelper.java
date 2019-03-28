@@ -123,10 +123,12 @@ public class SheetsHelper {
         sheetID = spreadsheet.getSpreadsheetId();
         log.debug("Spreadsheet ID: " + spreadsheet.getSpreadsheetId());
 
+        makeTabsToSheet(token, sheetID);
+
         return sheetID;
     }
 
-    public User createDefUser(long id) {
+    public User createDefUser() {
         User user = new User();
 
         Address address = new Address();
@@ -171,9 +173,6 @@ public class SheetsHelper {
             return "Error";
             //e.printStackTrace();
         }
-
-        User user = createDefUser(0);
-        writeToSheet(accessToken, sheetID, user);
 
         return "Ok";
     }
@@ -229,7 +228,7 @@ public class SheetsHelper {
         }
 
         if (user.getMisc() != null) {
-            writeToSheet(accessToken, sheetID, "licences", user.getMisc().toListOfLists());
+            writeToSheet(accessToken, sheetID, "misc", user.getMisc().toListOfLists());
         }
 
         if (user.getExperience() != null) {

@@ -151,6 +151,11 @@ public class CvController {
         }
     }
 
+    @RequestMapping("/get/search")
+    public String getAccessToken(){
+        return googleServices.getOwnedSheetID(accessToken);
+    }
+
     @RequestMapping(value="/append/{range}", method=RequestMethod.POST)
     public String appendDataType(@PathVariable String range, @RequestBody DataType dataType){
         log.debug("Got here: {} and datatype {}", range, dataType.toString());

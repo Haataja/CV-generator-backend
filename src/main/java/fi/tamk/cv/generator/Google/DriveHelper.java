@@ -26,8 +26,6 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -58,21 +56,30 @@ public class DriveHelper {
         fileMetadata.setName(FOLDER_NAME);
         fileMetadata.setMimeType("application/vnd.google-apps.folder");
         List<File> files = search(token, FOLDER_NAME);
+        log.debug("files is empty? {}, {}", files.size(), files.isEmpty());
         if (files.isEmpty()) {
             File file = service.files().create(fileMetadata).setFields("id").execute();
             log.debug("Folder ID: " + file.getId());
             folderID = file.getId();
         } else {
-            for(File file: files){
-                if(file.getOwnedByMe() && !file.getTrashed()){
+            boolean folderExists = false;
+            for (File file : files) {
+                if (file.getOwnedByMe() && !file.getTrashed()) {
+                    log.debug("Folder ID: {}, trashed {}, ownedbyme {}", file.getId(), file.getTrashed(), file.getOwnedByMe());
                     folderID = file.getId();
+                    folderExists = true;
                     break;
                 }
+            }
+            if (!folderExists) {
+                File createdFile = service.files().create(fileMetadata).setFields("id").execute();
+                log.debug("Folder ID: " + createdFile.getId());
+                folderID = createdFile.getId();
+
             }
         }
         return folderID;
     }
-
 
 
     public String moveSheetToFolder(String token, String sheetID, String folderID) throws IOException, GeneralSecurityException {
@@ -100,18 +107,19 @@ public class DriveHelper {
 
     /**
      * Searches for files that have certain name in their name.
+     *
      * @param token accessToken that gives access to Google drive
-     * @param name The name of the searched file
+     * @param name  The name of the searched file
      * @return List of files
      */
-    public List<File> search(String token, String name){
+    public List<File> search(String token, String name) {
         Drive service;
         List<File> files = new ArrayList<>();
         try {
             service = getDriveService(token);
-            files = service.files().list().setQ("name contains '" + name +"'").setFields("files(id, name, mimeType, owners, ownedByMe, trashed)").execute().getFiles();
+            files = service.files().list().setQ("name = '" + name + "'").setFields("files(id, name, mimeType, owners, ownedByMe, trashed)").execute().getFiles();
 
-        } catch (IOException|GeneralSecurityException e) {
+        } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
         }
 
