@@ -146,13 +146,13 @@ public class CvController extends BaseController{
         return "ok";
     }
 
-    @RequestMapping("/create")
-    public String createSheetTemplate(){
+    @RequestMapping("/get/create")
+    public ResponseEntity<User> createSheetTemplate(){
         try {
-            return googleServices.createSheet(getAccessToken());
+            return new ResponseEntity<>(googleServices.createSheet(getAccessToken()),HttpStatus.CREATED);
         } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
-            return "error";
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -20,7 +20,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package fi.tamk.cv.generator.Google;
 
-import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import fi.tamk.cv.generator.model.Info;
 import fi.tamk.cv.generator.model.User;
@@ -47,39 +46,38 @@ public class GoogleServices {
     private DriveHelper driveHelper;
 
 
-    public String createSheet(String accessToken) throws IOException, GeneralSecurityException {
+    public User createSheet(String accessToken) throws IOException, GeneralSecurityException {
         String folderID = driveHelper.createNewFolder(accessToken);
         log.debug("Created folder: {}", folderID);
-        if(folderID != null){
+        User user = null;
+        if (folderID != null) {
             String sheetID = getOwnedSheetID(accessToken);
             log.debug("Found sheet? : {}", sheetID == null);
-            if(sheetID == null){
+            if (sheetID == null) {
                 sheetID = sheetsHelper.createSheet(accessToken);
-                log.debug("Created sheet id: {}", sheetID);
-            }
-            if(sheetID != null){
-                log.debug("folder: {} sheet: {}", folderID, sheetID);
-                driveHelper.moveSheetToFolder(accessToken, sheetID,folderID);
-                User user = sheetsHelper.createDefUser();
+                driveHelper.moveSheetToFolder(accessToken, sheetID, folderID);
+                user = sheetsHelper.createDefUser();
                 sheetsHelper.writeToSheet(accessToken, sheetID, user);
+            } else {
+                user = sheetsHelper.read(sheetID, accessToken);
             }
         }
-        return "ok";
+        return user;
     }
 
-    public void writeToCV(String accessToken, User user){
+    public void writeToCV(String accessToken, User user) {
         String sheetID = getOwnedSheetID(accessToken);
 
-        if(sheetID != null){
-            sheetsHelper.writeToSheet(accessToken,sheetID,user);
+        if (sheetID != null) {
+            sheetsHelper.writeToSheet(accessToken, sheetID, user);
         }
     }
 
-    public String getOwnedSheetID(String accessToken){
+    public String getOwnedSheetID(String accessToken) {
         List<File> files = driveHelper.search(accessToken, DriveHelper.SPREADSHEET_NAME);
         String sheetID = null;
-        for(File file: files){
-            if(file.getOwnedByMe() && !file.getTrashed()){
+        for (File file : files) {
+            if (file.getOwnedByMe() && !file.getTrashed()) {
                 sheetID = file.getId();
                 break;
             }
@@ -87,31 +85,31 @@ public class GoogleServices {
         return sheetID;
     }
 
-    public List<String> getEmailsOfNotOwnedByMe(String accessToken){
+    public List<String> getEmailsOfNotOwnedByMe(String accessToken) {
         List<File> files = driveHelper.search(accessToken, DriveHelper.SPREADSHEET_NAME);
         List<String> emails = new ArrayList<>();
-        for(File file: files){
-            if(!file.getOwnedByMe() && !file.getTrashed()){
-                emails.add( file.getOwners().get(0).getEmailAddress());
+        for (File file : files) {
+            if (!file.getOwnedByMe() && !file.getTrashed()) {
+                emails.add(file.getOwners().get(0).getEmailAddress());
                 break;
             }
         }
         return emails;
     }
 
-    public String appendDataType(String accessToken ,String range, DataType dataType) {
+    public String appendDataType(String accessToken, String range, DataType dataType) {
         String sheetID = getOwnedSheetID(accessToken);
         Info data = (Info) sheetsHelper.readRange(accessToken, sheetID, range);
         data.getData().add(dataType);
 
-        sheetsHelper.writeToSheet(accessToken, sheetID, range,data.toListOfLists());
+        sheetsHelper.writeToSheet(accessToken, sheetID, range, data.toListOfLists());
 
         return "ok";
     }
 
-    public User getData(String accessToken){
+    public User getData(String accessToken) {
         String sheetID = getOwnedSheetID(accessToken);
-        if(sheetID != null){
+        if (sheetID != null) {
             return sheetsHelper.read(sheetID, accessToken);
         } else {
             return null;
