@@ -29,22 +29,31 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf()
+                .disable()
+                .antMatcher("/**")
+                .authorizeRequests()
+                .antMatchers("/", "/api/test")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
         http.authorizeRequests()
                 .antMatchers("/api/get/user").permitAll()
                 .antMatchers("/api/demo").permitAll()
                 .antMatchers("/api/pdf").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .oauth2Login().defaultSuccessUrl("/api/loginSuccess").failureUrl("/api/error");
+                .oauth2Login()
+                .defaultSuccessUrl("/api/loginSuccess").failureUrl("/api/error");
     }
 
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/auth", "/demo", "/api/error", "/dist/**");
+        web.ignoring().antMatchers("/resources/**");
     }
 
 
