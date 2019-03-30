@@ -23,22 +23,18 @@ package fi.tamk.cv.generator;
 import fi.tamk.cv.generator.Google.GoogleServices;
 import fi.tamk.cv.generator.model.*;
 import fi.tamk.cv.generator.model.datatypes.*;
+import org.apache.pdfbox.io.IOUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.http.*;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.security.GeneralSecurityException;
 import java.time.LocalDate;
 
@@ -52,6 +48,31 @@ public class CvController extends BaseController{
 
     @Autowired
     GoogleServices googleServices;
+
+
+    @GetMapping(value = "/pdf",
+    produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<byte[]> getPDF() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Curriculum vitae.pdf");
+
+        new CreateCVToPDF();
+        File file = new File("cv.pdf");
+
+        try (InputStream in = new FileInputStream(file)){
+            byte[] media = IOUtils.toByteArray(in);
+            headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+            ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
+
+            return responseEntity;
+
+        } catch (IOException e) {
+            return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+
+        } finally {
+            if(file!=null) file.delete();
+        }
+    }
 
 
     @GetMapping("/error")
