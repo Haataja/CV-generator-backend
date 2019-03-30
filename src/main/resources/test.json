@@ -20,7 +20,7 @@
   },
   "bio": {
     "value": "I'm absolutely best human on planet. No one is better than me. The best",
-    "visible": false
+    "visible": true
   },
   "misc": {
     "order": 6,
@@ -29,21 +29,21 @@
       {
         "type": "language",
         "id": 0,
-        "visible": false,
+        "visible": true,
         "value": "Swedish",
         "name": "Bad"
       },
       {
         "type": "language",
         "id": 0,
-        "visible": false,
+        "visible": true,
         "value": "Finnish",
         "name": "Mothers tongue"
       },
       {
         "type": "language",
         "id": 0,
-        "visible": false,
+        "visible": true,
         "value": "English",
         "name": "Good"
       }
