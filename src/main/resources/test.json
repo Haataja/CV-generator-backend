@@ -3,11 +3,18 @@
     "firstname": "Tuksu",
     "lastname": "Juksu",
     "birthdate": 662688000,
-    "contact_info": {
-            "email": "tuksu.juksu@email.com",
-            "phone": "0401234123",
+    "contact_info": [
+        {
+            "type": "email",
+            "value": "tuksu.juksu@email.com",
             "visible": true
-    },
+        },
+        {
+            "type": "phone",
+            "value": "0101234456",
+            "visible": true
+        }
+    ],
     "address": {
         "street_address": "Esimerkkikatu 12",
         "zipcode": "33500",
@@ -16,38 +23,17 @@
         "visible": true
     },
     "profile_image": {
-        "source": "https://cdn.pixabay.com/photo/2014/11/30/14/11/kitty-551554__340.jpg",
+        "source": "testtesttest",
         "visible": false
+    },
+    "document_settings": {
+        "language": "en",
+        "background_image": "testtesttest",
+        "footer_value": "If you want to know more from me send me a email!"
     },
     "bio": {
         "value": "I'm absolutely best human on planet. No one is better than me. The best",
-        "footer": "If you want to know more from me send me a email!",
         "visible": true
-    },
-    "misc": {
-        "data": [
-            {
-                "type": "language", 
-                "id": 1,
-                "name": "Swedish",
-                "value": "Bad",
-                "visible": true 
-            },
-            {
-              "type": "language",
-              "id": 1,
-              "name": "English",
-              "value": "Bad",
-              "visible": true
-            },
-            {
-              "type": "language",
-              "id": 1,
-              "name": "Finnish",
-              "value": "Mother tongue",
-              "visible": true
-            }
-        ]
     },
     "experience": {
         "data": [
@@ -118,7 +104,7 @@
         "order": 1,
         "visible": true
     },
-    "education": {
+    "courses_and_education": {
         "data": [
             {
                 "type": "education",
@@ -145,7 +131,7 @@
         "order": 2,
         "visible": true
     },
-    "projects": {
+    "achievements_and_projects": {
         "data": [
             {
                 "type": "project",
@@ -183,7 +169,7 @@
         "order": 3,
         "visible": true
     },
-    "titles": {
+    "titles_and_degrees": {
         "data": [
             {
                 "type": "title",
@@ -206,9 +192,9 @@
     "references": {
         "data": [
             {
-                "type": "Head of Market, S-market Huittinen",
+                "type": "person",
                 "id": 1,
-                "name": "Kaisa Haikarainen", 
+                "name": "Kaisa Haikarainen",
                 "contact_email": "kaisa.haikarainen@email.com",
                 "contact_phone": "0101153456",
                 "visible": true
