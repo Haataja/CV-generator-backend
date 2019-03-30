@@ -33,6 +33,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
@@ -54,10 +55,11 @@ public class CvController extends BaseController{
     produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<byte[]> getPDF() {
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Curriculum vitae.pdf");
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=curriculum_vitae.pdf");
 
-        new CreatePDF("cv.pdf");
-        File file = new File("cv.pdf");
+        String fileName = RequestContextHolder.currentRequestAttributes().getSessionId();
+        new CreatePDF(fileName);
+        File file = new File(fileName);
 
         try (InputStream in = new FileInputStream(file)){
             byte[] media = IOUtils.toByteArray(in);
