@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import com.nimbusds.jose.util.IOUtils;
 import org.json.*;
+import org.springframework.core.io.ClassPathResource;
+
 import javax.imageio.ImageIO;
 
 
@@ -157,9 +159,8 @@ public class CreateCVToPDF {
     }
 
     public void getJSONData() {
-        File stream = new File("F:\\Coding\\CV-generator-backend\\src\\main\\resources\\test.json");
         try {
-            String jsonTxt = IOUtils.readFileToString(stream, Charset.defaultCharset());
+            String jsonTxt = IOUtils.readFileToString(new ClassPathResource("test.json").getFile(), Charset.defaultCharset());
             JSONObject obj = new JSONObject(jsonTxt);
             firstName = obj.get("firstname");
             lastName = obj.get("lastname");
