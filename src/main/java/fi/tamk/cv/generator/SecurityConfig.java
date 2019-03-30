@@ -37,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/api/get/user").permitAll()
                 .antMatchers("/api/demo").permitAll()
+                .antMatchers("/api/pdf").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login().defaultSuccessUrl("/api/loginSuccess").failureUrl("/api/error");
