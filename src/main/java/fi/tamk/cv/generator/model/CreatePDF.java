@@ -16,7 +16,7 @@ import org.springframework.core.io.ClassPathResource;
 import javax.imageio.ImageIO;
 
 
-public class CreateCVToPDF {
+public class CreatePDF {
     private Object firstName;
     private Object lastName;
     private Object birthDate;
@@ -31,7 +31,7 @@ public class CreateCVToPDF {
     private Object titles;
     private Object references;
 
-    public CreateCVToPDF(String name) {
+    public CreatePDF(String name) {
         try {
             getJSONData();
             Document document = new Document(PageSize.A4);

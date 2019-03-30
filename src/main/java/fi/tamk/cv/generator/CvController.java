@@ -56,7 +56,7 @@ public class CvController extends BaseController{
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Curriculum vitae.pdf");
 
-        new CreateCVToPDF();
+        new CreatePDF("cv.pdf");
         File file = new File("cv.pdf");
 
         try (InputStream in = new FileInputStream(file)){
