@@ -52,7 +52,7 @@ public class CvController extends BaseController{
 
 
     @GetMapping(value = "/pdf",
-    produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> getPDF() {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=curriculum_vitae.pdf");
