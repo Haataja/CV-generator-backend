@@ -55,7 +55,7 @@ public class CvController extends BaseController{
     produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> getPDF() {
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=curriculum_vitae.pdf");
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=curriculum_vitae.pdf");
 
         String fileName = RequestContextHolder.currentRequestAttributes().getSessionId();
         new CreatePDF(fileName);
