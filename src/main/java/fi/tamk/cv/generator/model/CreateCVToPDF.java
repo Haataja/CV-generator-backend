@@ -31,11 +31,11 @@ public class CreateCVToPDF {
     private Object titles;
     private Object references;
 
-    public CreateCVToPDF() {
+    public CreateCVToPDF(String name) {
         try {
             getJSONData();
             Document document = new Document(PageSize.A4);
-            PdfWriter.getInstance(document, new FileOutputStream("cv.pdf"));
+            PdfWriter.getInstance(document, new FileOutputStream(name));
             document.open();
             addData(document);
             document.close();
