@@ -35,7 +35,7 @@ public class CreateCVToPDF {
         try {
             getJSONData();
             Document document = new Document(PageSize.A4);
-            PdfWriter.getInstance(document, new FileOutputStream("iTextHelloWorld.pdf"));
+            PdfWriter.getInstance(document, new FileOutputStream("cv.pdf"));
             document.open();
             addData(document);
             document.close();
