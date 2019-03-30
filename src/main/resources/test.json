@@ -1,206 +1,219 @@
 {
-    "id": 1,
-    "firstname": "Tuksu",
-    "lastname": "Juksu",
-    "birthdate": 662688000,
-    "contact_info": [
-        {
-            "type": "email",
-            "value": "tuksu.juksu@email.com",
-            "visible": true
-        },
-        {
-            "type": "phone",
-            "value": "0101234456",
-            "visible": true
-        }
-    ],
-    "address": {
-        "street_address": "Esimerkkikatu 12",
-        "zipcode": "33500",
-        "country": "Finland",
-        "city": "Tampere",
-        "visible": true
-    },
-    "profile_image": {
-        "source": "testtesttest",
-        "visible": false
-    },
-    "document_settings": {
-        "language": "en",
-        "background_image": "testtesttest",
-        "footer_value": "If you want to know more from me send me a email!"
-    },
-    "bio": {
-        "value": "I'm absolutely best human on planet. No one is better than me. The best",
-        "visible": true
-    },
-    "experience": {
-        "data": [
-            {
-                "type": "work",
-                "id": 1,
-                "startdate": 1104537600,
-                "enddate": 1138838400,
-                "title": "Java consultant",
-                "name": "Tuksu's Coding palace",
-                "description": "Was a great place to work at",
-                "achievements": [
-                    1
-                ],
-                "visible": true
-            },
-            {
-                "type": "work",
-                "id": 2,
-                "startdate": 1196467200,
-                "enddate": 1212364800,
-                "title": "Kotlin trainee",
-                "name": "Cool code Joonas",
-                "description": "Was a fun place to work at",
-                "achievements": [
-                ],
-                "visible": true
-            },
-            {
-                "type": "work",
-                "id": 3,
-                "startdate": 1214265600,
-                "enddate": 1365724800,
-                "title": "Kotlin developer",
-                "name": "Samu's pro codezz",
-                "description": "Was a super nice place to work at",
-                "achievements": [
-                    2
-                ],
-                "visible": true
-            },
-            {
-                "type": "work",
-                "id": 4,
-                "startdate": 1367452800,
-                "enddate": 1428796800,
-                "title": "Kotlin expert",
-                "name": "Hannateq",
-                "description": "Was a super nice place to work at",
-                "achievements": [
-                    3,4
-                ],
-                "visible": true
-            },
-            {
-                "type": "personal",
-                "id": 5,
-                "startdate": 1388534400,
-                "enddate": 1493596800,
-                "title": "Leader of sports team in University",
-                "name": "Generic sports team",
-                "description": "Worked hard to achieve this dream",
-                "achievements": [
-                ],
-                "visible": true
-            }
-        ],
-        "order": 1,
-        "visible": true
-    },
-    "courses_and_education": {
-        "data": [
-            {
-                "type": "education",
-                "id": 1,
-                "school_name": "Tampere University of Applied Sciences",
-                "school_type": "University of Applied Sciences",
-                "field_name": "Bacheleor of Business Information Systems",
-                "startdate": 1408060800,
-                "enddate": 1512086400,
-                "grade": 3.5,
-                "visible": true
-            },
-            {
-                "type": "course",
-                "id": 2,
-                "provider_name": "Tampere University",
-                "course_name": "Kotlin basics",
-                "startdate": 1456790400,
-                "enddate": 1462060800,
-                "grade": 4,
-                "visible": true
-            }
-        ],
-        "order": 2,
-        "visible": true
-    },
-    "achievements_and_projects": {
-        "data": [
-            {
-                "type": "project",
-                "id": 1,
-                "name": "Java/json-parser",
-                "description": "I worked on a json-parser, which can read and write json data. I worked in a group of ten people. Project was a great success (as Borat would say it) and it reached top 10 most downloaded json-parsers month it was released.",
-                "completion_date": 1107388800,
-                "visible": true
-            },
-            {
-                "type": "project",
-                "id": 2,
-                "name": "Java/shpoping-list-applcation",
-                "description": "Shopping list application where user can save their data as a json file. User can also read their shopping list from said json file. User can also save their shopping list to Dropbox and database. Standalone project, worked for 8 hours for ten months. ",
-                "completion_date": 1251158400,
-                "visible": true
-            },
-            {
-                "type": "project",
-                "id": 3,
-                "name": "Kotlin/user-login-backend",
-                "description": "User login backend for Samu's pro codezz. Worked with two other people on this project. My field of work was mostly releted on validating user's login credentials.",
-                "completion_date": 1139097600,
-                "visible": true
-            },
-            {
-                "type": "achievement",
-                "id": 4,
-                "name": "Award for best Kotlin code in 2015",
-                "description": "I was awarded from my hard work with Ktolin",
-                "completion_date": 1434326400,
-                "visible": true
-            }
-        ],
-        "order": 3,
-        "visible": true
-    },
-    "titles_and_degrees": {
-        "data": [
-            {
-                "type": "title",
-                "id": 1,
-                "title": "Vuoden hauis palkinto",
-                "awarded": 1293840000,
-                "visible": true
-            },
-            {
-                "type": "degree",
-                "id": 2,
-                "title": "Penkkauksen maisterikoulutus",
-                "awarded": 1293840000,
-                "visible": true
-            }
-        ],
-        "order": 4,
-        "visible": true
-    },
-    "references": {
-        "data": [
-            {
-                "type": "person",
-                "id": 1,
-                "name": "Kaisa Haikarainen",
-                "contact_email": "kaisa.haikarainen@email.com",
-                "contact_phone": "0101153456",
-                "visible": true
-            }
-        ],
-        "order": 5,
-        "visible": true
-    }
+  "firstname": "Tuksu",
+  "lastname": "Juksu",
+  "birthdate": "1990-01-01",
+  "contact_info": {
+    "email": "tuksu.juksu@email.com",
+    "phone": "0101234456",
+    "visible": true
+  },
+  "address": {
+    "street_address": "Esimerkkikatu 12",
+    "zipcode": "33500",
+    "country": "Finland",
+    "city": "Tampere",
+    "visible": true
+  },
+  "profile_image": {
+    "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/600px-Cat03.jpg",
+    "visible": true
+  },
+  "bio": {
+    "value": "I'm absolutely best human on planet. No one is better than me. The best",
+    "visible": false
+  },
+  "misc": {
+    "order": 6,
+    "visible": true,
+    "data": [
+      {
+        "type": "language",
+        "id": 0,
+        "visible": false,
+        "value": "Swedish",
+        "name": "Bad"
+      },
+      {
+        "type": "language",
+        "id": 0,
+        "visible": false,
+        "value": "Finnish",
+        "name": "Mothers tongue"
+      },
+      {
+        "type": "language",
+        "id": 0,
+        "visible": false,
+        "value": "English",
+        "name": "Good"
+      }
+    ]
+  },
+  "experience": {
+    "order": 1,
+    "visible": true,
+    "data": [
+      {
+        "type": "work",
+        "id": 1,
+        "visible": true,
+        "startdate": "1992-02-21",
+        "enddate": "2015-05-28",
+        "title": "Java consultant",
+        "name": "Tuksu's Coding palace",
+        "description": "Was a great place to work at",
+        "achievements": [
+          1
+        ]
+      },
+      {
+        "type": "work",
+        "id": 2,
+        "visible": true,
+        "startdate": "2005-02-01",
+        "enddate": "2019-03-30",
+        "title": "Kotlin trainee",
+        "name": "Cool code Joonas",
+        "description": "Was a fun place to work at",
+        "achievements": []
+      },
+      {
+        "type": "work",
+        "id": 3,
+        "visible": true,
+        "startdate": "2001-05-01",
+        "enddate": "2002-08-31",
+        "title": "Kotlin developer",
+        "name": "Samu's pro codezz",
+        "description": "Was a super nice place to work at",
+        "achievements": [
+          2
+        ]
+      },
+      {
+        "type": "work",
+        "id": 4,
+        "visible": true,
+        "startdate": "2003-05-01",
+        "enddate": "2008-08-31",
+        "title": "Kotlin expert",
+        "name": "Hannateq",
+        "description": "Was a super nice place to work at",
+        "achievements": [
+          3,
+          4
+        ]
+      },
+      {
+        "type": "personal",
+        "id": 5,
+        "visible": true,
+        "startdate": "2002-05-01",
+        "enddate": "2003-08-31",
+        "title": "Leader of sports team in University",
+        "name": "Generic sports team",
+        "description": "Worked hard to achieve this dream",
+        "achievements": []
+      }
+    ]
+  },
+  "education": {
+    "order": 2,
+    "visible": true,
+    "data": [
+      {
+        "type": "education",
+        "id": 1,
+        "visible": true,
+        "school_name": "Tampere University of Applied Sciences",
+        "school_type": "University of Applied Sciences",
+        "field_name": "Bacheleor of Business Information Systems",
+        "grade": 4,
+        "startdate": "2013-08-01",
+        "enddate": "2017-12-20"
+      },
+      {
+        "type": "course",
+        "id": 2,
+        "visible": true,
+        "provider_name": "Tampere University",
+        "course_name": "Kotlin basics",
+        "grade": 4,
+        "startdate": "2011-11-01",
+        "enddate": "2011-12-22"
+      }
+    ]
+  },
+  "projects": {
+    "order": 3,
+    "visible": true,
+    "data": [
+      {
+        "type": "project",
+        "id": 1,
+        "visible": true,
+        "name": "Java/json-parser",
+        "description": "I worked on a json-parser, which can read and write json data. I worked in a group of ten people. Project was a great success (as Borat would say it) and it reached top 10 most downloaded json-parsers month it was released.",
+        "completion_date": "2018-11-01"
+      },
+      {
+        "type": "project",
+        "id": 2,
+        "visible": true,
+        "name": "Java/shpoping-list-applcation",
+        "description": "Shopping list application where user can save their data as a json file. User can also read their shopping list from said json file. User can also save their shopping list to Dropbox and database. Standalone project, worked for 8 hours for ten months.",
+        "completion_date": "2011-12-12"
+      },
+      {
+        "type": "project",
+        "id": 3,
+        "visible": true,
+        "name": "Kotlin/user-login-backend",
+        "description": "User login backend for Samu's pro codezz. Worked with two other people on this project. My field of work was mostly releted on validating user's login credentials.",
+        "completion_date": "2006-01-01"
+      },
+      {
+        "type": "achievement",
+        "id": 1,
+        "visible": true,
+        "name": "Award for best Kotlin code in 2015",
+        "description": "I was awarded from my hard work with Ktolin",
+        "completion_date": "2014-05-25"
+      }
+    ]
+  },
+  "titles": {
+    "order": 4,
+    "visible": true,
+    "data": [
+      {
+        "type": "title",
+        "id": 1,
+        "visible": true,
+        "title": "Vuoden hauis palkinto",
+        "awarded": "2009-01-01"
+      },
+      {
+        "type": "degree",
+        "id": 2,
+        "visible": true,
+        "title": "Penkkauksen maisterikoulutus",
+        "awarded": "2013-01-01"
+      }
+    ]
+  },
+  "references": {
+    "order": 5,
+    "visible": true,
+    "data": [
+      {
+        "type": "person",
+        "id": 1,
+        "visible": true,
+        "name": "Kaisa Haikarainene",
+        "contact_email": "kaisa.haikarainen@email.com",
+        "contact_phone": "0101153456"
+      }
+    ]
+  }
 }
