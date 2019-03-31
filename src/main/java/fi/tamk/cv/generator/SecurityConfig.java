@@ -32,8 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
+        http    .authorizeRequests()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -44,6 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/*.*", "/static/**", "/api/get/user", "/api/pdf", "/api/test", "/api/demo");
+        web.ignoring().antMatchers("/*.*", "/static/**");
     }
 }
