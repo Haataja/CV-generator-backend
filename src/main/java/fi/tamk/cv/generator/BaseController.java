@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Hanna Haataja <hanna.haataja@tuni.fi>. All rights reserved.
+Copyright 2019 Hanna Haataja <hanna.haataja@tuni.fi>, Joonas Lauhala <joonas.lauhala@tuni.fi>. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
 following conditions are met:
@@ -22,11 +22,11 @@ package fi.tamk.cv.generator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -37,21 +37,21 @@ public class BaseController {
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
+    private HttpSession session;
+
+    @Autowired
     private OAuth2AuthorizedClientService authorizedClientService;
 
-    private String accessToken;
-
     public String getAccessToken() {
-        return accessToken;
+        return (String) session.getAttribute("token");
     }
 
-    // login in http://localhost:8080/oauth2/authorize/google
     @GetMapping("/api/loginSuccess")
     public ModelAndView getLoginInfo(OAuth2AuthenticationToken authentication) {
         OAuth2AuthorizedClient client = authorizedClientService
                 .loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
         log.info("Client: {}, token: {}", authentication.getName(), client.getAccessToken().getTokenValue());
-        accessToken = client.getAccessToken().getTokenValue();
+        session.setAttribute("token", client.getAccessToken().getTokenValue());
         return new ModelAndView("redirect:/");
     }
 }
