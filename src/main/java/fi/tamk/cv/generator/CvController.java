@@ -28,7 +28,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -42,14 +41,12 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("api/")
-@Scope("session")
 public class CvController extends BaseController{
 
     Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     GoogleServices googleServices;
-
 
     @GetMapping(value = "/pdf",
     produces = MediaType.APPLICATION_PDF_VALUE)
@@ -64,9 +61,7 @@ public class CvController extends BaseController{
         try (InputStream in = new FileInputStream(file)){
             byte[] media = IOUtils.toByteArray(in);
             headers.setCacheControl(CacheControl.noCache().getHeaderValue());
-            ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
-
-            return responseEntity;
+            return new ResponseEntity<>(media, headers, HttpStatus.OK);
 
         } catch (IOException e) {
             return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
@@ -75,7 +70,6 @@ public class CvController extends BaseController{
             if(file!=null) file.delete();
         }
     }
-
 
     @GetMapping("/error")
     public String getLoginError(OAuth2AuthenticationToken authentication) {
@@ -128,15 +122,17 @@ public class CvController extends BaseController{
     @RequestMapping("/get/user")
     public ResponseEntity<User> getData(){
         log.debug("Getting user");
-        if (getAccessToken() != null){
-            User user = googleServices.getData(getAccessToken());
+        String token = getAccessToken();
+
+        if (token != null){
+            User user = googleServices.getData(token);
             if(user != null){
-                return new ResponseEntity<>(googleServices.getData(getAccessToken()), HttpStatus.OK);
+                return new ResponseEntity<>(user, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
         } else {
-            return  new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 
