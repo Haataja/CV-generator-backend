@@ -27,12 +27,10 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class BaseController {
@@ -48,7 +46,7 @@ public class BaseController {
     }
 
     // login in http://localhost:8080/oauth2/authorize/google
-    @GetMapping("/loginSuccess")
+    @GetMapping("/api/loginSuccess")
     public ModelAndView getLoginInfo(OAuth2AuthenticationToken authentication) {
         OAuth2AuthorizedClient client = authorizedClientService
                 .loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
