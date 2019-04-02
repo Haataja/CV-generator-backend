@@ -88,7 +88,7 @@ public class SheetsHelper {
         ranges.add("contact_info"); // type,value,visible
         ranges.add("address");
         ranges.add("profile_image");
-        ranges.add("bio");//licences
+        ranges.add("bio");
         ranges.add("misc");
         ranges.add("experience");
         ranges.add("education");
