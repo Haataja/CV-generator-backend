@@ -23,6 +23,7 @@ package fi.tamk.cv.generator.Google;
 import com.google.api.services.drive.model.File;
 import fi.tamk.cv.generator.model.Bio;
 import fi.tamk.cv.generator.model.Info;
+import fi.tamk.cv.generator.model.ProfileImage;
 import fi.tamk.cv.generator.model.User;
 import fi.tamk.cv.generator.model.datatypes.DataType;
 import org.slf4j.Logger;
@@ -121,5 +122,13 @@ public class GoogleServices {
             return null;
         }
 
+    }
+
+    public void addProfileData(String accessToken, ProfileImage image) {
+        String sheetID = getOwnedSheetID(accessToken);
+
+        if (sheetID != null) {
+            sheetsHelper.writeToSheet(accessToken, sheetID, "profile_image", image.toListOfLists());
+        }
     }
 }

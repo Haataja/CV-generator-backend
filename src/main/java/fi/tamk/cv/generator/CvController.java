@@ -215,4 +215,15 @@ public class CvController extends BaseController{
         }
     }
 
+    @RequestMapping(value = "/post/profile", method = RequestMethod.POST)
+    public ResponseEntity<?> postProfilePictureData(@RequestBody ProfileImage image){
+        log.debug("Got the profile image post: {} {} ", image.getSource(), image.isVisible());
+        if(getAccessToken() != null){
+            googleServices.addProfileData(getAccessToken(), image);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else{
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
 }
