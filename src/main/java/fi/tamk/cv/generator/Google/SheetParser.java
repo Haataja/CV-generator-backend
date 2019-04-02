@@ -122,7 +122,7 @@ public class SheetParser {
                         projectData.add(project);
                     }
                     projectInfo.setData(projectData);
-                    user.setEducation(projectInfo);
+                    user.setProjects(projectInfo);
                     break;
                 case "titles":
                     List<Object> titleInfos = values.get(0);
