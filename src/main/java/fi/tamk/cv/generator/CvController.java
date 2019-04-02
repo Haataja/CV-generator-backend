@@ -129,7 +129,7 @@ public class CvController extends BaseController{
             if(user != null){
                 return new ResponseEntity<>(user, HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                return createSheetTemplate();
             }
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -187,5 +187,20 @@ public class CvController extends BaseController{
         return googleServices.appendDataType(getAccessToken(),range, dataType);
     }
 
+    @RequestMapping(value = "/post/{range}", method = RequestMethod.POST)
+    public ResponseEntity<?> postInfoData(@PathVariable String range){
+        log.debug("In range");
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @RequestMapping(value = "/post/bio", method = RequestMethod.POST)
+    public ResponseEntity<?> postBioData(@RequestBody Bio bio){
+        if(getAccessToken() != null){
+            googleServices.addBioData(getAccessToken(), bio);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else{
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
 
 }

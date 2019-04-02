@@ -21,6 +21,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package fi.tamk.cv.generator.Google;
 
 import com.google.api.services.drive.model.File;
+import fi.tamk.cv.generator.model.Bio;
 import fi.tamk.cv.generator.model.Info;
 import fi.tamk.cv.generator.model.User;
 import fi.tamk.cv.generator.model.datatypes.DataType;
@@ -105,6 +106,12 @@ public class GoogleServices {
         sheetsHelper.writeToSheet(accessToken, sheetID, range, data.toListOfLists());
 
         return "ok";
+    }
+
+    public void addBioData(String accessToken, Bio bio){
+        log.debug("HERE IN THE BIO " + bio.getValue() + bio.isVisible());
+        String sheetID = getOwnedSheetID(accessToken);
+        sheetsHelper.writeToSheet(accessToken, sheetID, "bio", bio.toListOfLists());
     }
 
     public User getData(String accessToken) {
