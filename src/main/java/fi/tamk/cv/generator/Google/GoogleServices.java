@@ -109,7 +109,6 @@ public class GoogleServices {
     }
 
     public void addBioData(String accessToken, Bio bio){
-        log.debug("HERE IN THE BIO " + bio.getValue() + bio.isVisible());
         String sheetID = getOwnedSheetID(accessToken);
         sheetsHelper.writeToSheet(accessToken, sheetID, "bio", bio.toListOfLists());
     }

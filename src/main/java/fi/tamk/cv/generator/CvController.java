@@ -195,6 +195,7 @@ public class CvController extends BaseController{
 
     @RequestMapping(value = "/post/bio", method = RequestMethod.POST)
     public ResponseEntity<?> postBioData(@RequestBody Bio bio){
+        log.debug("Got the bio post: {}", bio.getValue());
         if(getAccessToken() != null){
             googleServices.addBioData(getAccessToken(), bio);
             return new ResponseEntity<>(HttpStatus.OK);
