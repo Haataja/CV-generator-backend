@@ -28,6 +28,9 @@ public class ContactInfo {
     private String phone;
     private Boolean visible;
 
+    public ContactInfo() {
+    }
+
     public ContactInfo(String email, String phone, Boolean visible) {
         this.email = email;
         this.phone = phone;

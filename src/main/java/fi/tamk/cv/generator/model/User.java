@@ -22,7 +22,6 @@ package fi.tamk.cv.generator.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +31,7 @@ import java.util.List;
 public class User {
     private String firstname;
     private String lastname;
-    private LocalDate birthdate;
+    private LocalDate birthdate; // not really used or written - cannot deserialize
     private ContactInfo contact_info;
     private Address address;
     private ProfileImage profile_image;
@@ -55,10 +54,10 @@ public class User {
     }
 
 
-    public List<List<Object>> fetchContactInfoAsList(){
+    public List<List<Object>> fetchContactInfoAsList() {
         List<List<Object>> lists = Arrays.asList(new ArrayList<>());
-        if(contact_info != null){
-         lists= Arrays.asList(contact_info.toList());
+        if (contact_info != null) {
+            lists = Arrays.asList(contact_info.toList());
         }
         return lists;
     }
@@ -86,6 +85,11 @@ public class User {
     public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
     }
+
+    /*public void setBirthdate(String birthdate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        this.birthdate = LocalDate.parse(birthdate, formatter);
+    }*/
 
     public ContactInfo getContact_info() {
         return contact_info;

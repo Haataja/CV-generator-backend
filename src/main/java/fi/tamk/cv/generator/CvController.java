@@ -162,7 +162,7 @@ public class CvController extends BaseController{
     @RequestMapping("/write/demo")
     public String writeDemo() {
         User user = demo();
-        googleServices.writeToCV(getAccessToken(), user);
+        googleServices.addUserData(getAccessToken(), user);
         return "ok";
     }
 
@@ -198,6 +198,17 @@ public class CvController extends BaseController{
         log.debug("Got the bio post: {}", bio.getValue());
         if(getAccessToken() != null){
             googleServices.addBioData(getAccessToken(), bio);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else{
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @RequestMapping(value = "/post/user", method = RequestMethod.POST)
+    public ResponseEntity<?> postBasicData(@RequestBody User user){
+        log.debug("Got the basic post: {} {} ", user.getFirstname(), user.getLastname());
+        if(getAccessToken() != null){
+            googleServices.addUserData(getAccessToken(), user);
             return new ResponseEntity<>(HttpStatus.OK);
         } else{
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

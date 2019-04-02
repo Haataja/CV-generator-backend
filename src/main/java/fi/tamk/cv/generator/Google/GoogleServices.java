@@ -66,7 +66,7 @@ public class GoogleServices {
         return user;
     }
 
-    public void writeToCV(String accessToken, User user) {
+    public void addUserData(String accessToken, User user) {
         String sheetID = getOwnedSheetID(accessToken);
 
         if (sheetID != null) {
