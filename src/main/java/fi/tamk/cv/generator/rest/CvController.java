@@ -19,11 +19,12 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSE
 WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package fi.tamk.cv.generator;
+package fi.tamk.cv.generator.rest;
 
 import fi.tamk.cv.generator.Google.GoogleServices;
 import fi.tamk.cv.generator.model.*;
 import fi.tamk.cv.generator.model.datatypes.*;
+import fi.tamk.cv.generator.rest.BaseController;
 import org.apache.pdfbox.io.IOUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -41,7 +42,7 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("api/")
-public class CvController extends BaseController{
+public class CvController extends BaseController {
 
     Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -187,9 +188,13 @@ public class CvController extends BaseController{
         return googleServices.appendDataType(getAccessToken(),range, dataType);
     }
 
-    @RequestMapping(value = "/post/{range}", method = RequestMethod.POST)
-    public ResponseEntity<?> postInfoData(@PathVariable String range){
-        log.debug("In range");
+    @RequestMapping(value = "/post/{range}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> postInfoData(@PathVariable String range, @RequestBody Info info){
+        log.debug("Got range post: {}", range);
+        if(getAccessToken() != null){
+            //googleServices.addInfoData(getAccessToken(), range, info);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
