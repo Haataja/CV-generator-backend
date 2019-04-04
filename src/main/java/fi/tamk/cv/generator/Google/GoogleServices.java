@@ -131,4 +131,12 @@ public class GoogleServices {
             sheetsHelper.writeToSheet(accessToken, sheetID, "profile_image", image.toListOfLists());
         }
     }
+
+    public void addInfoData(String accessToken, String range, Info info) {
+        String sheetID = getOwnedSheetID(accessToken);
+
+        if (sheetID != null) {
+            sheetsHelper.writeToSheet(accessToken, sheetID, range, info.toListOfLists());
+        }
+    }
 }
