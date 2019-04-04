@@ -20,12 +20,15 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package fi.tamk.cv.generator.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fi.tamk.cv.generator.model.datatypes.DataType;
+import fi.tamk.cv.generator.rest.InfoDeserializer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@JsonDeserialize(using = InfoDeserializer.class)
 public class Info {
     private int order;
     private boolean visible;
