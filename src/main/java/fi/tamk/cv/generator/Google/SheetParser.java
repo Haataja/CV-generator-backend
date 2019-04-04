@@ -144,11 +144,11 @@ public class SheetParser {
                     ArrayList<DataType> referenceData = new ArrayList<>();
                     for (int i = 1; i < values.size(); i++) {
                         if (values.get(i).size() > 5) {
-                            referenceData.add(new Person(Long.parseLong((String) values.get(i).get(1)),
+                            referenceData.add(new Person((String) values.get(i).get(0),Long.parseLong((String) values.get(i).get(1)),
                                     Boolean.parseBoolean((String) values.get(i).get(2)), (String) values.get(i).get(3),
                                     (String) values.get(i).get(4), (String) values.get(i).get(5)));
                         } else if (values.get(i).size() > 4) {
-                            referenceData.add(new Person(Long.parseLong((String) values.get(i).get(1)),
+                            referenceData.add(new Person((String) values.get(i).get(0),Long.parseLong((String) values.get(i).get(1)),
                                     Boolean.parseBoolean((String) values.get(i).get(2)), (String) values.get(i).get(3),
                                     (String) values.get(i).get(4), null));
                         }
@@ -284,11 +284,11 @@ public class SheetParser {
                 ArrayList<DataType> referenceData = new ArrayList<>();
                 for (int i = 1; i < data.size(); i++) {
                     if (data.get(i).size() > 5) {
-                        referenceData.add(new Person(Long.parseLong((String) data.get(i).get(1)),
+                        referenceData.add(new Person((String) data.get(i).get(0),Long.parseLong((String) data.get(i).get(1)),
                                 Boolean.parseBoolean((String) data.get(i).get(2)), (String) data.get(i).get(3),
                                 (String) data.get(i).get(4), (String) data.get(i).get(5)));
                     } else if (data.get(i).size() > 4) {
-                        referenceData.add(new Person(Long.parseLong((String) data.get(i).get(1)),
+                        referenceData.add(new Person((String) data.get(i).get(0),Long.parseLong((String) data.get(i).get(1)),
                                 Boolean.parseBoolean((String) data.get(i).get(2)), (String) data.get(i).get(3),
                                 (String) data.get(i).get(4), null));
                     }

@@ -31,8 +31,8 @@ public class Person extends DataType{
     private String contact_email;
     private String contact_phone;
 
-    public Person(long id, boolean visible, String name, String contact_email, String contact_phone) {
-        super("person", id, visible);
+    public Person(String type, long id, boolean visible, String name, String contact_email, String contact_phone) {
+        super(type, id, visible);
         this.name = name;
         this.contact_email = contact_email;
         this.contact_phone = contact_phone;
