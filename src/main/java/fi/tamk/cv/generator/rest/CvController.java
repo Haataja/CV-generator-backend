@@ -111,7 +111,7 @@ public class CvController extends BaseController {
         demoUser.getTitles().getData().add(new Title("title",1,true,"Vuoden hauis palkinto",LocalDate.of(2009,1,1)));
         demoUser.getTitles().getData().add(new Title("degree",2,true,"Penkkauksen maisterikoulutus",LocalDate.of(2013,1,1)));
         demoUser.setReferences(new Info(5,true));
-        demoUser.getReferences().getData().add(new Person(1,true,"Kaisa Haikarainene","kaisa.haikarainen@email.com","0101153456"));
+        demoUser.getReferences().getData().add(new Person("person",1,true,"Kaisa Haikarainene","kaisa.haikarainen@email.com","0101153456"));
         demoUser.setMisc(new Info(6, true));
         demoUser.getMisc().getData().add(new Misc("language", "Swedish", "Bad"));
         demoUser.getMisc().getData().add(new Misc("language", "Finnish", "Mothers tongue"));
@@ -192,7 +192,7 @@ public class CvController extends BaseController {
     public ResponseEntity<?> postInfoData(@PathVariable String range, @RequestBody Info info){
         log.debug("Got range post: {}", range);
         if(getAccessToken() != null){
-            //googleServices.addInfoData(getAccessToken(), range, info);
+            googleServices.addInfoData(getAccessToken(), range, info);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
