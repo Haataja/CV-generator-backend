@@ -60,7 +60,10 @@ public class Education extends DataType {
     public List<Object> toList() {
         String start = getStartdate() == null ? "" : getStartdate().format(formatter);
         String end = getEnddate() == null ? "" : getEnddate().format(formatter);
-        return Arrays.asList(getType(), getId(), isVisible(), getSchool_name(), getSchool_type(), getField_name(), getGrade(),
+        String school = getSchool_name() == null ? "": getSchool_name();
+        String type = getSchool_type() == null ? "": getSchool_type();
+        String field = getField_name() == null ? "": getField_name();
+        return Arrays.asList(getType(), getId(), isVisible(), school, type, field, getGrade(),
                 start, end);
     }
 

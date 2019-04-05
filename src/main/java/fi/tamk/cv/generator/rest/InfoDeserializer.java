@@ -63,6 +63,7 @@ public class InfoDeserializer extends JsonDeserializer<Info> {
                 if (data.get("name") != null && data.get("value") != null) {
                     //log.debug("Data type: Misc, {}",data.toString());
                     dataType = mapper.readValue(data.toString(), Misc.class);
+                    log.debug("MISC: name: {}, value: {}", ((Misc) dataType).getName(), ((Misc) dataType).getValue());
                 } else if (data.get("completion_date") != null) {
                     //log.debug("Data type: Project, {}",data.toString());
                     dataType = mapper.readValue(data.toString(), Project.class);
@@ -78,6 +79,7 @@ public class InfoDeserializer extends JsonDeserializer<Info> {
                 } else {
                     log.debug("Data type: Unknown, {}", data.toString());
                     dataType = mapper.readValue(data.toString(), Misc.class);
+                    log.debug("name: {}, value: {}", ((Misc) dataType).getName(), ((Misc) dataType).getValue());
                 }
             }
             info.getData().add(dataType);

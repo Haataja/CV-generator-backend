@@ -44,7 +44,8 @@ public class Misc extends DataType{
     }
 
     public List<Object> toList(){
-        return Arrays.asList(getType(),getId(),isVisible(),getValue(),getName());
+        String value = getValue() == null ? "": getValue();
+        return Arrays.asList(getType(),getId(),isVisible(),value,getName());
     }
 
     public String getValue() {

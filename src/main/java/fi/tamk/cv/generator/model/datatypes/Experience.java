@@ -77,9 +77,9 @@ public class Experience extends DataType {
         list.add(isVisible());
         list.add(getStartdate() == null ? "" : getStartdate().format(formatter));
         list.add(getEnddate() == null ? "" : getEnddate().format(formatter));
-        list.add(getTitle());
-        list.add(getName());
-        list.add(getDescription());
+        list.add(getTitle() == null ? "" : getTitle());
+        list.add(getName() == null ? "" : getName());
+        list.add(getDescription() == null ? "" : getDescription());
         if (achievements != null && achievements.length != 0) {
             for (int i : achievements) {
                 list.add(i);

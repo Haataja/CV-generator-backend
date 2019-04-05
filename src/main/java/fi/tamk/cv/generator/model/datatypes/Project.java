@@ -48,7 +48,10 @@ public class Project extends DataType{
     }
 
     public List<Object> toList(){
-        return Arrays.asList(getType(),getId(),isVisible(),getName(),getDescription(),getCompletion_date().format(formatter));
+        String name = getName() == null ? "" : getName();
+        String desc = getDescription() == null ? "" : getDescription();
+        String completion = getCompletion_date() == null ? "" : getCompletion_date().format(formatter);
+        return Arrays.asList(getType(),getId(),isVisible(),name,desc,completion);
     }
     public String getName() {
         return name;

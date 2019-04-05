@@ -89,19 +89,7 @@ public class SheetParser {
                     Info expInfo = new Info(Integer.parseInt((String) ExpInfos.get(0)),
                             Boolean.parseBoolean((String) ExpInfos.get(1)));
                     ArrayList<DataType> expData = new ArrayList<>();
-                    for (int i = 1; i < values.size(); i++) {
-                        Experience experience = new Experience((String) values.get(i).get(0), Long.parseLong((String) values.get(i).get(1)),
-                                Boolean.parseBoolean((String) values.get(i).get(2)), parseLocalDate((String) values.get(i).get(3)),
-                                parseLocalDate((String) values.get(i).get(4)), (String) values.get(i).get(5), (String) values.get(i).get(6),
-                                (String) values.get(i).get(7));
-                        int size = values.get(i).size() - 8;
-                        int[] achievements = new int[size];
-                        for (int j = 0; j < size; j++) {
-                            achievements[j] = (Integer) values.get(i).get(j + 8);
-                        }
-                        experience.setAchievements(achievements);
-                        expData.add(experience);
-                    }
+                    parseExpData(values, expData);
                     expInfo.setData(expData);
                     user.setExperience(expInfo);
                     break;
@@ -119,12 +107,7 @@ public class SheetParser {
                     Info projectInfo = new Info(Integer.parseInt((String) projectInfos.get(0)),
                             Boolean.parseBoolean((String) projectInfos.get(1)));
                     ArrayList<DataType> projectData = new ArrayList<>();
-                    for (int i = 1; i < values.size(); i++) {
-                        Project project = new Project((String) values.get(i).get(0), Long.parseLong((String) values.get(i).get(1)),
-                                Boolean.parseBoolean((String) values.get(i).get(2)),
-                                (String) values.get(i).get(3), (String) values.get(i).get(4), parseLocalDate((String) values.get(i).get(5)));
-                        projectData.add(project);
-                    }
+                    parseProjectData(values, projectData);
                     projectInfo.setData(projectData);
                     user.setProjects(projectInfo);
                     break;
@@ -134,9 +117,15 @@ public class SheetParser {
                             Boolean.parseBoolean((String) titleInfos.get(1)));
                     ArrayList<DataType> titleData = new ArrayList<>();
                     for (int i = 1; i < values.size(); i++) {
-                        titleData.add(new Title((String) values.get(i).get(0), Long.parseLong((String) values.get(i).get(1)),
-                                Boolean.parseBoolean((String) values.get(i).get(2)), (String) values.get(i).get(3),
-                                parseLocalDate((String) values.get(i).get(4))));
+                        if(values.get(i).size() > 4){
+                            titleData.add(new Title((String) values.get(i).get(0), Long.parseLong((String) values.get(i).get(1)),
+                                    Boolean.parseBoolean((String) values.get(i).get(2)), (String) values.get(i).get(3),
+                                    parseLocalDate((String) values.get(i).get(4))));
+                        } else {
+                            titleData.add(new Title((String) values.get(i).get(0), Long.parseLong((String) values.get(i).get(1)),
+                                    Boolean.parseBoolean((String) values.get(i).get(2)), (String) values.get(i).get(3),
+                                    null));
+                        }
                     }
                     titleInfo.setData(titleData);
                     user.setTitles(titleInfo);
@@ -146,17 +135,7 @@ public class SheetParser {
                     Info referenceInfo = new Info(Integer.parseInt((String) referenceInfos.get(0)),
                             Boolean.parseBoolean((String) referenceInfos.get(1)));
                     ArrayList<DataType> referenceData = new ArrayList<>();
-                    for (int i = 1; i < values.size(); i++) {
-                        if (values.get(i).size() > 5) {
-                            referenceData.add(new Person((String) values.get(i).get(0),Long.parseLong((String) values.get(i).get(1)),
-                                    Boolean.parseBoolean((String) values.get(i).get(2)), (String) values.get(i).get(3),
-                                    (String) values.get(i).get(4), (String) values.get(i).get(5)));
-                        } else if (values.get(i).size() > 4) {
-                            referenceData.add(new Person((String) values.get(i).get(0),Long.parseLong((String) values.get(i).get(1)),
-                                    Boolean.parseBoolean((String) values.get(i).get(2)), (String) values.get(i).get(3),
-                                    (String) values.get(i).get(4), null));
-                        }
-                    }
+                    parseReferenceData(values, referenceData);
                     referenceInfo.setData(referenceData);
                     user.setReferences(referenceInfo);
                     break;
@@ -165,23 +144,131 @@ public class SheetParser {
         return user;
     }
 
+    private static void parseExpData(List<List<Object>> values, ArrayList<DataType> expData) {
+        for (int i = 1; i < values.size(); i++) {
+            Experience experience;
+            if(values.get(i).size() > 7){
+                experience = new Experience((String) values.get(i).get(0), Long.parseLong((String) values.get(i).get(1)),
+                        Boolean.parseBoolean((String) values.get(i).get(2)), parseLocalDate((String) values.get(i).get(3)),
+                        parseLocalDate((String) values.get(i).get(4)), (String) values.get(i).get(5), (String) values.get(i).get(6),
+                        (String) values.get(i).get(7));
+            } else if(values.get(i).size() > 6){
+                experience = new Experience((String) values.get(i).get(0), Long.parseLong((String) values.get(i).get(1)),
+                        Boolean.parseBoolean((String) values.get(i).get(2)), parseLocalDate((String) values.get(i).get(3)),
+                        parseLocalDate((String) values.get(i).get(4)), (String) values.get(i).get(5), (String) values.get(i).get(6),
+                        null);
+            } else if(values.get(i).size() > 5){
+                experience = new Experience((String) values.get(i).get(0), Long.parseLong((String) values.get(i).get(1)),
+                        Boolean.parseBoolean((String) values.get(i).get(2)), parseLocalDate((String) values.get(i).get(3)),
+                        parseLocalDate((String) values.get(i).get(4)), (String) values.get(i).get(5), null,
+                        null);
+            } else if(values.get(i).size() > 4){
+                experience = new Experience((String) values.get(i).get(0), Long.parseLong((String) values.get(i).get(1)),
+                        Boolean.parseBoolean((String) values.get(i).get(2)), parseLocalDate((String) values.get(i).get(3)),
+                        parseLocalDate((String) values.get(i).get(4)), null, null,
+                        null);
+            } else if(values.get(i).size() > 3){
+                experience = new Experience((String) values.get(i).get(0), Long.parseLong((String) values.get(i).get(1)),
+                        Boolean.parseBoolean((String) values.get(i).get(2)), parseLocalDate((String) values.get(i).get(3)),
+                        null, null, null,
+                        null);
+            } else {
+                experience = new Experience((String) values.get(i).get(0), Long.parseLong((String) values.get(i).get(1)),
+                        Boolean.parseBoolean((String) values.get(i).get(2)), null,
+                        null, null, null,
+                        null);
+            }
+            int size = values.get(i).size() - 8;
+            int[] achievements = new int[size];
+            for (int j = 0; j < size; j++) {
+                achievements[j] = (Integer) values.get(i).get(j + 8);
+            }
+            experience.setAchievements(achievements);
+            expData.add(experience);
+        }
+    }
+
 
     private static void parseCourseData(List<List<Object>> values, ArrayList<DataType> courseData) {
         for (int i = 1; i < values.size(); i++) {
             DataType course;
             if (values.get(i).get(0).equals("course")) {
-                course = new Course(Long.parseLong((String) values.get(i).get(1)),
-                        Boolean.parseBoolean((String) values.get(i).get(2)),
-                        (String) values.get(i).get(3), (String) values.get(i).get(4), Integer.parseInt((String) values.get(i).get(5)),
-                        parseLocalDate((String) values.get(i).get(6)), parseLocalDate((String) values.get(i).get(7)));
+                if(values.get(i).size() > 7){
+                    course = new Course(Long.parseLong((String) values.get(i).get(1)),
+                            Boolean.parseBoolean((String) values.get(i).get(2)),
+                            (String) values.get(i).get(3), (String) values.get(i).get(4), Integer.parseInt((String) values.get(i).get(5)),
+                            parseLocalDate((String) values.get(i).get(6)), parseLocalDate((String) values.get(i).get(7)));
+                } else if(values.get(i).size() > 6){
+                    course = new Course(Long.parseLong((String) values.get(i).get(1)),
+                            Boolean.parseBoolean((String) values.get(i).get(2)),
+                            (String) values.get(i).get(3), (String) values.get(i).get(4), Integer.parseInt((String) values.get(i).get(5)),
+                            parseLocalDate((String) values.get(i).get(6)), null);
+                } else if(values.get(i).size() > 5){
+                    course = new Course(Long.parseLong((String) values.get(i).get(1)),
+                            Boolean.parseBoolean((String) values.get(i).get(2)),
+                            (String) values.get(i).get(3), (String) values.get(i).get(4), Integer.parseInt((String) values.get(i).get(5)),
+                            null, null);
+                } else if(values.get(i).size() > 4){
+                    course = new Course(Long.parseLong((String) values.get(i).get(1)),
+                            Boolean.parseBoolean((String) values.get(i).get(2)),
+                            (String) values.get(i).get(3), (String) values.get(i).get(4), 0,
+                            null, null);
+                } else if(values.get(i).size() > 3){
+                    course = new Course(Long.parseLong((String) values.get(i).get(1)),
+                            Boolean.parseBoolean((String) values.get(i).get(2)),
+                            (String) values.get(i).get(3), null, 0,
+                            null, null);
+                } else {
+                    course = new Course(Long.parseLong((String) values.get(i).get(1)),
+                            Boolean.parseBoolean((String) values.get(i).get(2)),
+                            null , null , 0,
+                            null, null);
+                }
             } else {
-                course = new Education(Long.parseLong((String) values.get(i).get(1)),
-                        Boolean.parseBoolean((String) values.get(i).get(2)),
-                        (String) values.get(i).get(3), (String) values.get(i).get(4), (String) values.get(i).get(5)
-                        , Integer.parseInt((String) values.get(i).get(6)),
-                        parseLocalDate((String) values.get(i).get(7)), parseLocalDate((String) values.get(i).get(8)));
+                if(values.get(i).size() > 8){
+                    course = new Education(Long.parseLong((String) values.get(i).get(1)),
+                            Boolean.parseBoolean((String) values.get(i).get(2)),
+                            (String) values.get(i).get(3), (String) values.get(i).get(4), (String) values.get(i).get(5)
+                            , Integer.parseInt((String) values.get(i).get(6)),
+                            parseLocalDate((String) values.get(i).get(7)), parseLocalDate((String) values.get(i).get(8)));
+                } else if (values.get(i).size() > 7){
+                    course = new Education(Long.parseLong((String) values.get(i).get(1)),
+                            Boolean.parseBoolean((String) values.get(i).get(2)),
+                            (String) values.get(i).get(3), (String) values.get(i).get(4), (String) values.get(i).get(5)
+                            , Integer.parseInt((String) values.get(i).get(6)),
+                            parseLocalDate((String) values.get(i).get(7)), null);
+                } else if (values.get(i).size() > 6){
+                    course = new Education(Long.parseLong((String) values.get(i).get(1)),
+                            Boolean.parseBoolean((String) values.get(i).get(2)),
+                            (String) values.get(i).get(3), (String) values.get(i).get(4), (String) values.get(i).get(5)
+                            , Integer.parseInt((String) values.get(i).get(6)),
+                            null, null);
+                } else if (values.get(i).size() > 5){
+                    course = new Education(Long.parseLong((String) values.get(i).get(1)),
+                            Boolean.parseBoolean((String) values.get(i).get(2)),
+                            (String) values.get(i).get(3), (String) values.get(i).get(4), (String) values.get(i).get(5)
+                            , 0,
+                            null, null);
+                } else if (values.get(i).size() > 4){
+                    course = new Education(Long.parseLong((String) values.get(i).get(1)),
+                            Boolean.parseBoolean((String) values.get(i).get(2)),
+                            (String) values.get(i).get(3), (String) values.get(i).get(4), null
+                            , 0,
+                            null, null);
+                } else if (values.get(i).size() > 3){
+                    course = new Education(Long.parseLong((String) values.get(i).get(1)),
+                            Boolean.parseBoolean((String) values.get(i).get(2)),
+                            (String) values.get(i).get(3), null, null
+                            , 0,
+                            null, null);
+                } else {
+                    course = new Education(Long.parseLong((String) values.get(i).get(1)),
+                            Boolean.parseBoolean((String) values.get(i).get(2)),
+                            null, null, null
+                            , 0,
+                            null, null);
+                }
             }
-
             courseData.add(course);
         }
     }
@@ -232,19 +319,7 @@ public class SheetParser {
                 object = new Info(Integer.parseInt((String) ExpInfos.get(0)),
                         Boolean.parseBoolean((String) ExpInfos.get(1)));
                 ArrayList<DataType> expData = new ArrayList<>();
-                for (int i = 1; i < data.size(); i++) {
-                    Experience experience = new Experience((String) data.get(i).get(0), Long.parseLong((String) data.get(i).get(1)),
-                            Boolean.parseBoolean((String) data.get(i).get(2)), parseLocalDate((String) data.get(i).get(3)),
-                            parseLocalDate((String) data.get(i).get(4)), (String) data.get(i).get(5), (String) data.get(i).get(6),
-                            (String) data.get(i).get(7));
-                    int size = data.get(i).size() - 8;
-                    int[] achievements = new int[size];
-                    for (int j = 0; j < size; j++) {
-                        achievements[j] = (Integer) data.get(i).get(j + 8);
-                    }
-                    experience.setAchievements(achievements);
-                    expData.add(experience);
-                }
+                parseExpData(data, expData);
                 ((Info) object).setData(expData);
                 break;
             case "education":
@@ -261,12 +336,7 @@ public class SheetParser {
                 object = new Info(Integer.parseInt((String) projectInfos.get(0)),
                         Boolean.parseBoolean((String) projectInfos.get(1)));
                 ArrayList<DataType> projectData = new ArrayList<>();
-                for (int i = 1; i < data.size(); i++) {
-                    Project project = new Project((String) data.get(i).get(0), Long.parseLong((String) data.get(i).get(1)),
-                            Boolean.parseBoolean((String) data.get(i).get(2)),
-                            (String) data.get(i).get(3), (String) data.get(i).get(4), parseLocalDate((String) data.get(i).get(5)));
-                    projectData.add(project);
-                }
+                parseProjectData(data, projectData);
                 ((Info) object).setData(projectData);
                 break;
             case "titles":
@@ -275,9 +345,15 @@ public class SheetParser {
                         Boolean.parseBoolean((String) titleInfos.get(1)));
                 ArrayList<DataType> titleData = new ArrayList<>();
                 for (int i = 1; i < data.size(); i++) {
-                    titleData.add(new Title((String) data.get(i).get(0), Long.parseLong((String) data.get(i).get(1)),
-                            Boolean.parseBoolean((String) data.get(i).get(2)), (String) data.get(i).get(3),
-                            parseLocalDate((String) data.get(i).get(4))));
+                    if(data.get(i).size() > 4){
+                        titleData.add(new Title((String) data.get(i).get(0), Long.parseLong((String) data.get(i).get(1)),
+                                Boolean.parseBoolean((String) data.get(i).get(2)), (String) data.get(i).get(3),
+                                parseLocalDate((String) data.get(i).get(4))));
+                    } else {
+                        titleData.add(new Title((String) data.get(i).get(0), Long.parseLong((String) data.get(i).get(1)),
+                                Boolean.parseBoolean((String) data.get(i).get(2)), (String) data.get(i).get(3),
+                                null));
+                    }
                 }
                 ((Info) object).setData(titleData);
                 break;
@@ -286,21 +362,49 @@ public class SheetParser {
                 object = new Info(Integer.parseInt((String) referenceInfos.get(0)),
                         Boolean.parseBoolean((String) referenceInfos.get(1)));
                 ArrayList<DataType> referenceData = new ArrayList<>();
-                for (int i = 1; i < data.size(); i++) {
-                    if (data.get(i).size() > 5) {
-                        referenceData.add(new Person((String) data.get(i).get(0),Long.parseLong((String) data.get(i).get(1)),
-                                Boolean.parseBoolean((String) data.get(i).get(2)), (String) data.get(i).get(3),
-                                (String) data.get(i).get(4), (String) data.get(i).get(5)));
-                    } else if (data.get(i).size() > 4) {
-                        referenceData.add(new Person((String) data.get(i).get(0),Long.parseLong((String) data.get(i).get(1)),
-                                Boolean.parseBoolean((String) data.get(i).get(2)), (String) data.get(i).get(3),
-                                (String) data.get(i).get(4), null));
-                    }
-                }
+                parseReferenceData(data, referenceData);
                 ((Info) object).setData(referenceData);
                 break;
         }
         return object;
+    }
+
+    private static void parseReferenceData(List<List<Object>> data, ArrayList<DataType> referenceData) {
+        for (int i = 1; i < data.size(); i++) {
+            if (data.get(i).size() > 5) {
+                referenceData.add(new Person((String) data.get(i).get(0),Long.parseLong((String) data.get(i).get(1)),
+                        Boolean.parseBoolean((String) data.get(i).get(2)), (String) data.get(i).get(3),
+                        (String) data.get(i).get(4), (String) data.get(i).get(5)));
+            } else if (data.get(i).size() > 4) {
+                referenceData.add(new Person((String) data.get(i).get(0),Long.parseLong((String) data.get(i).get(1)),
+                        Boolean.parseBoolean((String) data.get(i).get(2)), (String) data.get(i).get(3),
+                        (String) data.get(i).get(4), null));
+            }
+        }
+    }
+
+    private static void parseProjectData(List<List<Object>> data, ArrayList<DataType> projectData) {
+        for (int i = 1; i < data.size(); i++) {
+            Project project;
+            if(data.get(i).size() > 5){
+                project = new Project((String) data.get(i).get(0), Long.parseLong((String) data.get(i).get(1)),
+                        Boolean.parseBoolean((String) data.get(i).get(2)),
+                        (String) data.get(i).get(3), (String) data.get(i).get(4), parseLocalDate((String) data.get(i).get(5)));
+            } else if (data.get(i).size() > 4){
+                project = new Project((String) data.get(i).get(0), Long.parseLong((String) data.get(i).get(1)),
+                        Boolean.parseBoolean((String) data.get(i).get(2)),
+                        (String) data.get(i).get(3), (String) data.get(i).get(4), null);
+            } else if (data.get(i).size() > 3){
+                project = new Project((String) data.get(i).get(0), Long.parseLong((String) data.get(i).get(1)),
+                        Boolean.parseBoolean((String) data.get(i).get(2)),
+                        (String) data.get(i).get(3), null, null);
+            } else {
+                project = new Project((String) data.get(i).get(0), Long.parseLong((String) data.get(i).get(1)),
+                        Boolean.parseBoolean((String) data.get(i).get(2)),
+                        null, null, null);
+            }
+            projectData.add(project);
+        }
     }
 
 }
