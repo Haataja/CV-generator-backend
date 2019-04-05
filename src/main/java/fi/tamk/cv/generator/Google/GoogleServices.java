@@ -143,4 +143,8 @@ public class GoogleServices {
             sheetsHelper.writeToSheet(accessToken, sheetID, range, info.toListOfLists());
         }
     }
+
+    public void shareFolder(String accesToken, String email) throws IOException, GeneralSecurityException {
+        driveHelper.shareFolder(accesToken, email);
+    }
 }

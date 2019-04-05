@@ -225,4 +225,19 @@ public class CvController extends BaseController {
         }
     }
 
+    @RequestMapping("/get/share/{email}")
+    public ResponseEntity<?> writeDemo(@PathVariable String email) {
+        if(getAccessToken() != null){
+            try {
+                googleServices.shareFolder(getAccessToken(), email);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (IOException|GeneralSecurityException e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
 }

@@ -26,6 +26,7 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.Permission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -130,6 +131,25 @@ public class DriveHelper {
     public List<File> getFiles(String token, String name) throws IOException, GeneralSecurityException {
         Drive service = getDriveService(token);
         return service.files().list().setQ("name = '" + name + "'").execute().getFiles();
+    }
+
+    public void shareFolder(String accessToken, String email) throws IOException, GeneralSecurityException {
+        Permission userPermission = new Permission().setType("user").setRole("reader").setEmailAddress(email);
+
+        List<File> folders = search(accessToken, FOLDER_NAME);
+        String folerID = null;
+        for(File folder: folders){
+            if(folder.getOwnedByMe() && !folder.getTrashed()){
+                folerID = folder.getId();
+                break;
+            }
+        }
+
+        Permission response;
+        if(folerID != null){
+             response = getDriveService(accessToken).permissions().create(folerID, userPermission).execute();
+            log.debug(response.toString());
+        }
     }
 
 }
