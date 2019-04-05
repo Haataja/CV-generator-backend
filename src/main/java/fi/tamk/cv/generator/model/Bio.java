@@ -61,4 +61,8 @@ public class Bio {
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
+
+    public void setFooter(String footer) {
+        this.footer = footer;
+    }
 }
