@@ -135,6 +135,10 @@ public class GoogleServices {
     public void addInfoData(String accessToken, String range, Info info) {
         String sheetID = getOwnedSheetID(accessToken);
 
+        for(int i = 1; i <= info.getData().size(); i++){
+            info.getData().get(i - 1).setId(i);
+        }
+
         if (sheetID != null) {
             sheetsHelper.writeToSheet(accessToken, sheetID, range, info.toListOfLists());
         }
