@@ -65,4 +65,8 @@ public class Bio {
     public void setFooter(String footer) {
         this.footer = footer;
     }
+
+    public String getFooter() {
+        return footer;
+    }
 }
