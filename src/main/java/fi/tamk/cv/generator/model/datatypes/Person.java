@@ -20,18 +20,16 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package fi.tamk.cv.generator.model.datatypes;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import java.util.Arrays;
 import java.util.List;
 
 
-public class Person extends DataType{
+public class Person extends DataType {
     private String name;
     private String contact_email;
     private String contact_phone;
 
-    public Person(){
+    public Person() {
         super();
     }
 
@@ -49,10 +47,10 @@ public class Person extends DataType{
         this.contact_phone = contact_phone;
     }
 
-    public List<Object> toList(){
-        String email = getContact_email() == null? "":getContact_email();
-        String phone = getContact_phone() == null? "":getContact_phone();
-        return Arrays.asList(getType(),getId(),isVisible(),getName(),email,phone);
+    public List<Object> toList() {
+        String email = getContact_email() == null ? "" : getContact_email();
+        String phone = getContact_phone() == null ? "" : getContact_phone();
+        return Arrays.asList(getType(), getId(), isVisible(), getName(), email, phone);
     }
 
     public String getName() {

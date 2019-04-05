@@ -39,7 +39,6 @@ import java.util.List;
 @Component
 public class GoogleServices {
     Logger log = LoggerFactory.getLogger(this.getClass());
-    public static final String APPLICATION_NAME = "quickstart-1550136441024";
 
     @Autowired
     private SheetsHelper sheetsHelper;

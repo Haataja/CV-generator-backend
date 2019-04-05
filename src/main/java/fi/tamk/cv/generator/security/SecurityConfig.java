@@ -48,7 +48,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/api/error");
     }
 
-    public void configure(WebSecurity web) throws Exception {
+    /**
+     * Allows post to urls by ignoring the web security
+     *
+     * This does not require normally login and it bypasses the spring default csrf-check.
+     * More secure way to allow post is to require csrf-token to be sent from the front end, that is not
+     * implemented to this project.
+     *
+     * @param web Web security
+     */
+    public void configure(WebSecurity web){
         web.ignoring().antMatchers(HttpMethod.POST, "/api/post/**");
     }
 

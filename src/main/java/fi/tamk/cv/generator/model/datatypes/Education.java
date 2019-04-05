@@ -20,13 +20,12 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package fi.tamk.cv.generator.model.datatypes;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
-public class Education extends DataType{
+public class Education extends DataType {
     private String school_name;
     private String school_type;
     private String field_name;
@@ -58,11 +57,11 @@ public class Education extends DataType{
         this.enddate = enddate;
     }
 
-    public List<Object> toList(){
-        String start = getStartdate() == null ? "": getStartdate().format(formatter);
-        String end = getEnddate() == null ? "": getEnddate().format(formatter);
-        return Arrays.asList(getType(),getId(),isVisible(),getSchool_name(),getSchool_type(),getField_name(),getGrade(),
-                start,end);
+    public List<Object> toList() {
+        String start = getStartdate() == null ? "" : getStartdate().format(formatter);
+        String end = getEnddate() == null ? "" : getEnddate().format(formatter);
+        return Arrays.asList(getType(), getId(), isVisible(), getSchool_name(), getSchool_type(), getField_name(), getGrade(),
+                start, end);
     }
 
     public String getSchool_name() {

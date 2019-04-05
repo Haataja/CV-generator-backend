@@ -50,7 +50,7 @@ public class BaseController {
     public ModelAndView getLoginInfo(OAuth2AuthenticationToken authentication) {
         OAuth2AuthorizedClient client = authorizedClientService
                 .loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
-        log.info("Client: {}, token: {}", authentication.getName(), client.getAccessToken().getTokenValue());
+        log.debug("Client detected");
         session.setAttribute("token", client.getAccessToken().getTokenValue());
         return new ModelAndView("redirect:/");
     }

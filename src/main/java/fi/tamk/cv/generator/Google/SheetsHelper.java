@@ -23,25 +23,10 @@ package fi.tamk.cv.generator.Google;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.FileContent;
-import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.model.File;
-import com.google.api.services.drive.model.FileList;
 import com.google.api.services.sheets.v4.Sheets;
-import com.google.api.services.sheets.v4.model.BatchGetValuesResponse;
-import com.google.api.services.sheets.v4.model.Spreadsheet;
-import com.google.api.services.sheets.v4.model.SpreadsheetProperties;
-import com.google.api.services.sheets.v4.model.UpdateValuesResponse;
-import com.google.api.services.sheets.v4.model.ValueRange;
 import com.google.api.services.sheets.v4.model.*;
 import fi.tamk.cv.generator.model.*;
-import fi.tamk.cv.generator.model.datatypes.*;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -59,8 +44,6 @@ import java.util.List;
 public class SheetsHelper {
     private Logger log = LoggerFactory.getLogger(this.getClass());
     private static final String APPLICATION_NAME = "quickstart-1550136441024";
-    private static final String SHEET_ID = "1yTCCewzBoaqy4ALWEj-0bOEkaRMhzftC_9lWt58xIuE";
-    private static final String FOLDER_NAME = "CV-Generator-data";
     private static final String SPREADSHEET_NAME = "CV-Generator-data-spreadsheet";
 
 
@@ -168,7 +151,7 @@ public class SheetsHelper {
             BatchUpdateSpreadsheetResponse response = getSheetsService(accessToken).spreadsheets().batchUpdate(sheetID, requestBody).execute();
             log.debug(response.toString());
         } catch (IOException | GeneralSecurityException e) {
-            log.error("Something went wrong in the making of the tabs in the sheets: {}", e.getMessage());
+            log.warn("Something went wrong in the making of the tabs in the sheets: {}", e.getMessage());
             return "Error";
             //e.printStackTrace();
         }
@@ -186,9 +169,10 @@ public class SheetsHelper {
                     .setValueInputOption("RAW")
                     .execute();
         } catch (IOException | GeneralSecurityException e) {
+            log.warn("Error while writing to sheet: sheetID {} and range {}", sheetID, range);
             e.printStackTrace();
         }
-        log.debug("Result {}", result);
+        //log.debug("Result {}", result);
     }
 
     public void writeToSheet(String accessToken, String sheetID, User user) {
@@ -251,7 +235,7 @@ public class SheetsHelper {
         }
     }
 
-    public void clearSheet(String accessToken, String sheetID, String range){
+    public void clearSheet(String accessToken, String sheetID, String range) {
         BatchClearValuesResponse result = null;
         BatchClearValuesRequest clearValuesRequest = new BatchClearValuesRequest();
         clearValuesRequest.setRanges(Collections.singletonList(range + "!A1:Z100"));
@@ -260,7 +244,8 @@ public class SheetsHelper {
                     .batchClear(sheetID, clearValuesRequest)
                     .execute();
         } catch (IOException | GeneralSecurityException e) {
-            e.printStackTrace();
+            log.warn("Error while clearing the sheet: range {}", range);
+            //e.printStackTrace();
         }
     }
 }

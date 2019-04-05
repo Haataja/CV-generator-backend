@@ -47,18 +47,18 @@ public class Info {
     }
 
     public List<List<Object>> toListOfLists() {
-        List<Object> list = Arrays.asList(order,visible);
+        List<Object> list = Arrays.asList(order, visible);
         List<List<Object>> listOfLists = new ArrayList<>();
         listOfLists.add(list);
-        if(data.size() > 0){
-            for(DataType dataSample: data){
+        if (data.size() > 0) {
+            for (DataType dataSample : data) {
                 listOfLists.add(dataSample.toList());
             }
         }
         return listOfLists;
     }
 
-    public Info(){
+    public Info() {
         this.data = new ArrayList<>();
     }
 

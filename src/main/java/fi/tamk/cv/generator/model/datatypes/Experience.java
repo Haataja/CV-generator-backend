@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Experience extends DataType {
@@ -38,7 +37,7 @@ public class Experience extends DataType {
     private String description;
     private int[] achievements;
 
-    public Experience(){
+    public Experience() {
         super();
     }
 
@@ -71,18 +70,18 @@ public class Experience extends DataType {
         this.description = description;
     }
 
-    public List<Object> toList(){
+    public List<Object> toList() {
         List<Object> list = new ArrayList<>();
         list.add(getType());
         list.add(getId());
         list.add(isVisible());
-        list.add(getStartdate() == null ? "": getStartdate().format(formatter));
-        list.add(getEnddate()== null ? "": getEnddate().format(formatter));
+        list.add(getStartdate() == null ? "" : getStartdate().format(formatter));
+        list.add(getEnddate() == null ? "" : getEnddate().format(formatter));
         list.add(getTitle());
         list.add(getName());
         list.add(getDescription());
-        if(achievements != null && achievements.length != 0){
-            for(int i: achievements){
+        if (achievements != null && achievements.length != 0) {
+            for (int i : achievements) {
                 list.add(i);
             }
         }

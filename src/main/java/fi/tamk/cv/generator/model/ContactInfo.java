@@ -37,10 +37,10 @@ public class ContactInfo {
         this.visible = visible;
     }
 
-    public List<Object> toList(){
-        String phoneString = phone == null ? "":phone;
-        String emailString = email == null ? "":email;
-        List<Object> list = Arrays.asList(emailString,phoneString,visible);
+    public List<Object> toList() {
+        String phoneString = phone == null ? "" : phone;
+        String emailString = email == null ? "" : email;
+        List<Object> list = Arrays.asList(emailString, phoneString, visible);
         return list;
     }
 

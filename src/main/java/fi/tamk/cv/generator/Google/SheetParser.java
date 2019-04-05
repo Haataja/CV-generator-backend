@@ -28,6 +28,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class parses the Information got from the Google sheets to the java objects in model package.
+ * If countering data mismatch from sheet to rest response check that parse functions are up to date.
+ */
 public class SheetParser {
 
     public static User parseUser(List<ValueRange> list) {
