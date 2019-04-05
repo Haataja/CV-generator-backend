@@ -52,6 +52,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -247,6 +248,19 @@ public class SheetsHelper {
 
         if (user.getReferences() != null) {
             writeToSheet(accessToken, sheetID, "references", user.getReferences().toListOfLists());
+        }
+    }
+
+    public void clearSheet(String accessToken, String sheetID, String range){
+        BatchClearValuesResponse result = null;
+        BatchClearValuesRequest clearValuesRequest = new BatchClearValuesRequest();
+        clearValuesRequest.setRanges(Collections.singletonList(range + "!A1:Z100"));
+        try {
+            result = getSheetsService(accessToken).spreadsheets().values()
+                    .batchClear(sheetID, clearValuesRequest)
+                    .execute();
+        } catch (IOException | GeneralSecurityException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -140,6 +140,7 @@ public class GoogleServices {
         }
 
         if (sheetID != null) {
+            sheetsHelper.clearSheet(accessToken, sheetID, range);
             sheetsHelper.writeToSheet(accessToken, sheetID, range, info.toListOfLists());
         }
     }
