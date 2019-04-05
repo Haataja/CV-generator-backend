@@ -195,7 +195,7 @@ public class CvController extends BaseController {
             googleServices.addInfoData(getAccessToken(), range, info);
             return new ResponseEntity<>(HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @RequestMapping(value = "/post/bio", method = RequestMethod.POST)

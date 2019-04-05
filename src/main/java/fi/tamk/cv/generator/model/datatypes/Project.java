@@ -21,6 +21,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package fi.tamk.cv.generator.model.datatypes;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,6 +29,9 @@ public class Project extends DataType{
     private String name;
     private String description;
     private LocalDate completion_date;
+
+    public Project() {
+    }
 
     public Project(String type, String name, String description, LocalDate completion_date) {
         super(type);
@@ -68,5 +72,9 @@ public class Project extends DataType{
 
     public void setCompletion_date(LocalDate completion_date) {
         this.completion_date = completion_date;
+    }
+
+    public void setCompletion_date(String completion_date) {
+        this.completion_date = LocalDate.parse(completion_date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 }

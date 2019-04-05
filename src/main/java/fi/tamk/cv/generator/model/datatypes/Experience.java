@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,6 +37,10 @@ public class Experience extends DataType {
     private String name;
     private String description;
     private int[] achievements;
+
+    public Experience(){
+        super();
+    }
 
     public Experience(String type, LocalDate startdate, LocalDate enddate, String title, String name, String description, int[] achievements) {
         super(type);
@@ -77,7 +82,9 @@ public class Experience extends DataType {
         list.add(getName());
         list.add(getDescription());
         if(achievements != null && achievements.length != 0){
-            list.addAll(Arrays.asList(achievements));
+            for(int i: achievements){
+                list.add(i);
+            }
         }
 
         return list;
@@ -91,12 +98,20 @@ public class Experience extends DataType {
         this.startdate = startdate;
     }
 
+    public void setStartdate(String stardate) {
+        this.startdate = LocalDate.parse(stardate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
     public LocalDate getEnddate() {
         return enddate;
     }
 
     public void setEnddate(LocalDate enddate) {
         this.enddate = enddate;
+    }
+
+    public void setEnddate(String enddate) {
+        this.enddate = LocalDate.parse(enddate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
     public String getTitle() {

@@ -21,6 +21,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package fi.tamk.cv.generator.model.datatypes;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,6 +31,9 @@ import java.util.List;
 public class Title extends DataType{
     private String title;
     private LocalDate awarded;
+
+    public Title() {
+    }
 
     public Title(String type, String title, LocalDate awarded) {
         super(type);
@@ -61,5 +65,9 @@ public class Title extends DataType{
 
     public void setAwarded(LocalDate awarded) {
         this.awarded = awarded;
+    }
+
+    public void setAwarded(String awarded) {
+        this.awarded = LocalDate.parse(awarded, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 }

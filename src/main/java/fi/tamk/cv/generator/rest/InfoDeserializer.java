@@ -10,15 +10,17 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.LongNode;
 import fi.tamk.cv.generator.model.Info;
-import fi.tamk.cv.generator.model.datatypes.Course;
-import fi.tamk.cv.generator.model.datatypes.DataType;
-import fi.tamk.cv.generator.model.datatypes.Education;
+import fi.tamk.cv.generator.model.datatypes.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.crypto.Data;
 import java.io.IOException;
 
+/**
+ * This class will take care of the deserialization of {@link DataType} to different classes.
+ * If countering errors about receiving posts with {@link Info} as a body, check for errors here.
+ */
 public class InfoDeserializer extends JsonDeserializer<Info> {
     Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -33,15 +35,33 @@ public class InfoDeserializer extends JsonDeserializer<Info> {
         info.setVisible(node.get("visible").booleanValue());
         ArrayNode arrayNode = (ArrayNode) node.get("data");
         for(JsonNode data:arrayNode){
-            log.debug("Data type: {}, {}", data.get("type").toString(),data.toString());
             DataType dataType;
             if(data.get("type").toString().replace("\"","").equalsIgnoreCase("course")){
+                //log.debug("Data type: Course, {}",data.toString());
                 dataType = mapper.readValue(data.toString(), Course.class);
             } else if(data.get("type").toString().replace("\"","").equalsIgnoreCase("education")){
+                //log.debug("Data type: Education, {}",data.toString());
                 dataType = mapper.readValue(data.toString(), Education.class);
             } else {
-                log.debug("null");
-                dataType = null;
+                if(data.get("name") != null && data.get("value") != null){
+                    //log.debug("Data type: Misc, {}",data.toString());
+                    dataType = mapper.readValue(data.toString(), Misc.class);
+                } else if (data.get("completion_date") != null){
+                    //log.debug("Data type: Project, {}",data.toString());
+                    dataType = mapper.readValue(data.toString(), Project.class);
+                } else if(data.get("title") != null && data.size() <= 4){
+                    //log.debug("Data type: Title, {}",data.toString());
+                    dataType = mapper.readValue(data.toString(), Title.class);
+                } else if (data.get("name") != null && (data.get("contact_email") != null || data.get("contact_phone") != null)){
+                    //log.debug("Data type: Person, {}",data.toString());
+                    dataType = mapper.readValue(data.toString(), Person.class);
+                } else if(data.get("title") != null && data.get("startdate") != null) {
+                    //log.debug("Data type: Experience, {}",data.toString());
+                    dataType = mapper.readValue(data.toString(), Experience.class);
+                } else {
+                    log.debug("Data type: Unknown, {}",data.toString());
+                    dataType = mapper.readValue(data.toString(), Misc.class);
+                }
             }
             info.getData().add(dataType);
         }

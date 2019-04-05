@@ -7,6 +7,10 @@ public class Misc extends DataType{
     private String value;
     private String name;
 
+    public Misc(){
+        super();
+    }
+
     public Misc(String type, String value, String name) {
         super(type);
         this.value = value;

@@ -59,8 +59,10 @@ public class Education extends DataType{
     }
 
     public List<Object> toList(){
+        String start = getStartdate() == null ? "": getStartdate().format(formatter);
+        String end = getEnddate() == null ? "": getEnddate().format(formatter);
         return Arrays.asList(getType(),getId(),isVisible(),getSchool_name(),getSchool_type(),getField_name(),getGrade(),
-                getStartdate().format(formatter),getEnddate().format(formatter));
+                start,end);
     }
 
     public String getSchool_name() {
