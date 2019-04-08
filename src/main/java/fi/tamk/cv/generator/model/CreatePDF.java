@@ -6,32 +6,19 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import com.nimbusds.jose.util.IOUtils;
 import fi.tamk.cv.generator.Google.GoogleServices;
 import fi.tamk.cv.generator.model.datatypes.*;
-import fi.tamk.cv.generator.rest.BaseController;
-import org.json.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Controller;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpSession;
 
-@Controller
 public class CreatePDF {
     private User user;
 
-    @Autowired
-    HttpSession session;
-
-    public CreatePDF(String name) {
-        GoogleServices services = new GoogleServices();
-        user = services.getData((String) session.getAttribute("token"));
+    public CreatePDF(String name, String accessToken, GoogleServices services) {
+        user = services.getData(accessToken);
         try {
             Document document = new Document(PageSize.A4);
             PdfWriter.getInstance(document, new FileOutputStream(name));
