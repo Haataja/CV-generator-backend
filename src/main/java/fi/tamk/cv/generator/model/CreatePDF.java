@@ -9,31 +9,30 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import com.nimbusds.jose.util.IOUtils;
+import fi.tamk.cv.generator.Google.GoogleServices;
+import fi.tamk.cv.generator.model.datatypes.*;
+import fi.tamk.cv.generator.rest.BaseController;
 import org.json.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Controller;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpSession;
 
-
+@Controller
 public class CreatePDF {
-    private Object firstName;
-    private Object lastName;
-    private Object birthDate;
-    private Object contactInfo;
-    private Object address;
-    private Object profileImage;
-    private Object bio;
-    private Object misc;
-    private Object experience;
-    private Object education;
-    private Object projects;
-    private Object titles;
-    private Object references;
+    private User user;
+
+    @Autowired
+    HttpSession session;
 
     public CreatePDF(String name) {
+        GoogleServices services = new GoogleServices();
+        user = services.getData((String) session.getAttribute("token"));
         try {
-            getJSONData();
             Document document = new Document(PageSize.A4);
             PdfWriter.getInstance(document, new FileOutputStream(name));
             document.open();
@@ -66,13 +65,13 @@ public class CreatePDF {
             chunkCell.addElement(chunk);
             header.addCell(chunkCell);
 
-            if (checkVisibility(profileImage)) {
+            if (user.getProfile_image().isVisible()) {
                 BufferedImage image = null;
                 URL url;
                 ByteArrayOutputStream baos = null;
                 Image iTextImage = null;
                 try {
-                    url = new URL(getProfileImageData());
+                    url = new URL(user.getProfile_image().getSource());
                     image = ImageIO.read(url);
                     baos = new ByteArrayOutputStream();
                     ImageIO.write(image, "png", baos);
@@ -93,14 +92,14 @@ public class CreatePDF {
             }
             document.add(header);
 
-            if (checkVisibility(bio)) {
+            if (user.getBio().isVisible()) {
                 PdfPTable bioTable = new PdfPTable(1);
                 createBioTable(bioTable);
                 bioTable.setSpacingAfter(20f);
                 document.add(bioTable);
             }
 
-            if (checkVisibility(experience)) {
+            if (user.getExperience().isVisible()) {
                 PdfPTable content = new PdfPTable(2);
                 content.setWidthPercentage(100);
                 content.setWidths(new float[]{2, 3});
@@ -109,7 +108,7 @@ public class CreatePDF {
                 document.add(content);
             }
 
-            if (checkVisibility(education)) {
+            if (user.getEducation().isVisible()) {
                 PdfPTable content = new PdfPTable(2);
                 content.setWidthPercentage(100);
                 content.setWidths(new float[]{2, 3});
@@ -118,7 +117,7 @@ public class CreatePDF {
                 document.add(content);
             }
 
-            if (checkVisibility(projects)) {
+            if (user.getProjects().isVisible()) {
                 PdfPTable content = new PdfPTable(2);
                 content.setWidthPercentage(100);
                 content.setWidths(new float[]{2, 3});
@@ -127,7 +126,7 @@ public class CreatePDF {
                 document.add(content);
             }
 
-            if (checkVisibility(titles)) {
+            if (user.getTitles().isVisible()) {
                 PdfPTable content = new PdfPTable(2);
                 content.setWidthPercentage(100);
                 content.setWidths(new float[]{2, 3});
@@ -136,7 +135,7 @@ public class CreatePDF {
                 document.add(content);
             }
 
-            if (checkVisibility(references)) {
+            if (user.getReferences().isVisible()) {
                 PdfPTable content = new PdfPTable(2);
                 content.setWidthPercentage(100);
                 content.setWidths(new float[]{2, 3});
@@ -145,7 +144,7 @@ public class CreatePDF {
                 document.add(content);
             }
 
-            if (checkVisibility(misc)) {
+            if (user.getMisc().isVisible()) {
                 PdfPTable content = new PdfPTable(2);
                 content.setWidthPercentage(100);
                 content.setWidths(new float[]{2, 3});
@@ -158,61 +157,32 @@ public class CreatePDF {
         }
     }
 
-    public void getJSONData() {
-        try {
-            String jsonTxt = IOUtils.readFileToString(new ClassPathResource("test.json").getFile(), Charset.defaultCharset());
-            JSONObject obj = new JSONObject(jsonTxt);
-            firstName = obj.get("firstname");
-            lastName = obj.get("lastname");
-            birthDate = obj.get("birthdate");
-            contactInfo = obj.get("contact_info");
-            address = obj.get("address");
-            profileImage = obj.get("profile_image");
-            bio = obj.get("bio");
-            misc = obj.get("misc");
-            experience = obj.get("experience");
-            education = obj.get("education");
-            projects = obj.get("projects");
-            titles = obj.get("titles");
-            references = obj.get("references");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private boolean checkVisibility(Object object) {
-        JSONObject obj = (JSONObject) object;
-        return obj.get("visible").toString().equals("true");
-    }
-
     private void createContactInfoTable(PdfPTable table) {
         PdfPCell cell = new PdfPCell();
         cell.setFixedHeight(25f);
-        cell.addElement(new Phrase(firstName.toString()));
+        cell.addElement(new Phrase(user.getFirstname()));
         table.addCell(cell);
         PdfPCell cellLast = new PdfPCell();
         cell.setFixedHeight(25f);
-        cellLast.addElement(new Phrase(lastName.toString()));
+        cellLast.addElement(new Phrase(user.getLastname()));
         table.addCell(cellLast);
-        if (checkVisibility(address)) {
+        if (user.getAddress().isVisible()) {
             cell.setColspan(2);
-            ArrayList<String> listAddress = getAddressData();
-            cell.setPhrase(new Phrase(listAddress.get(0)));
+            cell.setPhrase(new Phrase(user.getAddress().getStreet_address()));
             table.addCell(cell);
             cell.setColspan(1);
-            cell.addElement(new Phrase(listAddress.get(1)));
+            cell.addElement(new Phrase(user.getAddress().getZipcode()));
             table.addCell(cell);
             PdfPCell cella = new PdfPCell();
             cella.setFixedHeight(25f);
-            cella.addElement(new Phrase(listAddress.get(3)));
+            cella.addElement(new Phrase(user.getAddress().getCity()));
             table.addCell(cella);
         }
-        if (checkVisibility(contactInfo)) {
+        if (user.getContact_info().getVisible()) {
             cell.setColspan(2);
-            ArrayList<String> list = getContactInfoData();
-            cell.setPhrase(new Phrase(list.get(0)));
+            cell.setPhrase(new Phrase(user.getContact_info().getEmail()));
             table.addCell(cell);
-            cell.setPhrase(new Phrase(list.get(1)));
+            cell.setPhrase(new Phrase(user.getContact_info().getPhone()));
             table.addCell(cell);
         }
     }
@@ -220,7 +190,7 @@ public class CreatePDF {
     private void createBioTable(PdfPTable table) {
         PdfPCell cell = new PdfPCell();
         cell.setBorder(Rectangle.NO_BORDER);
-        cell.setPhrase(new Phrase(getBioData()));
+        cell.setPhrase(new Phrase(user.getBio().getValue()));
         table.setWidthPercentage(100);
         table.addCell(cell);
     }
@@ -260,176 +230,168 @@ public class CreatePDF {
         }
     }
 
-    private ArrayList<String> getAddressData() {
-        JSONObject obj = (JSONObject) address;
-        String streetAddress = obj.getString("street_address");
-        String zipCode = obj.getString("zipcode");
-        String country = obj.getString("country");
-        String city = obj.getString("city");
-        ArrayList<String> list = new ArrayList<>();
-        list.add(streetAddress);
-        list.add(zipCode);
-        list.add(country);
-        list.add(city);
-        return list;
-    }
-
-    private ArrayList<String> getContactInfoData() {
-        JSONObject obj = (JSONObject) contactInfo;
-        String email = obj.getString("email");
-        String phone = obj.getString("phone");
-        ArrayList<String> list = new ArrayList<>();
-        list.add(email);
-        list.add(phone);
-        return list;
-    }
-
-    private String getBioData() {
-        JSONObject obj = (JSONObject) bio;
-        return obj.getString("value");
-    }
-
-    private String getProfileImageData() {
-        JSONObject obj = (JSONObject) profileImage;
-        return obj.getString("source");
-    }
-
     private ArrayList<ArrayList<String>> getMiscData() {
-        JSONObject obj = (JSONObject) misc;
-        JSONArray array = obj.getJSONArray("data");
-        ArrayList<ArrayList<String>> list = new ArrayList<>();
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject object = array.getJSONObject(i);
-            if (checkVisibility(object)) {
-                ArrayList<String> valueList = new ArrayList<>();
-                String value = object.get("value").toString();
-                String name = object.get("name").toString();
-                valueList.add(value);
-                valueList.add(name);
-                list.add(valueList);
+        ArrayList<ArrayList<String>> listReturn = new ArrayList<>();
+        List<List<Object>> listOfLists = user.getMisc().toListOfLists();
+        for (int i = 0; i < listOfLists.size(); i++) {
+            List<Object> list = listOfLists.get(i);
+            ArrayList<String> valueList = new ArrayList<>();
+            for (int j = 0; j < list.size(); j++) {
+                if (list.get(j) instanceof Misc) {
+                    Misc obj = (Misc) list.get(j);
+                    if (obj.isVisible()) {
+                        String name = obj.getName();
+                        String value = obj.getValue();
+                        valueList.add(value);
+                        valueList.add(name);
+                    }
+                }
             }
+            listReturn.add(valueList);
         }
-        return list;
+        return listReturn;
     }
 
     private ArrayList<ArrayList<String>> getExperienceData() {
-        JSONObject obj = (JSONObject) experience;
-        JSONArray array = obj.getJSONArray("data");
-        ArrayList<ArrayList<String>> list = new ArrayList<>();
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject object = array.getJSONObject(i);
-            if (checkVisibility(object)) {
-                ArrayList<String> valueList = new ArrayList<>();
-                String name = object.get("name").toString();
-                String title = object.get("title").toString();
-                String description = object.get("description").toString();
-                String startDate = object.get("startdate").toString();
-                String endDate = object.get("enddate").toString();
-                valueList.add(name);
-                valueList.add(title);
-                valueList.add(description);
-                valueList.add("Start Date: " + startDate);
-                valueList.add("End Date: " + endDate);
-                list.add(valueList);
+        ArrayList<ArrayList<String>> listReturn = new ArrayList<>();
+        List<List<Object>> listOfLists = user.getExperience().toListOfLists();
+        for (int i = 0; i < listOfLists.size(); i++) {
+            List<Object> list = listOfLists.get(i);
+            ArrayList<String> valueList = new ArrayList<>();
+            for (int j = 0; j < list.size(); j++) {
+                if (list.get(j) instanceof Experience) {
+                    Experience obj = (Experience) list.get(j);
+                    if (obj.isVisible()) {
+                        String name = obj.getName();
+                        String title = obj.getTitle();
+                        String description = obj.getDescription();
+                        String startDate = obj.getStartdate().toString();
+                        String endDate = obj.getEnddate().toString();
+                        valueList.add(name);
+                        valueList.add(title);
+                        valueList.add(description);
+                        valueList.add("Start Date: " + startDate);
+                        valueList.add("End Date: " + endDate);
+                    }
+                }
             }
+            listReturn.add(valueList);
         }
-        return list;
+        return listReturn;
     }
 
     private ArrayList<ArrayList<String>> getEducationData() {
-        JSONObject obj = (JSONObject) education;
-        JSONArray array = obj.getJSONArray("data");
-        ArrayList<ArrayList<String>> list = new ArrayList<>();
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject object = array.getJSONObject(i);
-            if (checkVisibility(object)) {
-                ArrayList<String> valueList = new ArrayList<>();
-                if (object.get("type").toString().equals("education")) {
-                    String schoolName = object.get("school_name").toString();
-                    String schoolType = object.get("school_type").toString();
-                    String fieldName = object.get("field_name").toString();
-                    String startDate = object.get("startdate").toString();
-                    String endDate = object.get("enddate").toString();
-                    String grade = object.get("grade").toString();
-                    valueList.add(schoolName);
-                    valueList.add(schoolType);
-                    valueList.add(fieldName);
-                    valueList.add("Grade: " + grade);
-                    valueList.add("Start Date: " + startDate);
-                    valueList.add("End Date: " + endDate);
-                } else {
-                    String courseName = object.get("course_name").toString();
-                    String providerName = object.get("provider_name").toString();
-                    String grade = object.get("grade").toString();
-                    String startDate = object.get("startdate").toString();
-                    String endDate = object.get("enddate").toString();
-                    valueList.add(courseName);
-                    valueList.add(providerName);
-                    valueList.add("Grade: " + grade);
-                    valueList.add("Start Date: " + startDate);
-                    valueList.add("End Date: " + endDate);
+
+        ArrayList<ArrayList<String>> listReturn = new ArrayList<>();
+        List<List<Object>> listOfLists = user.getEducation().toListOfLists();
+        for (int i = 0; i < listOfLists.size(); i++) {
+            List<Object> list = listOfLists.get(i);
+            ArrayList<String> valueList = new ArrayList<>();
+            for (int j = 0; j < list.size(); j++) {
+                if (list.get(j) instanceof Education) {
+                    Education obj = (Education) list.get(j);
+                    if (obj.isVisible()) {
+                        String schoolName = obj.getSchool_name();
+                        String schoolType = obj.getSchool_type();
+                        String fieldName = obj.getField_name();
+                        String startDate = obj.getStartdate().toString();
+                        String endDate = obj.getEnddate().toString();
+                        String grade = String.valueOf(obj.getGrade());
+                        valueList.add(schoolName);
+                        valueList.add(schoolType);
+                        valueList.add(fieldName);
+                        valueList.add("Grade: " + grade);
+                        valueList.add("Start Date: " + startDate);
+                        valueList.add("End Date: " + endDate);
+                    }
+                } else if (list.get(j) instanceof Course) {
+                    Course obj = (Course) list.get(j);
+                    if (obj.isVisible()) {
+                        String courseName = obj.getCourse_name();
+                        String providerName = obj.getProvider_name();
+                        String grade = String.valueOf(obj.getGrade());
+                        String startDate = obj.getStartdate().toString();
+                        String endDate = obj.getEnddate().toString();
+                        valueList.add(courseName);
+                        valueList.add(providerName);
+                        valueList.add("Grade: " + grade);
+                        valueList.add("Start Date: " + startDate);
+                        valueList.add("End Date: " + endDate);
+                    }
                 }
-                list.add(valueList);
             }
+            listReturn.add(valueList);
         }
-        return list;
+        return listReturn;
     }
 
     private ArrayList<ArrayList<String>> getProjectsData() {
-        JSONObject obj = (JSONObject) projects;
-        JSONArray array = obj.getJSONArray("data");
-        ArrayList<ArrayList<String>> list = new ArrayList<>();
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject object = array.getJSONObject(i);
-            if (checkVisibility(object)) {
-                ArrayList<String> valueList = new ArrayList<>();
-                String name = object.get("name").toString();
-                String description = object.get("description").toString();
-                String completionDate = object.get("completion_date").toString();
-                valueList.add(name);
-                valueList.add(description);
-                valueList.add("Completion Date: " + completionDate);
-                list.add(valueList);
+        ArrayList<ArrayList<String>> listReturn = new ArrayList<>();
+        List<List<Object>> listOfLists = user.getProjects().toListOfLists();
+        for (int i = 0; i < listOfLists.size(); i++) {
+            List<Object> list = listOfLists.get(i);
+            ArrayList<String> valueList = new ArrayList<>();
+            for (int j = 0; j < list.size(); j++) {
+                if (list.get(j) instanceof Project) {
+                    Project obj = (Project) list.get(j);
+                    if (obj.isVisible()) {
+                        String name = obj.getName();
+                        String description = obj.getDescription();
+                        String completionDate = obj.getCompletion_date().toString();
+                        valueList.add(name);
+                        valueList.add(description);
+                        valueList.add("Completion Date: " + completionDate);
+                    }
+                }
             }
+            listReturn.add(valueList);
         }
-        return list;
+        return listReturn;
     }
 
     private ArrayList<ArrayList<String>> getTitlesData() {
-        JSONObject obj = (JSONObject) titles;
-        JSONArray array = obj.getJSONArray("data");
-        ArrayList<ArrayList<String>> list = new ArrayList<>();
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject object = array.getJSONObject(i);
-            if (checkVisibility(object)) {
-                ArrayList<String> valueList = new ArrayList<>();
-                String title = object.get("title").toString();
-                String awarded = object.get("awarded").toString();
-                valueList.add(title);
-                valueList.add("Awarding Date: " + awarded);
-                list.add(valueList);
+        ArrayList<ArrayList<String>> listReturn = new ArrayList<>();
+        List<List<Object>> listOfLists = user.getTitles().toListOfLists();
+        for (int i = 0; i < listOfLists.size(); i++) {
+            List<Object> list = listOfLists.get(i);
+            ArrayList<String> valueList = new ArrayList<>();
+            for (int j = 0; j < list.size(); j++) {
+                if (list.get(j) instanceof Title) {
+                    Title obj = (Title) list.get(j);
+                    if (obj.isVisible()) {
+                        String title = obj.getTitle();
+                        String awarded = obj.getAwarded().toString();
+                        valueList.add(title);
+                        valueList.add("Awarding Date: " + awarded);
+                    }
+                }
             }
+            listReturn.add(valueList);
         }
-        return list;
+        return listReturn;
     }
 
     private ArrayList<ArrayList<String>> getReferencesData() {
-        JSONObject obj = (JSONObject) references;
-        JSONArray array = obj.getJSONArray("data");
-        ArrayList<ArrayList<String>> list = new ArrayList<>();
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject object = array.getJSONObject(i);
-            if (checkVisibility(object)) {
-                ArrayList<String> valueList = new ArrayList<>();
-                String name = object.get("name").toString();
-                String contactEmail = object.get("contact_email").toString();
-                String contactPhone = object.get("contact_phone").toString();
-                valueList.add(name);
-                valueList.add(contactEmail);
-                valueList.add(contactPhone);
-                list.add(valueList);
+        ArrayList<ArrayList<String>> listReturn = new ArrayList<>();
+        List<List<Object>> listOfLists = user.getReferences().toListOfLists();
+        for (int i = 0; i < listOfLists.size(); i++) {
+            List<Object> list = listOfLists.get(i);
+            ArrayList<String> valueList = new ArrayList<>();
+            for (int j = 0; j < list.size(); j++) {
+                if (list.get(j) instanceof Person) {
+                    Person obj = (Person) list.get(j);
+                    if (obj.isVisible()) {
+                        String name = obj.getName();
+                        String contactEmail = obj.getContact_email();
+                        String contactPhone = obj.getContact_phone();
+                        valueList.add(name);
+                        valueList.add(contactEmail);
+                        valueList.add(contactPhone);
+                    }
+                }
             }
+            listReturn.add(valueList);
         }
-        return list;
+        return listReturn;
     }
 }
