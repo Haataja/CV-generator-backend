@@ -13,6 +13,7 @@ import fi.tamk.cv.generator.Google.GoogleServices;
 import fi.tamk.cv.generator.model.datatypes.*;
 
 import javax.imageio.ImageIO;
+import javax.xml.crypto.Data;
 
 public class CreatePDF {
     private User user;
@@ -131,14 +132,14 @@ public class CreatePDF {
                 document.add(content);
             }
 
-            if (user.getMisc().isVisible()) {
+            /*if (user.getMisc().isVisible()) {
                 PdfPTable content = new PdfPTable(2);
                 content.setWidthPercentage(100);
                 content.setWidths(new float[]{2, 3});
                 createContentTable(content, "Miscellaneous", getMiscData());
                 content.setSpacingAfter(20f);
                 document.add(content);
-            }
+            }*/
         } catch (DocumentException e) {
             e.printStackTrace();
         }
@@ -219,19 +220,17 @@ public class CreatePDF {
 
     private ArrayList<ArrayList<String>> getMiscData() {
         ArrayList<ArrayList<String>> listReturn = new ArrayList<>();
-        List<List<Object>> listOfLists = user.getMisc().toListOfLists();
+        List<DataType> listOfLists = user.getMisc().getData();
         for (int i = 0; i < listOfLists.size(); i++) {
-            List<Object> list = listOfLists.get(i);
+            DataType list = listOfLists.get(i);
             ArrayList<String> valueList = new ArrayList<>();
-            for (int j = 0; j < list.size(); j++) {
-                if (list.get(j) instanceof Misc) {
-                    Misc obj = (Misc) list.get(j);
-                    if (obj.isVisible()) {
-                        String name = obj.getName();
-                        String value = obj.getValue();
-                        valueList.add(value);
-                        valueList.add(name);
-                    }
+            if (list instanceof Misc) {
+                Misc obj = (Misc) list;
+                if (obj.isVisible()) {
+                    String name = obj.getName();
+                    String value = obj.getValue();
+                    valueList.add(value);
+                    valueList.add(name);
                 }
             }
             listReturn.add(valueList);
@@ -241,25 +240,23 @@ public class CreatePDF {
 
     private ArrayList<ArrayList<String>> getExperienceData() {
         ArrayList<ArrayList<String>> listReturn = new ArrayList<>();
-        List<List<Object>> listOfLists = user.getExperience().toListOfLists();
+        List<DataType> listOfLists = user.getExperience().getData();
         for (int i = 0; i < listOfLists.size(); i++) {
-            List<Object> list = listOfLists.get(i);
+            DataType list = listOfLists.get(i);
             ArrayList<String> valueList = new ArrayList<>();
-            for (int j = 0; j < list.size(); j++) {
-                if (list.get(j) instanceof Experience) {
-                    Experience obj = (Experience) list.get(j);
-                    if (obj.isVisible()) {
-                        String name = obj.getName();
-                        String title = obj.getTitle();
-                        String description = obj.getDescription();
-                        String startDate = obj.getStartdate().toString();
-                        String endDate = obj.getEnddate().toString();
-                        valueList.add(name);
-                        valueList.add(title);
-                        valueList.add(description);
-                        valueList.add("Start Date: " + startDate);
-                        valueList.add("End Date: " + endDate);
-                    }
+            if (list instanceof Experience) {
+                Experience obj = (Experience) list;
+                if (obj.isVisible()) {
+                    String name = obj.getName();
+                    String title = obj.getTitle();
+                    String description = obj.getDescription();
+                    String startDate = obj.getStartdate().toString();
+                    String endDate = obj.getEnddate().toString();
+                    valueList.add(name);
+                    valueList.add(title);
+                    valueList.add(description);
+                    valueList.add("Start Date: " + startDate);
+                    valueList.add("End Date: " + endDate);
                 }
             }
             listReturn.add(valueList);
@@ -270,41 +267,39 @@ public class CreatePDF {
     private ArrayList<ArrayList<String>> getEducationData() {
 
         ArrayList<ArrayList<String>> listReturn = new ArrayList<>();
-        List<List<Object>> listOfLists = user.getEducation().toListOfLists();
+        List<DataType> listOfLists = user.getEducation().getData();
         for (int i = 0; i < listOfLists.size(); i++) {
-            List<Object> list = listOfLists.get(i);
+            DataType list = listOfLists.get(i);
             ArrayList<String> valueList = new ArrayList<>();
-            for (int j = 0; j < list.size(); j++) {
-                if (list.get(j) instanceof Education) {
-                    Education obj = (Education) list.get(j);
-                    if (obj.isVisible()) {
-                        String schoolName = obj.getSchool_name();
-                        String schoolType = obj.getSchool_type();
-                        String fieldName = obj.getField_name();
-                        String startDate = obj.getStartdate().toString();
-                        String endDate = obj.getEnddate().toString();
-                        String grade = String.valueOf(obj.getGrade());
-                        valueList.add(schoolName);
-                        valueList.add(schoolType);
-                        valueList.add(fieldName);
-                        valueList.add("Grade: " + grade);
-                        valueList.add("Start Date: " + startDate);
-                        valueList.add("End Date: " + endDate);
-                    }
-                } else if (list.get(j) instanceof Course) {
-                    Course obj = (Course) list.get(j);
-                    if (obj.isVisible()) {
-                        String courseName = obj.getCourse_name();
-                        String providerName = obj.getProvider_name();
-                        String grade = String.valueOf(obj.getGrade());
-                        String startDate = obj.getStartdate().toString();
-                        String endDate = obj.getEnddate().toString();
-                        valueList.add(courseName);
-                        valueList.add(providerName);
-                        valueList.add("Grade: " + grade);
-                        valueList.add("Start Date: " + startDate);
-                        valueList.add("End Date: " + endDate);
-                    }
+            if (list instanceof Education) {
+                Education obj = (Education) list;
+                if (obj.isVisible()) {
+                    String schoolName = obj.getSchool_name();
+                    String schoolType = obj.getSchool_type();
+                    String fieldName = obj.getField_name();
+                    String startDate = obj.getStartdate().toString();
+                    String endDate = obj.getEnddate().toString();
+                    String grade = String.valueOf(obj.getGrade());
+                    valueList.add(schoolName);
+                    valueList.add(schoolType);
+                    valueList.add(fieldName);
+                    valueList.add("Grade: " + grade);
+                    valueList.add("Start Date: " + startDate);
+                    valueList.add("End Date: " + endDate);
+                }
+            } else if (list instanceof Course) {
+                Course obj = (Course) list;
+                if (obj.isVisible()) {
+                    String courseName = obj.getCourse_name();
+                    String providerName = obj.getProvider_name();
+                    String grade = String.valueOf(obj.getGrade());
+                    String startDate = obj.getStartdate().toString();
+                    String endDate = obj.getEnddate().toString();
+                    valueList.add(courseName);
+                    valueList.add(providerName);
+                    valueList.add("Grade: " + grade);
+                    valueList.add("Start Date: " + startDate);
+                    valueList.add("End Date: " + endDate);
                 }
             }
             listReturn.add(valueList);
@@ -314,13 +309,12 @@ public class CreatePDF {
 
     private ArrayList<ArrayList<String>> getProjectsData() {
         ArrayList<ArrayList<String>> listReturn = new ArrayList<>();
-        List<List<Object>> listOfLists = user.getProjects().toListOfLists();
+        List<DataType> listOfLists = user.getProjects().getData();
         for (int i = 0; i < listOfLists.size(); i++) {
-            List<Object> list = listOfLists.get(i);
+            DataType list = listOfLists.get(i);
             ArrayList<String> valueList = new ArrayList<>();
-            for (int j = 0; j < list.size(); j++) {
-                if (list.get(j) instanceof Project) {
-                    Project obj = (Project) list.get(j);
+            if (list instanceof Project) {
+                Project obj = (Project) list;
                     if (obj.isVisible()) {
                         String name = obj.getName();
                         String description = obj.getDescription();
@@ -329,7 +323,6 @@ public class CreatePDF {
                         valueList.add(description);
                         valueList.add("Completion Date: " + completionDate);
                     }
-                }
             }
             listReturn.add(valueList);
         }
@@ -338,13 +331,12 @@ public class CreatePDF {
 
     private ArrayList<ArrayList<String>> getTitlesData() {
         ArrayList<ArrayList<String>> listReturn = new ArrayList<>();
-        List<List<Object>> listOfLists = user.getTitles().toListOfLists();
+        List<DataType> listOfLists = user.getTitles().getData();
         for (int i = 0; i < listOfLists.size(); i++) {
-            List<Object> list = listOfLists.get(i);
+            DataType list = listOfLists.get(i);
             ArrayList<String> valueList = new ArrayList<>();
-            for (int j = 0; j < list.size(); j++) {
-                if (list.get(j) instanceof Title) {
-                    Title obj = (Title) list.get(j);
+            if (list instanceof Title) {
+                Title obj = (Title) list;
                     if (obj.isVisible()) {
                         String title = obj.getTitle();
                         String awarded = obj.getAwarded().toString();
@@ -352,7 +344,7 @@ public class CreatePDF {
                         valueList.add("Awarding Date: " + awarded);
                     }
                 }
-            }
+
             listReturn.add(valueList);
         }
         return listReturn;
@@ -360,13 +352,12 @@ public class CreatePDF {
 
     private ArrayList<ArrayList<String>> getReferencesData() {
         ArrayList<ArrayList<String>> listReturn = new ArrayList<>();
-        List<List<Object>> listOfLists = user.getReferences().toListOfLists();
+        List<DataType> listOfLists = user.getReferences().getData();
         for (int i = 0; i < listOfLists.size(); i++) {
-            List<Object> list = listOfLists.get(i);
+            DataType list = listOfLists.get(i);
             ArrayList<String> valueList = new ArrayList<>();
-            for (int j = 0; j < list.size(); j++) {
-                if (list.get(j) instanceof Person) {
-                    Person obj = (Person) list.get(j);
+            if (list instanceof Person) {
+                Person obj = (Person) list;
                     if (obj.isVisible()) {
                         String name = obj.getName();
                         String contactEmail = obj.getContact_email();
@@ -375,7 +366,6 @@ public class CreatePDF {
                         valueList.add(contactEmail);
                         valueList.add(contactPhone);
                     }
-                }
             }
             listReturn.add(valueList);
         }
