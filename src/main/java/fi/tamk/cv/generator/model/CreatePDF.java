@@ -132,14 +132,14 @@ public class CreatePDF {
                 document.add(content);
             }
 
-            /*if (user.getMisc().isVisible()) {
+            if (user.getMisc().isVisible()) {
                 PdfPTable content = new PdfPTable(2);
                 content.setWidthPercentage(100);
                 content.setWidths(new float[]{2, 3});
                 createContentTable(content, "Miscellaneous", getMiscData());
                 content.setSpacingAfter(20f);
                 document.add(content);
-            }*/
+            }
         } catch (DocumentException e) {
             e.printStackTrace();
         }
@@ -202,7 +202,6 @@ public class CreatePDF {
     private void createContentListTable(PdfPTable table, ArrayList<ArrayList<String>> data) {
         PdfPCell cell = new PdfPCell();
         cell.setBorder(Rectangle.NO_BORDER);
-
         for (int i = 0; i < data.size(); i++) {
             for (int j = 0; j < data.get(i).size(); j++) {
                 Phrase phrase = new Phrase(data.get(i).get(j));
@@ -233,7 +232,9 @@ public class CreatePDF {
                     valueList.add(name);
                 }
             }
-            listReturn.add(valueList);
+            if (!valueList.isEmpty()) {
+                listReturn.add(valueList);
+            }
         }
         return listReturn;
     }
@@ -259,7 +260,9 @@ public class CreatePDF {
                     valueList.add("End Date: " + endDate);
                 }
             }
-            listReturn.add(valueList);
+            if (!valueList.isEmpty()) {
+                listReturn.add(valueList);
+            }
         }
         return listReturn;
     }
@@ -302,7 +305,9 @@ public class CreatePDF {
                     valueList.add("End Date: " + endDate);
                 }
             }
-            listReturn.add(valueList);
+            if (!valueList.isEmpty()) {
+                listReturn.add(valueList);
+            }
         }
         return listReturn;
     }
@@ -324,7 +329,9 @@ public class CreatePDF {
                         valueList.add("Completion Date: " + completionDate);
                     }
             }
-            listReturn.add(valueList);
+            if (!valueList.isEmpty()) {
+                listReturn.add(valueList);
+            }
         }
         return listReturn;
     }
@@ -344,8 +351,9 @@ public class CreatePDF {
                         valueList.add("Awarding Date: " + awarded);
                     }
                 }
-
-            listReturn.add(valueList);
+            if (!valueList.isEmpty()) {
+                listReturn.add(valueList);
+            }
         }
         return listReturn;
     }
@@ -367,7 +375,9 @@ public class CreatePDF {
                         valueList.add(contactPhone);
                     }
             }
-            listReturn.add(valueList);
+            if (!valueList.isEmpty()) {
+                listReturn.add(valueList);
+            }
         }
         return listReturn;
     }
