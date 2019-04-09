@@ -55,7 +55,7 @@ public class CvController extends BaseController {
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=curriculum_vitae.pdf");
 
         String fileName = RequestContextHolder.currentRequestAttributes().getSessionId();
-        new CreatePDF(fileName);
+        new CreatePDF(fileName, getAccessToken(), googleServices);
         File file = new File(fileName);
 
         try (InputStream in = new FileInputStream(file)) {

@@ -179,11 +179,6 @@ public class SheetParser {
                         null);
             }
             int size = values.get(i).size() - 8;
-            int[] achievements = new int[size];
-            for (int j = 0; j < size; j++) {
-                achievements[j] = (Integer) values.get(i).get(j + 8);
-            }
-            experience.setAchievements(achievements);
             expData.add(experience);
         }
     }
