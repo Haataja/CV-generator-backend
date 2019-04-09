@@ -1,19 +1,39 @@
+/*
+Copyright 2019
+Samu Koivulahti<samu.koivulahti@tuni.fi>,
+Joonas Lauhala <joonas.lauhala@tuni.fi>,
+Tuukka Juusela <tuukka.juusela@tuni.fi>. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following
+disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
 package fi.tamk.cv.generator.model;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import fi.tamk.cv.generator.Google.GoogleServices;
 import fi.tamk.cv.generator.model.datatypes.*;
-
 import javax.imageio.ImageIO;
-import javax.xml.crypto.Data;
 
 public class CreatePDF {
     private User user;
@@ -64,8 +84,6 @@ public class CreatePDF {
                     baos = new ByteArrayOutputStream();
                     ImageIO.write(image, "png", baos);
                     iTextImage = Image.getInstance(baos.toByteArray());
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -82,62 +100,44 @@ public class CreatePDF {
 
             if (user.getBio().isVisible()) {
                 PdfPTable bioTable = new PdfPTable(1);
-                createBioTable(bioTable);
                 bioTable.setSpacingAfter(20f);
+                createBioTable(bioTable);
                 document.add(bioTable);
             }
 
             if (user.getExperience().isVisible()) {
-                PdfPTable content = new PdfPTable(2);
-                content.setWidthPercentage(100);
-                content.setWidths(new float[]{2, 3});
+                PdfPTable content = createTable();
                 createContentTable(content, "Experience", getExperienceData());
-                content.setSpacingAfter(20f);
                 document.add(content);
             }
 
             if (user.getEducation().isVisible()) {
-                PdfPTable content = new PdfPTable(2);
-                content.setWidthPercentage(100);
-                content.setWidths(new float[]{2, 3});
+                PdfPTable content = createTable();
                 createContentTable(content, "Education", getEducationData());
-                content.setSpacingAfter(20f);
                 document.add(content);
             }
 
             if (user.getProjects().isVisible()) {
-                PdfPTable content = new PdfPTable(2);
-                content.setWidthPercentage(100);
-                content.setWidths(new float[]{2, 3});
+                PdfPTable content = createTable();
                 createContentTable(content, "Projects", getProjectsData());
-                content.setSpacingAfter(20f);
                 document.add(content);
             }
 
             if (user.getTitles().isVisible()) {
-                PdfPTable content = new PdfPTable(2);
-                content.setWidthPercentage(100);
-                content.setWidths(new float[]{2, 3});
+                PdfPTable content = createTable();
                 createContentTable(content, "Titles", getTitlesData());
-                content.setSpacingAfter(20f);
                 document.add(content);
             }
 
             if (user.getReferences().isVisible()) {
-                PdfPTable content = new PdfPTable(2);
-                content.setWidthPercentage(100);
-                content.setWidths(new float[]{2, 3});
+                PdfPTable content = createTable();
                 createContentTable(content, "References", getReferencesData());
-                content.setSpacingAfter(20f);
                 document.add(content);
             }
 
             if (user.getMisc().isVisible()) {
-                PdfPTable content = new PdfPTable(2);
-                content.setWidthPercentage(100);
-                content.setWidths(new float[]{2, 3});
+                PdfPTable content = createTable();
                 createContentTable(content, "Miscellaneous", getMiscData());
-                content.setSpacingAfter(20f);
                 document.add(content);
             }
         } catch (DocumentException e) {
@@ -145,26 +145,35 @@ public class CreatePDF {
         }
     }
 
+    private PdfPTable createTable() {
+        try {
+            PdfPTable content = new PdfPTable(2);
+            content.setWidthPercentage(100);
+            content.setWidths(new float[]{2, 3});
+            content.setSpacingAfter(20f);
+            return content;
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private void createContactInfoTable(PdfPTable table) {
         PdfPCell cell = new PdfPCell();
         cell.setFixedHeight(25f);
-        cell.addElement(new Phrase(user.getFirstname()));
+        cell.setPhrase(new Phrase(user.getFirstname()));
         table.addCell(cell);
-        PdfPCell cellLast = new PdfPCell();
-        cell.setFixedHeight(25f);
-        cellLast.addElement(new Phrase(user.getLastname()));
-        table.addCell(cellLast);
+        cell.setPhrase(new Phrase(user.getLastname()));
+        table.addCell(cell);
         if (user.getAddress().isVisible()) {
             cell.setColspan(2);
             cell.setPhrase(new Phrase(user.getAddress().getStreet_address()));
             table.addCell(cell);
             cell.setColspan(1);
-            cell.addElement(new Phrase(user.getAddress().getZipcode()));
+            cell.setPhrase(new Phrase(user.getAddress().getZipcode()));
             table.addCell(cell);
-            PdfPCell cella = new PdfPCell();
-            cella.setFixedHeight(25f);
-            cella.addElement(new Phrase(user.getAddress().getCity()));
-            table.addCell(cella);
+            cell.setPhrase(new Phrase(user.getAddress().getCity()));
+            table.addCell(cell);
         }
         if (user.getContact_info().getVisible()) {
             cell.setColspan(2);
@@ -185,17 +194,17 @@ public class CreatePDF {
 
     private void createContentTable(PdfPTable table, String title, ArrayList<ArrayList<String>> content) {
         if (!content.isEmpty()) {
-            PdfPCell cell = new PdfPCell();
-            cell.setBorder(Rectangle.NO_BORDER);
-            cell.setPhrase(new Phrase(title));
-            table.addCell(cell);
-            cell = new PdfPCell();
-            cell.setBorder(Rectangle.NO_BORDER);
+            PdfPCell cellTitle = new PdfPCell();
+            cellTitle.setBorder(Rectangle.NO_BORDER);
+            cellTitle.setPhrase(new Phrase(title));
+            table.addCell(cellTitle);
+            PdfPCell cellContent = new PdfPCell();
+            cellContent.setBorder(Rectangle.NO_BORDER);
             PdfPTable listTable = new PdfPTable(1);
             createContentListTable(listTable, content);
             listTable.getDefaultCell().setBorder(0);
-            cell.addElement(listTable);
-            table.addCell(cell);
+            cellContent.addElement(listTable);
+            table.addCell(cellContent);
         }
     }
 
