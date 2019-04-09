@@ -59,6 +59,8 @@ public class InfoDeserializer extends JsonDeserializer<Info> {
             } else if (data.get("type").toString().replace("\"", "").equalsIgnoreCase("education")) {
                 //log.debug("Data type: Education, {}",data.toString());
                 dataType = mapper.readValue(data.toString(), Education.class);
+            } else if (data.get("type").toString().replace("\"", "").equalsIgnoreCase("title")) {
+                dataType = mapper.readValue(data.toString(), Title.class);
             } else {
                 if (data.get("name") != null && data.get("value") != null) {
                     //log.debug("Data type: Misc, {}",data.toString());
@@ -67,9 +69,6 @@ public class InfoDeserializer extends JsonDeserializer<Info> {
                 } else if (data.get("completion_date") != null) {
                     //log.debug("Data type: Project, {}",data.toString());
                     dataType = mapper.readValue(data.toString(), Project.class);
-                } else if (data.get("title") != null && data.size() <= 4) {
-                    //log.debug("Data type: Title, {}",data.toString());
-                    dataType = mapper.readValue(data.toString(), Title.class);
                 } else if (data.get("name") != null && (data.get("contact_email") != null || data.get("contact_phone") != null)) {
                     //log.debug("Data type: Person, {}",data.toString());
                     dataType = mapper.readValue(data.toString(), Person.class);
