@@ -82,7 +82,7 @@ public class SheetParser {
                         miscData.add(misc);
                     }
                     miscInfo.setData(miscData);
-                    user.setEducation(miscInfo);
+                    user.setMisc(miscInfo);
                     break;
                 case "experience":
                     List<Object> ExpInfos = values.get(0);
