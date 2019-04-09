@@ -24,6 +24,7 @@ import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.Value;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.*;
 import fi.tamk.cv.generator.model.*;
@@ -43,7 +44,9 @@ import java.util.List;
 @Component
 public class SheetsHelper {
     private Logger log = LoggerFactory.getLogger(this.getClass());
-    private static final String APPLICATION_NAME = "quickstart-1550136441024";
+
+    @Value("${cv.generator.google.project.id}")
+    private static String APPLICATION_NAME;
     private static final String SPREADSHEET_NAME = "CV-Generator-data-spreadsheet";
 
 

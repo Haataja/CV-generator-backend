@@ -24,6 +24,7 @@ import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.Value;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.Permission;
@@ -41,7 +42,9 @@ public class DriveHelper {
     private Logger log = LoggerFactory.getLogger(this.getClass());
     private static final String FOLDER_NAME = "CV-Generator-data";
     static final String SPREADSHEET_NAME = "CV-Generator-data-spreadsheet";
-    private static final String APPLICATION_NAME = "quickstart-1550136441024";
+
+    @Value("${cv.generator.google.project.id}")
+    private static String APPLICATION_NAME;
 
 
     public static Drive getDriveService(String token) throws IOException, GeneralSecurityException {
