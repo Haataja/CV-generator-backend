@@ -226,7 +226,7 @@ public class CvController extends BaseController {
     }
 
     @RequestMapping("/get/share/{email}")
-    public ResponseEntity<?> writeDemo(@PathVariable String email) {
+    public ResponseEntity<?> share(@PathVariable String email) {
         if(getAccessToken() != null){
             try {
                 googleServices.shareFolder(getAccessToken(), email);
