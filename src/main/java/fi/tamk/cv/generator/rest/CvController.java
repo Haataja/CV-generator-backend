@@ -23,7 +23,6 @@ package fi.tamk.cv.generator.rest;
 
 import fi.tamk.cv.generator.Google.GoogleServices;
 import fi.tamk.cv.generator.model.*;
-import fi.tamk.cv.generator.model.datatypes.*;
 import org.apache.pdfbox.io.IOUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -31,13 +30,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
-import java.time.LocalDate;
 
 @RestController
 @RequestMapping("api/")
@@ -48,8 +45,7 @@ public class CvController extends BaseController {
     @Autowired
     GoogleServices googleServices;
 
-    @GetMapping(value = "/pdf",
-            produces = MediaType.APPLICATION_PDF_VALUE)
+    @GetMapping(value = "/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> getPDF() {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=curriculum_vitae.pdf");
@@ -88,7 +84,7 @@ public class CvController extends BaseController {
         }
     }
 
-    @GetMapping(value = "/test", produces = "application/json")
+    @GetMapping(value = "/test", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getTestJson() throws IOException {
         log.debug("Getting test");
         BufferedReader reader = new BufferedReader(new InputStreamReader(new ClassPathResource("test.json").getInputStream()));
@@ -104,7 +100,6 @@ public class CvController extends BaseController {
 
         return object.toString();
     }
-
 
     @RequestMapping("/get/create")
     public ResponseEntity<User> createSheetTemplate() {
