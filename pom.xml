@@ -10,7 +10,7 @@
     </parent>
     <groupId>fi.tamk.cv</groupId>
     <artifactId>generator</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>generator</name>
     <description>Backend of the CV generator app</description>
 
