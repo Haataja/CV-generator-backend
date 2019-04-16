@@ -47,6 +47,13 @@ public class GoogleServices {
     private DriveHelper driveHelper;
 
 
+    /**
+     * Creates Google drive folder and sheet, and adds default information.
+     * @param accessToken AccessToken is used to connect users Google account
+     * @return User is returned
+     * @throws IOException
+     * @throws GeneralSecurityException
+     */
     public User createSheet(String accessToken) throws IOException, GeneralSecurityException {
         String folderID = driveHelper.createNewFolder(accessToken);
         log.debug("Created folder: {}", folderID);
@@ -66,6 +73,11 @@ public class GoogleServices {
         return user;
     }
 
+    /**
+     * Writes data to sheet
+     * @param accessToken Access token is used to connect users Google account
+     * @param user The data that is written
+     */
     public void addUserData(String accessToken, User user) {
         String sheetID = getOwnedSheetID(accessToken);
 
@@ -74,6 +86,11 @@ public class GoogleServices {
         }
     }
 
+    /**
+     * Searches the Google Drive for sheet and returns the id of the sheet that is owned by user and not in trash
+     * @param accessToken Access token is used to connect users Google account
+     * @return Id of the sheet
+     */
     public String getOwnedSheetID(String accessToken) {
         List<File> files = driveHelper.search(accessToken, DriveHelper.SPREADSHEET_NAME);
         String sheetID = null;
@@ -86,6 +103,11 @@ public class GoogleServices {
         return sheetID;
     }
 
+    /**
+     * Searches Google drive for sheet and returns list of email of the people that own those sheets
+     * @param accessToken Access token is used to connect users Google account
+     * @return List of emails
+     */
     public List<String> getEmailsOfNotOwnedByMe(String accessToken) {
         List<File> files = driveHelper.search(accessToken, DriveHelper.SPREADSHEET_NAME);
         List<String> emails = new ArrayList<>();
@@ -98,21 +120,36 @@ public class GoogleServices {
         return emails;
     }
 
-    public String appendDataType(String accessToken, String range, DataType dataType) {
+    /**
+     * Appends row of data to sheet, not in active use
+     * @param accessToken Access token is used to connect users Google account
+     * @param range Sheet tab name
+     * @param dataType Data written to the sheet
+     */
+    public void appendDataType(String accessToken, String range, DataType dataType) {
         String sheetID = getOwnedSheetID(accessToken);
         Info data = (Info) sheetsHelper.readRange(accessToken, sheetID, range);
         data.getData().add(dataType);
 
         sheetsHelper.writeToSheet(accessToken, sheetID, range, data.toListOfLists());
 
-        return "ok";
     }
 
+    /**
+     * Writes data to the sheet
+     * @param accessToken Access token is used to connect users Google account
+     * @param bio The data written to sheet
+     */
     public void addBioData(String accessToken, Bio bio){
         String sheetID = getOwnedSheetID(accessToken);
         sheetsHelper.writeToSheet(accessToken, sheetID, "bio", bio.toListOfLists());
     }
 
+    /**
+     * Reads data from the sheet.
+     * @param accessToken Access token is used to connect users Google account
+     * @return The data in form of {@link User}
+     */
     public User getData(String accessToken) {
         String sheetID = getOwnedSheetID(accessToken);
         if (sheetID != null) {
@@ -123,6 +160,11 @@ public class GoogleServices {
 
     }
 
+    /**
+     * Writes data to the sheet
+     * @param accessToken Access token is used to connect users Google account
+     * @param image The data written to sheet
+     */
     public void addProfileData(String accessToken, ProfileImage image) {
         String sheetID = getOwnedSheetID(accessToken);
 
@@ -131,6 +173,12 @@ public class GoogleServices {
         }
     }
 
+    /**
+     * Writes data to the sheet
+     * @param accessToken Access token is used to connect users Google account
+     * @param range Sheet tab name
+     * @param info The data written to sheet
+     */
     public void addInfoData(String accessToken, String range, Info info) {
         String sheetID = getOwnedSheetID(accessToken);
 
@@ -144,7 +192,14 @@ public class GoogleServices {
         }
     }
 
-    public void shareFolder(String accesToken, String email) throws IOException, GeneralSecurityException {
-        driveHelper.shareFolder(accesToken, email);
+    /**
+     * Shares reading rights of the folder to another user by email
+     * @param accessToken Access token is used to connect users Google account
+     * @param email Email of the user to which folder is shared
+     * @throws IOException thrown on exception
+     * @throws GeneralSecurityException thrown on exception
+     */
+    public void shareFolder(String accessToken, String email) throws IOException, GeneralSecurityException {
+        driveHelper.shareFolder(accessToken, email);
     }
 }
