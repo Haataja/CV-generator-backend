@@ -21,7 +21,7 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSE
 WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package fi.tamk.cv.generator.model;
+package fi.tamk.cv.generator.rest;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
@@ -32,6 +32,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import fi.tamk.cv.generator.Google.GoogleServices;
+import fi.tamk.cv.generator.model.User;
 import fi.tamk.cv.generator.model.datatypes.*;
 import javax.imageio.ImageIO;
 
