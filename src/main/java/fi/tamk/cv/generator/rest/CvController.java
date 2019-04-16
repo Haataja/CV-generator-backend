@@ -40,7 +40,7 @@ import java.security.GeneralSecurityException;
 @RequestMapping("api/")
 public class CvController extends BaseController {
 
-    Logger log = LoggerFactory.getLogger(this.getClass());
+    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     GoogleServices googleServices;
@@ -84,7 +84,7 @@ public class CvController extends BaseController {
         }
     }
 
-    @GetMapping(value = "/test", produces = MediaType.APPLICATION_JSON_VALUE)
+    /*@GetMapping(value = "/test", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getTestJson() throws IOException {
         log.debug("Getting test");
         BufferedReader reader = new BufferedReader(new InputStreamReader(new ClassPathResource("test.json").getInputStream()));
@@ -99,7 +99,7 @@ public class CvController extends BaseController {
         JSONObject object = new JSONObject(builder.toString());
 
         return object.toString();
-    }
+    }*/
 
     @RequestMapping("/get/create")
     public ResponseEntity<User> createSheetTemplate() {
@@ -111,10 +111,10 @@ public class CvController extends BaseController {
         }
     }
 
-    @RequestMapping("/get/search")
+    /*@RequestMapping("/get/search")
     public String getOwnedByMe() {
         return googleServices.getOwnedSheetID(getAccessToken());
-    }
+    }*/
 
 
     @RequestMapping(value = "/post/{range}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -160,6 +160,7 @@ public class CvController extends BaseController {
         }
     }
 
+    /*
     @RequestMapping("/get/share/{email}")
     public ResponseEntity<?> share(@PathVariable String email) {
         if(getAccessToken() != null){
@@ -173,6 +174,6 @@ public class CvController extends BaseController {
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-    }
+    }*/
 
 }
