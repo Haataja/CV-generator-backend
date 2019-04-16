@@ -50,11 +50,25 @@ public class SheetsHelper {
     private static final String SPREADSHEET_NAME = "CV-Generator-data-spreadsheet";
 
 
+    /**
+     * Connects to users Google account
+     * @param token Token is used to connect in users Google account
+     * @return Sheets service
+     * @throws IOException Thrown on exception
+     * @throws GeneralSecurityException Thrown on exception
+     */
     public static Sheets getSheetsService(String token) throws IOException, GeneralSecurityException {
         Credential credential = new GoogleCredential().setAccessToken(token);
         return new Sheets.Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(), credential).setApplicationName(APPLICATION_NAME).build();
     }
 
+    /**
+     * Reads one tab in sheets
+     * @param accessToken Access token is used to connect in users Google account
+     * @param sheetID Id of the sheet that is read
+     * @param range Name of the tab that is read
+     * @return Object
+     */
     public Object readRange(String accessToken, String sheetID, String range) {
         try {
             Sheets service = getSheetsService(accessToken);
@@ -68,7 +82,12 @@ public class SheetsHelper {
         return null;
     }
 
-
+    /**
+     * Reads whole sheet.
+     * @param sheetID Id of the sheet that is read.
+     * @param token Access token is used to connect in users Google account
+     * @return {@link User}
+     */
     public User read(String sheetID, String token) {
         ArrayList<String> ranges = new ArrayList<>();
         ranges.add("basic"); // id, first,last,birthdate
@@ -98,6 +117,13 @@ public class SheetsHelper {
         return null;
     }
 
+    /**
+     * Creates Google sheet to users root folder.
+     * @param token Access token is used to connect in users Google account
+     * @return Id of the sheet that was created
+     * @throws IOException thrown on exception
+     * @throws GeneralSecurityException thrown on exception
+     */
     public String createSheet(String token) throws IOException, GeneralSecurityException {
         String sheetID;
         Sheets service = getSheetsService(token);
@@ -113,6 +139,10 @@ public class SheetsHelper {
         return sheetID;
     }
 
+    /**
+     * Creates default data of the user.
+     * @return default user
+     */
     public User createDefUser() {
         User user = new User();
 
@@ -132,7 +162,12 @@ public class SheetsHelper {
         return user;
     }
 
-    // should this be done in the create sheet?
+    /**
+     * Creates tabs to existing default sheet.
+     * @param accessToken Access token is used to connect in users Google account
+     * @param sheetID Id of the sheet that is modified
+     * @return String
+     */
     public String makeTabsToSheet(String accessToken, String sheetID) {
         List<Request> requests = new ArrayList<>();
         BatchUpdateSpreadsheetRequest requestBody = new BatchUpdateSpreadsheetRequest();
@@ -162,9 +197,16 @@ public class SheetsHelper {
         return "Ok";
     }
 
+    /**
+     * Writes data to the tab of the sheet.
+     * @param accessToken Access token is used to connect in users Google account
+     * @param sheetID Id of the sheet that is modified
+     * @param range Name of the tab that is modified
+     * @param values Data that is written
+     */
     public void writeToSheet(String accessToken, String sheetID, String range, List<List<Object>> values) {
         ValueRange body = new ValueRange().setValues(values);
-        log.debug("{}", body);
+        // log.debug("{}", body);
         UpdateValuesResponse result = null;
         try {
             result = getSheetsService(accessToken).spreadsheets().values()
@@ -178,6 +220,12 @@ public class SheetsHelper {
         //log.debug("Result {}", result);
     }
 
+    /**
+     * Writes data to sheet.
+     * @param accessToken Access token is used to connect in users Google account
+     * @param sheetID Id of the sheet modified
+     * @param user Data that is written
+     */
     public void writeToSheet(String accessToken, String sheetID, User user) {
         String firstname = user.getFirstname();
         String lastname = user.getLastname();
@@ -238,6 +286,12 @@ public class SheetsHelper {
         }
     }
 
+    /**
+     * Clears tab of the sheet
+     * @param accessToken Access token is used to connect in users Google account
+     * @param sheetID Id of the sheet that is modified
+     * @param range Name of the tab that is modified
+     */
     public void clearSheet(String accessToken, String sheetID, String range) {
         BatchClearValuesResponse result = null;
         BatchClearValuesRequest clearValuesRequest = new BatchClearValuesRequest();
