@@ -47,12 +47,26 @@ public class DriveHelper {
     private static String APPLICATION_NAME;
 
 
+    /**
+     * Connects to users Google account
+     * @param token Token is used to connect in users Google account
+     * @return Drive service
+     * @throws IOException Thrown on exception
+     * @throws GeneralSecurityException Thrown on exception
+     */
     public static Drive getDriveService(String token) throws IOException, GeneralSecurityException {
         Credential credential = new GoogleCredential().setAccessToken(token);
         return new Drive.Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(), credential).setApplicationName(APPLICATION_NAME).build();
     }
 
 
+    /**
+     * Creates new folder in the users drive root folder
+     * @param token Token is used to connect in users Google account
+     * @return Id of the folder
+     * @throws IOException Thrown on exception
+     * @throws GeneralSecurityException Thrown on exception
+     */
     public String createNewFolder(String token) throws IOException, GeneralSecurityException {
         String folderID = null;
         Drive service = getDriveService(token);
@@ -86,6 +100,15 @@ public class DriveHelper {
     }
 
 
+    /**
+     * Moves the sheet to the folder
+     * @param token Token is used to connect in users Google account
+     * @param sheetID Id of the sheet
+     * @param folderID Id of the folder
+     * @return String
+     * @throws IOException Thrown on exception
+     * @throws GeneralSecurityException Thrown on exception
+     */
     public String moveSheetToFolder(String token, String sheetID, String folderID) throws IOException, GeneralSecurityException {
         Drive service = getDriveService(token);
         File file = service.files().get(sheetID)
@@ -136,6 +159,13 @@ public class DriveHelper {
         return service.files().list().setQ("name = '" + name + "'").execute().getFiles();
     }
 
+    /**
+     * Shares the folder to another Google user
+     * @param accessToken accessToken that gives access to Google drive
+     * @param email Email of the person to which folder is shared
+     * @throws IOException Thrown on exception
+     * @throws GeneralSecurityException Thrown on exception
+     */
     public void shareFolder(String accessToken, String email) throws IOException, GeneralSecurityException {
         Permission userPermission = new Permission().setType("user").setRole("reader").setEmailAddress(email);
 
