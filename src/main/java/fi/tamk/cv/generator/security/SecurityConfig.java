@@ -44,8 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout().logoutSuccessUrl("/").deleteCookies("JSESSIONID")
                 .and()
                 .oauth2Login()
-                .defaultSuccessUrl("/api/loginSuccess", true)
-                .failureUrl("/api/error");
+                .defaultSuccessUrl("/api/loginSuccess", true);
     }
 
     /**

@@ -46,7 +46,7 @@ public class InfoDeserializer extends JsonDeserializer<Info> {
         ObjectMapper mapper = new ObjectMapper();
 
         JsonNode node = p.getCodec().readTree(p);
-        log.debug(node.toString());
+        log.trace(node.toString());
         Info info = new Info();
         info.setOrder((Integer) node.get("order").numberValue());
         info.setVisible(node.get("visible").booleanValue());
