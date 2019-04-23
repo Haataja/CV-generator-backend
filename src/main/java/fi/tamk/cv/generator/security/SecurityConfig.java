@@ -50,7 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * Allows post to urls by ignoring the web security
      *
-     * This does not require normally login and it bypasses the spring default csrf-check.
+     * This does not require normally login (requires JSESSIONID that is connected to access token still)
+     * and it bypasses the spring default csrf-check.
+     *
      * More secure way to allow post is to require csrf-token to be sent from the front end, that is not
      * implemented to this project.
      *
