@@ -6,7 +6,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * This configuration is needed in development, to allow contact from front development server.
- * No need to be in use if front end is build to resources.
+ * No need to be in use if front end is build to resources. If using Google login don't use this configuration.
+ *
+ * To use this configuration remove comments from annotation.
  */
 // @Configuration
 public class CORSConfiguration implements WebMvcConfigurer {
