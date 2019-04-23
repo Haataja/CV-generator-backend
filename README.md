@@ -3,6 +3,7 @@
 ## Tools
 
 [Download and install Java 8 SDK](https://www.oracle.com/technetwork/java/javaee/downloads/jdk8-downloads-2133151.html)
+
 [Download and install Maven](https://maven.apache.org/download.cgi)
 
 ## Configure project
